@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
   return (
-    <nav className="flex justify-between">
+    <nav className="flex justify-between w-full">
       <Logo />
       <NavBtns />
     </nav>
