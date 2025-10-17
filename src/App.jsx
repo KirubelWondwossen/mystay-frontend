@@ -1,18 +1,14 @@
-import React from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import UserDasboard from "./pages/UserDashboard";
 
 function App() {
   return (
-    <>
-      <div className="bg-background min-h-screen">
-        <h1 className="text-textPrimary font-heading text-3xl">
-          Welcome to MyStay
-        </h1>
-        <p className="text-textSecondary font-body">
-          Find your perfect stay in real-time.
-        </p>
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<UserDasboard />} />
+      </Routes>
+    </Router>
   );
 }
 
