@@ -13,7 +13,6 @@ function Navbar() {
 
 function NavBtns({ isOpen }) {
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <ul
