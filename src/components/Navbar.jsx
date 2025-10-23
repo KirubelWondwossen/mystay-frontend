@@ -1,6 +1,6 @@
 import Logo from "./Logo";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -12,7 +12,7 @@ function Navbar() {
 }
 
 function NavBtns({ isOpen }) {
-  const location = useLocation();
+  // const location = useLocation();
 
   return (
     <ul

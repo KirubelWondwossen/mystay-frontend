@@ -5,8 +5,8 @@ import { StarIcon } from "@heroicons/react/16/solid";
 function RoomCard({ room }) {
   return (
     <Link to={`/roomdetailpage`}>
-      <div className="flex flex-col rounded-xl hover:scale-105 duration-300  gap-4 bg-white overflow-hidden">
-        <div className="overflow-hidden h-64 rounded-xl relative">
+      <div className="flex flex-col rounded-xl hover:scale-105 duration-300 gap-4 bg-white overflow-hidden">
+        <div className="overflow-hidden md:h-64 rounded-xl relative">
           <HeartIcon className="w-7 cursor-pointer absolute right-[5%] top-[5%] text-white" />
           <img
             className="transition-transform w-full h-full"

@@ -1,3 +1,4 @@
+import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import RoomCard from "../components/RoomCard";
 import RoomCardContainer from "../components/RoomCardContainer";
@@ -46,6 +47,20 @@ const hotelRooms = [
     price: "$100",
     rating: 4.5,
   },
+  {
+    id: 5,
+    img: "/images/img-2.jpg",
+    title: "Luxury Penthouse Suite",
+    price: "$100",
+    rating: 4.5,
+  },
+  {
+    id: 6,
+    img: "/images/img-3.jpg",
+    title: "Standard Queen Room",
+    price: "$100",
+    rating: 4.5,
+  },
 ];
 
 function UserDasboard() {
@@ -58,6 +73,7 @@ function UserDasboard() {
           <RoomCard room={room} key={room.id} />
         ))}
       </RoomCardContainer>
+      <Footer />
     </div>
   );
 }
