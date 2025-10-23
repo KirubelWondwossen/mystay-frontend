@@ -1,7 +1,7 @@
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
-import Filter from "./Filter";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
+import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 
 function Navbar() {
   return (
@@ -26,7 +26,29 @@ function NavBtns({ isOpen }) {
       <BtnList path={"/guest"}>Guest Area</BtnList> */}
       {/* <Filter /> */}
       <FilterBtn />
+      <DarkLightModeBtns />
     </ul>
+  );
+}
+
+function DarkLightModeBtns() {
+  return (
+    <div className="flex border rounded-xl">
+      <IconHolder>
+        <SunIcon className="w-6 self-center cursor-pointer " />
+      </IconHolder>
+      <IconHolder>
+        <MoonIcon className="w-6 self-center cursor-pointer" />
+      </IconHolder>
+    </div>
+  );
+}
+
+function IconHolder({ children }) {
+  return (
+    <span className="rounded-xl cursor-pointer duration-200 p-3 hover:bg-gray-200 hover:border-slate-950 w-full">
+      {children}
+    </span>
   );
 }
 
