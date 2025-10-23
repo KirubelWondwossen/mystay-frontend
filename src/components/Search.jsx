@@ -2,10 +2,10 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 function Search() {
   return (
-    <div className="rounded-2xl shadow-lg flex justify-between items-center px-5 w-[30rem] mt-5">
+    <div className="rounded-2xl shadow-lg flex justify-between items-center px-5 mt-5 transform transition-transform duration-300 focus-within:-translate-y-2 focus-within:shadow-xl">
       <input
         type="search"
-        className="text-heading text-lg p-5 focus:outline-none"
+        className="text-heading text-lg p-5 focus:outline-none w-[30rem]"
         placeholder="Search"
       />
       <span className="bg-primary p-4 rounded-full text-center cursor-pointer">
