@@ -1,5 +1,6 @@
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+import Filter from "./Filter";
 import Logo from "./Logo";
-
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -20,10 +21,23 @@ function NavBtns({ isOpen }) {
         !isOpen && "invisible absolute"
       } md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
-      <BtnList path={""}>Home</BtnList>
+      {/* <BtnList path={""}>Home</BtnList>
       <BtnList path={"/about"}>About</BtnList>
-      <BtnList path={"/guest"}>Guest Area</BtnList>
+      <BtnList path={"/guest"}>Guest Area</BtnList> */}
+      {/* <Filter /> */}
+      <FilterBtn />
     </ul>
+  );
+}
+
+function FilterBtn() {
+  return (
+    <div className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950">
+      <AdjustmentsHorizontalIcon className="w-6" />
+      <h3 className="sm:text-lg md:text-xl font-heading font-semibold">
+        Filters
+      </h3>
+    </div>
   );
 }
 
