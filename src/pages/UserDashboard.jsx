@@ -65,7 +65,7 @@ const hotelRooms = [
 
 function UserDasboard() {
   return (
-    <div className="container mx-auto flex flex-col items-center">
+    <div className="container mx-auto flex flex-col items-center dark:bg-black">
       <Navbar />
       <Search />
       <RoomCardContainer>

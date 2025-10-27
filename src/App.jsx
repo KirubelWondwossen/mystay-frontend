@@ -4,11 +4,13 @@ import UserDasboard from "./pages/UserDashboard";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<UserDasboard />} />
-      </Routes>
-    </Router>
+    <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
+      <Router>
+        <Routes>
+          <Route path="/" element={<UserDasboard />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

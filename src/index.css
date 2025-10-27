@@ -18,3 +18,15 @@
 .navbar-btn {
   @apply text-sm p-2 lg:text-lg lg:p-3  font-semibold cursor-pointer no-underline font-heading;
 }
+
+#root {
+  background-color: white;
+}
+
+#root {
+  @apply bg-white dark:bg-black transition-colors duration-300;
+}
+
+body {
+  @apply bg-white dark:bg-black transition-colors duration-300;
+}

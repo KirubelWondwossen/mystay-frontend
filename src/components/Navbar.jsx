@@ -2,7 +2,7 @@ import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Navbar() {
   return (
@@ -32,15 +32,47 @@ function NavBtns({ isOpen }) {
   );
 }
 
+// function DarkLightModeBtns() {
+//   const [isDarkMode, setIsDarkMode] = useState(false);
+//   return (
+//     <div className="flex border rounded-xl">
+//       <IconHolder active={!isDarkMode} onClick={() => setIsDarkMode(false)}>
+//         <SunIcon className="w-6 self-center cursor-pointer" />
+//       </IconHolder>
+//       <IconHolder active={isDarkMode} onClick={() => setIsDarkMode(true)}>
+//         <MoonIcon className="w-6 self-center cursor-pointer" />
+//       </IconHolder>
+//     </div>
+//   );
+// }
 function DarkLightModeBtns() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
   return (
-    <div className="flex border rounded-xl">
+    <div className="flex border rounded-xl overflow-hidden">
       <IconHolder active={!isDarkMode} onClick={() => setIsDarkMode(false)}>
-        <SunIcon className="w-6 self-center cursor-pointer" />
+        <SunIcon className="w-6 h-6" />
       </IconHolder>
       <IconHolder active={isDarkMode} onClick={() => setIsDarkMode(true)}>
-        <MoonIcon className="w-6 self-center cursor-pointer" />
+        <MoonIcon className="w-6 h-6" />
       </IconHolder>
     </div>
   );
