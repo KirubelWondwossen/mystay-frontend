@@ -2,6 +2,7 @@ import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 
 function Navbar() {
   return (
@@ -32,23 +33,34 @@ function NavBtns({ isOpen }) {
 }
 
 function DarkLightModeBtns() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   return (
     <div className="flex border rounded-xl">
-      <IconHolder>
-        <SunIcon className="w-6 self-center cursor-pointer " />
+      <IconHolder active={!isDarkMode} onClick={() => setIsDarkMode(false)}>
+        <SunIcon className="w-6 self-center cursor-pointer" />
       </IconHolder>
-      <IconHolder>
+      <IconHolder active={isDarkMode} onClick={() => setIsDarkMode(true)}>
         <MoonIcon className="w-6 self-center cursor-pointer" />
       </IconHolder>
     </div>
   );
 }
 
-function IconHolder({ children }) {
+function IconHolder({ children, active, onClick }) {
   return (
-    <span className="rounded-xl cursor-pointer duration-200 p-3 hover:bg-gray-200 hover:border-slate-950 w-full">
+    <button
+      onClick={onClick}
+      className={`p-3 w-full transition-colors duration-200
+        ${
+          active
+            ? "bg-gray-200 dark:bg-slate-700 overflow-hidden rounded-xl"
+            : "bg-transparent"
+        }
+        hover:bg-gray-300 dark:hover:bg-slate-600
+      `}
+    >
       {children}
-    </span>
+    </button>
   );
 }
 
