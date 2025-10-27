@@ -67,15 +67,15 @@ const hotelRooms = [
 
 function UserDasboard() {
   return (
-    <div className="container mx-auto flex flex-col items-center dark:bg-black">
+    <div className="container mx-auto flex flex-col items-center dark:bg-black  h-screen">
       <Sticky pos={"top"}>
         <Navbar />
       </Sticky>
-      <main className="flex-1 overflow-y-auto container mx-auto flex flex-col items-center">
+      <main className="flex-1 overflow-y-auto container mx-auto flex flex-col items-center no-scrollbar">
         <Search />
         <RoomCardContainer>
-          {hotelRooms.map((room) => (
-            <RoomCard room={room} key={room.id} />
+          {hotelRooms.map((room, i) => (
+            <RoomCard room={room} key={i} />
           ))}
         </RoomCardContainer>
         <Footer />

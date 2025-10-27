@@ -25,8 +25,18 @@
 
 #root {
   @apply bg-white dark:bg-black transition-colors duration-300;
+  padding: 0 !important;
 }
 
 body {
   @apply bg-white dark:bg-black transition-colors;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

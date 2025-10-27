@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 function Navbar() {
   return (
-    <nav className="flex justify-between w-full">
+    <nav className="flex justify-between w-full p-3 shadow-sm border-b">
       <Logo />
       <NavBtns />
     </nav>

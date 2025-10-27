@@ -8,38 +8,44 @@ import { Link } from "react-router-dom";
 
 function BottomNav() {
   return (
-    <nav className="shadow-xl rounded-xl flex gap-6 border w-full justify-center">
+    <nav className="shadow-sm flex gap-6 border-t w-full justify-center">
       <BtnList path={""}>
-        <HomeIcon className="w-7" />
+        <Icon icon={HomeIcon} />
         <BtnName>Home</BtnName>
       </BtnList>
       <BtnList path={"/about"}>
-        <InformationCircleIcon className="w-7" />
+        <Icon icon={InformationCircleIcon} />
         <BtnName>About</BtnName>
       </BtnList>
       <BtnList path={"/profile"}>
-        <UserCircleIcon className="w-7" />
+        <Icon icon={UserCircleIcon} />
         <BtnName>Profile</BtnName>
       </BtnList>
       <BtnList path={"/wishlist"}>
-        <HeartIcon className="w-7" />
+        <Icon icon={HeartIcon} />
         <BtnName>WishList</BtnName>
       </BtnList>
     </nav>
   );
 }
 
+function Icon({ icon: Icon }) {
+  return <Icon className="w-6" />;
+}
+
 function BtnList({ children, path }) {
   return (
     <Link to={`/${path}`} className={`cursor-pointer`}>
-      <div className="flex gap-1 hover:bg-gray-200 p-3">{children}</div>
+      <div className="flex items-center gap-1 hover:bg-gray-200 p-2">
+        {children}
+      </div>
     </Link>
   );
 }
 
 function BtnName({ children }) {
   return (
-    <span className="lg:text-lg sm:p-3 sm:text-base font-semibold cursor-pointer no-underline font-heading">
+    <span className="font-semibold cursor-pointer no-underline font-heading">
       {children}
     </span>
   );
