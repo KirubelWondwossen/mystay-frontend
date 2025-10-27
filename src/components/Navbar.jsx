@@ -22,9 +22,6 @@ function NavBtns({ isOpen }) {
         !isOpen && "invisible absolute"
       } md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
-      {/* <BtnList path={""}>Home</BtnList>
-      <BtnList path={"/about"}>About</BtnList>
-      <BtnList path={"/guest"}>Guest Area</BtnList> */}
       {/* <Filter /> */}
       <FilterBtn />
       <DarkLightModeBtns />
@@ -32,19 +29,6 @@ function NavBtns({ isOpen }) {
   );
 }
 
-// function DarkLightModeBtns() {
-//   const [isDarkMode, setIsDarkMode] = useState(false);
-//   return (
-//     <div className="flex border rounded-xl">
-//       <IconHolder active={!isDarkMode} onClick={() => setIsDarkMode(false)}>
-//         <SunIcon className="w-6 self-center cursor-pointer" />
-//       </IconHolder>
-//       <IconHolder active={isDarkMode} onClick={() => setIsDarkMode(true)}>
-//         <MoonIcon className="w-6 self-center cursor-pointer" />
-//       </IconHolder>
-//     </div>
-//   );
-// }
 function DarkLightModeBtns() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 

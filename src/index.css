@@ -28,5 +28,5 @@
 }
 
 body {
-  @apply bg-white dark:bg-black transition-colors duration-300;
+  @apply bg-white dark:bg-black transition-colors;
 }

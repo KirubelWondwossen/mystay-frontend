@@ -1,8 +1,10 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import BottomNav from "../components/BottomNav";
 import RoomCard from "../components/RoomCard";
 import RoomCardContainer from "../components/RoomCardContainer";
 import Search from "../components/Search";
+import Sticky from "../components/Sticky";
 
 const hotelRooms = [
   {
@@ -66,14 +68,21 @@ const hotelRooms = [
 function UserDasboard() {
   return (
     <div className="container mx-auto flex flex-col items-center dark:bg-black">
-      <Navbar />
-      <Search />
-      <RoomCardContainer>
-        {hotelRooms.map((room) => (
-          <RoomCard room={room} key={room.id} />
-        ))}
-      </RoomCardContainer>
-      <Footer />
+      <Sticky pos={"top"}>
+        <Navbar />
+      </Sticky>
+      <main className="flex-1 overflow-y-auto container mx-auto flex flex-col items-center">
+        <Search />
+        <RoomCardContainer>
+          {hotelRooms.map((room) => (
+            <RoomCard room={room} key={room.id} />
+          ))}
+        </RoomCardContainer>
+        <Footer />
+      </main>
+      <Sticky pos={"bottom"}>
+        <BottomNav />
+      </Sticky>
     </div>
   );
 }
