@@ -4,26 +4,23 @@ import { Link } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
 
-function Navbar() {
+function Navbar({ handleOpenModal }) {
   return (
-    <nav className="flex justify-between w-full p-3 shadow-sm border-b">
+    <nav className="flex justify-between w-full p-3">
       <Logo />
-      <NavBtns />
+      <NavBtns handleOpenModal={handleOpenModal} />
     </nav>
   );
 }
 
-function NavBtns({ isOpen }) {
-  // const location = useLocation();
-
+function NavBtns({ isOpen, handleOpenModal }) {
   return (
     <ul
       className={`${
         !isOpen && "invisible absolute"
-      } md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
+      } relative md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
-      {/* <Filter /> */}
-      <FilterBtn />
+      <FilterBtn handleOpenModal={handleOpenModal} />
       <DarkLightModeBtns />
     </ul>
   );
@@ -72,7 +69,7 @@ function IconHolder({ children, active, onClick }) {
             ? "bg-gray-200 dark:bg-slate-700 overflow-hidden rounded-xl"
             : "bg-transparent"
         }
-        hover:bg-gray-300 dark:hover:bg-slate-600
+        hover:bg-gray-300 dark:hover:bg-slate-600 rounded-xl
       `}
     >
       {children}
@@ -80,9 +77,12 @@ function IconHolder({ children, active, onClick }) {
   );
 }
 
-function FilterBtn() {
+function FilterBtn({ handleOpenModal }) {
   return (
-    <div className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950">
+    <div
+      onClick={handleOpenModal}
+      className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
+    >
       <AdjustmentsHorizontalIcon className="w-6" />
       <h3 className="sm:text-lg md:text-xl font-heading font-semibold">
         Filters

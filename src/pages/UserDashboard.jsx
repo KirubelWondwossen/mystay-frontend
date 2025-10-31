@@ -5,6 +5,9 @@ import RoomCard from "../components/RoomCard";
 import RoomCardContainer from "../components/RoomCardContainer";
 import Search from "../components/Search";
 import Sticky from "../components/Sticky";
+import Backdrop from "../components/Backdrop";
+import Filter from "../components/Filter";
+import { useState } from "react";
 
 const hotelRooms = [
   {
@@ -66,10 +69,17 @@ const hotelRooms = [
 ];
 
 function UserDasboard() {
+  const [openModal, setOpenModal] = useState(false);
+
+  function handleOpenModal() {
+    setOpenModal((openModal) => !openModal);
+  }
   return (
     <div className="container mx-auto flex flex-col items-center dark:bg-black  h-screen">
+      {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
+      {openModal && <Filter handleOpenModal={handleOpenModal} />}
       <Sticky pos={"top"}>
-        <Navbar />
+        <Navbar handleOpenModal={handleOpenModal} />
       </Sticky>
       <main className="flex-1 overflow-y-auto container mx-auto flex flex-col items-center no-scrollbar">
         <Search />
