@@ -5,7 +5,7 @@ function Search() {
     <div className="rounded-2xl shadow-lg flex justify-between items-center px-5 transform transition-transform duration-300 focus-within:-translate-y-2 focus-within:shadow-xl">
       <input
         type="search"
-        className="text-heading text-lg p-5 focus:outline-none w-[30rem]"
+        className="dark:bg-surfaceDark text-heading text-lg p-5 focus:outline-none w-[30rem]"
         placeholder="Search"
       />
       <span className="bg-primary p-4 rounded-full text-center cursor-pointer">

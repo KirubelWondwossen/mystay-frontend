@@ -8,6 +8,7 @@ import Sticky from "../components/Sticky";
 import Backdrop from "../components/Backdrop";
 import Filter from "../components/Filter";
 import { useState } from "react";
+import Page from "../components/Page";
 
 const hotelRooms = [
   {
@@ -75,7 +76,7 @@ function UserDasboard() {
     setOpenModal((openModal) => !openModal);
   }
   return (
-    <div className="container mx-auto flex flex-col items-center dark:bg-black  h-screen">
+    <Page>
       {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
       {openModal && <Filter handleOpenModal={handleOpenModal} />}
       <Sticky pos={"top"}>
@@ -93,7 +94,7 @@ function UserDasboard() {
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
-    </div>
+    </Page>
   );
 }
 

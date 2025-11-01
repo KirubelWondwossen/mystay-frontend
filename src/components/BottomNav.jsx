@@ -36,10 +36,10 @@ function Icon({ icon: Icon }) {
 
 function BtnList({ children, path, loc }) {
   return (
-    <Link to={`/${path}`} className={`cursor-pointer`}>
+    <Link to={`${path}`} className="cursor-pointer">
       <div
         className={`flex items-center gap-1 hover:bg-gray-200 p-2 ${
-          loc && "bg-gray-200"
+          loc ? "bg-gray-200" : ""
         }`}
       >
         {children}
