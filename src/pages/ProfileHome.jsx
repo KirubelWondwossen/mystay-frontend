@@ -1,10 +1,10 @@
 import ProfileLayout from "../components/ProfileLayout";
-import SectionHeader from "../components/SectionHeader";
+import Subheader from "../components/Subheader";
 
 function ProfileHome() {
   return (
     <ProfileLayout>
-      <SectionHeader style={"text-start"}>Hello, User</SectionHeader>
+      <Subheader>Hello, User</Subheader>
     </ProfileLayout>
   );
 }
