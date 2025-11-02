@@ -21,7 +21,7 @@ function BottomNav() {
         <Icon icon={InformationCircleIcon} />
         <NavBtnName>About</NavBtnName>
       </BtnList>
-      <BtnList path={"/profile"} loc={location.pathname === "/profile"}>
+      <BtnList path={"/profilehome"} loc={location.pathname === "/profilehome"}>
         <Icon icon={UserCircleIcon} />
         <NavBtnName>Profile</NavBtnName>
       </BtnList>

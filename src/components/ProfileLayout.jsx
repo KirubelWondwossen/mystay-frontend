@@ -1,19 +1,18 @@
 import { HomeIcon } from "@heroicons/react/24/solid";
-import BottomNav from "../components/BottomNav";
-import BtnList from "../components/BtnList";
-import Navbar from "../components/Navbar";
-import Page from "../components/Page";
-import Sticky from "../components/Sticky";
-import { Icon } from "../components/Icon";
-import { NavBtnName } from "../components/NavBtnName";
+import BottomNav from "./BottomNav";
+import BtnList from "./BtnList";
+import Navbar from "./Navbar";
+import Page from "./Page";
+import Sticky from "./Sticky";
+import { Icon } from "./Icon";
+import { NavBtnName } from "./NavBtnName";
 import { useLocation } from "react-router-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   CalendarDateRangeIcon,
   InformationCircleIcon,
 } from "@heroicons/react/16/solid";
 
-function Profile() {
+function ProfileLayout({ children }) {
   return (
     <Page>
       <Sticky pos={"top"}>
@@ -21,9 +20,7 @@ function Profile() {
       </Sticky>
       <main className="overflow-y-auto h-screen container mx-auto no-scrollbar grid grid-cols-[1fr_4fr] my-6">
         <Sidebar />
-        <Routes>
-          {/* <Route path="/profilehome" element={<ProfileHome />} /> */}
-        </Routes>
+        <div className="p-6">{children}</div>
       </main>
       <Sticky pos={"bottom"}>
         <BottomNav />
@@ -46,17 +43,17 @@ function Sidebar() {
         <NavBtnName>Home</NavBtnName>
       </BtnList>
       <BtnList
-        path={"/profilehome"}
+        path={"/profilereservations"}
         className={"w-full"}
-        loc={location.pathname === "/reservations"}
+        loc={location.pathname === "/profilereservations"}
       >
         <Icon icon={CalendarDateRangeIcon} />
         <NavBtnName>Reservations</NavBtnName>
       </BtnList>
       <BtnList
-        path={"/profilehome"}
+        path={"/profileinfo"}
         className={"w-full"}
-        loc={location.pathname === "/userinfo"}
+        loc={location.pathname === "/profile  info"}
       >
         <Icon icon={InformationCircleIcon} />
         <NavBtnName>User Info</NavBtnName>
@@ -65,4 +62,4 @@ function Sidebar() {
   );
 }
 
-export default Profile;
+export default ProfileLayout;
