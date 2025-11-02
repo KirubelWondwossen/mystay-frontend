@@ -1,4 +1,7 @@
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+import {
+  AdjustmentsHorizontalIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
@@ -24,7 +27,13 @@ function NavBtns({ isOpen, handleOpenModal }) {
         !isOpen && "invisible absolute"
       } relative md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
-      <FilterBtn handleOpenModal={handleOpenModal} />
+      {useLocation().pathname === "/" ? (
+        <FilterSearchBtn handleOpenModal={handleOpenModal} />
+      ) : (
+        <Link to={"/"}>
+          <FilterSearchBtn />
+        </Link>
+      )}
       <DarkLightModeBtns />
     </ul>
   );
@@ -81,15 +90,19 @@ function IconHolder({ children, active, onClick }) {
   );
 }
 
-function FilterBtn({ handleOpenModal }) {
+function FilterSearchBtn({ handleOpenModal }) {
   return (
     <div
       onClick={handleOpenModal}
       className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
     >
-      <AdjustmentsHorizontalIcon className="w-6" />
+      {useLocation().pathname === "/" ? (
+        <AdjustmentsHorizontalIcon className="w-6" />
+      ) : (
+        <MagnifyingGlassIcon className="w-6" />
+      )}
       <h3 className="sm:text-lg md:text-xl font-heading font-semibold">
-        Filters
+        {useLocation().pathname === "/" ? "Filters" : "Search"}
       </h3>
     </div>
   );

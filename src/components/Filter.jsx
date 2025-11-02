@@ -4,7 +4,7 @@ function Filter({ handleOpenModal }) {
   return (
     <div
       className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-    rounded-xl shadow-lg w-96 mx-auto flex flex-col items-start gap-4"
+    rounded-xl shadow-lg w-96 mx-auto flex flex-col items-start gap-4 py-3"
     >
       <FilterHeader handleOpenModal={handleOpenModal} />
       <Filters />

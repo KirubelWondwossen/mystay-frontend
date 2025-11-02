@@ -42,7 +42,7 @@ function About() {
           </ParagraphHolder>
 
           <img src="/about/abt-1.jpg" />
-          <img src="/about/abt-2.jpg" cla />
+          <img src="/about/abt-2.jpg" />
           <ParagraphHolder>
             <SectionHeader style={"text-start text-primary mb-5"}>
               Trusted Journeys
