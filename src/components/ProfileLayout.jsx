@@ -20,7 +20,7 @@ function ProfileLayout({ children }) {
       </Sticky>
       <main className="overflow-y-auto h-screen container mx-auto no-scrollbar grid grid-cols-[1fr_4fr] my-6">
         <Sidebar />
-        <div className="p-6">{children}</div>
+        <div className="p-6 flex flex-col items-start gap-6">{children}</div>
       </main>
       <Sticky pos={"bottom"}>
         <BottomNav />
