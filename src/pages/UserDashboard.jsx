@@ -9,6 +9,7 @@ import Backdrop from "../components/Backdrop";
 import Filter from "../components/Filter";
 import { useState } from "react";
 import Page from "../components/Page";
+import Main from "../components/Main";
 
 const hotelRooms = [
   {
@@ -82,7 +83,7 @@ function UserDasboard() {
       <Sticky pos={"top"}>
         <Navbar handleOpenModal={handleOpenModal} />
       </Sticky>
-      <main className="flex-1 overflow-y-auto container mx-auto flex flex-col items-center no-scrollbar">
+      <Main>
         <Search />
         <RoomCardContainer>
           {hotelRooms.map((room, i) => (
@@ -90,7 +91,7 @@ function UserDasboard() {
           ))}
         </RoomCardContainer>
         <Footer />
-      </main>
+      </Main>
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>

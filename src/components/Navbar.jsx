@@ -1,12 +1,16 @@
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
 
 function Navbar({ handleOpenModal }) {
   return (
-    <nav className="flex justify-between w-full p-3">
+    <nav
+      className={`flex justify-between w-full p-3 ${
+        useLocation().pathname !== "/" ? "border-b" : ""
+      }`}
+    >
       <Logo />
       <NavBtns handleOpenModal={handleOpenModal} />
     </nav>
