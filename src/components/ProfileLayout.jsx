@@ -33,7 +33,7 @@ function Sidebar() {
   const location = useLocation();
 
   return (
-    <nav className="flex flex-col gap-3 border-r items-start">
+    <nav className="flex flex-col gap-2 border-r items-start">
       <BtnList
         path={"/profilehome"}
         className={"w-full"}
