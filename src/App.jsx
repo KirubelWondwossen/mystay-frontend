@@ -5,6 +5,7 @@ import About from "./pages/About";
 import ProfileHome from "./pages/ProfileHome";
 import ProfileInfo from "./pages/ProfileInfo";
 import ProfileReservations from "./pages/ProfileReservations";
+import WishList from "./pages/Wishlist";
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
             element={<ProfileReservations />}
           />
           <Route path="/profileinfo" element={<ProfileInfo />} />
+          <Route path="/wishlist" element={<WishList />} />
         </Routes>
       </div>
     </Router>
