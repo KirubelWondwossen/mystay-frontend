@@ -17,7 +17,7 @@ function App() {
             path="/profilereservations"
             element={<ProfileReservations />}
           />
-          <Route path="/profileinfo " element={<ProfileInfo />} />
+          <Route path="/profileinfo" element={<ProfileInfo />} />
         </Routes>
       </div>
     </Router>

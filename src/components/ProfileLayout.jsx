@@ -53,7 +53,7 @@ function Sidebar() {
       <BtnList
         path={"/profileinfo"}
         className={"w-full"}
-        loc={location.pathname === "/profile  info"}
+        loc={location.pathname === "/profileinfo"}
       >
         <Icon icon={InformationCircleIcon} />
         <NavBtnName>User Info</NavBtnName>
