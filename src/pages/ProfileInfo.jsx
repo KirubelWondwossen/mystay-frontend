@@ -30,7 +30,7 @@ function ProfileInfo() {
         </p>
       </div>
       <Form country={country} />
-      <Button className={"self-end"}>Update Profile</Button>
+      <Button className={"self-end mb-11"}>Update Profile</Button>
     </ProfileLayout>
   );
 }

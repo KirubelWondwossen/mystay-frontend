@@ -18,10 +18,15 @@ function ProfileLayout({ children }) {
       <Sticky pos={"top"}>
         <Navbar />
       </Sticky>
-      <main className="overflow-y-auto h-screen container mx-auto no-scrollbar grid grid-cols-[1fr_4fr] my-6">
+
+      <main className="grid grid-cols-[250px_1fr] w-full h-full my-6 overflow-hidden">
         <Sidebar />
-        <div className="p-6 flex flex-col items-start gap-6">{children}</div>
+
+        <div className="p-6 flex flex-col items-start gap-6 overflow-y-auto h-[calc(100vh-8rem)] no-scrollbar">
+          {children}
+        </div>
       </main>
+
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
@@ -33,7 +38,7 @@ function Sidebar() {
   const location = useLocation();
 
   return (
-    <nav className="flex flex-col gap-2 border-r items-start">
+    <aside className="flex flex-col gap-2 border-r items-start sticky top-[5rem] h-[calc(100vh-10rem)] overflow-hidden">
       <BtnList
         path={"/profilehome"}
         className={"w-full"}
@@ -42,6 +47,7 @@ function Sidebar() {
         <Icon icon={HomeIcon} />
         <NavBtnName>Home</NavBtnName>
       </BtnList>
+
       <BtnList
         path={"/profilereservations"}
         className={"w-full"}
@@ -50,6 +56,7 @@ function Sidebar() {
         <Icon icon={CalendarDateRangeIcon} />
         <NavBtnName>Reservations</NavBtnName>
       </BtnList>
+
       <BtnList
         path={"/profileinfo"}
         className={"w-full"}
@@ -58,7 +65,7 @@ function Sidebar() {
         <Icon icon={InformationCircleIcon} />
         <NavBtnName>User Info</NavBtnName>
       </BtnList>
-    </nav>
+    </aside>
   );
 }
 
