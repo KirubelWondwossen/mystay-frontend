@@ -5,6 +5,7 @@ import BottomNav from "../components/BottomNav";
 import Main from "../components/Main";
 import SectionHeader from "../components/SectionHeader";
 import { Link } from "react-router-dom";
+import { Button } from "./Button";
 
 function About() {
   return (
@@ -57,7 +58,7 @@ function About() {
               care. We’ve combined modern technology with a human touch,
               ensuring that every user feels guided and valued.
             </Paragraph>
-            <Button />
+            <ButtonLink />
           </ParagraphHolder>
         </ParagraphImg>
       </Main>
@@ -79,12 +80,10 @@ function ParagraphImg({ children }) {
   return <div className="grid grid-cols-2 gap-4 w-full">{children}</div>;
 }
 
-function Button() {
+function ButtonLink() {
   return (
     <Link to={"/"} className="text-start w-fit">
-      <button className="bg-primary w-fit p-4 text-xl font-heading text-white">
-        Explore Luxury Rooms
-      </button>
+      <Button>Explore Luxury Rooms</Button>
     </Link>
   );
 }
