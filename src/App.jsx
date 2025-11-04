@@ -6,6 +6,7 @@ import ProfileHome from "./pages/ProfileHome";
 import ProfileInfo from "./pages/ProfileInfo";
 import ProfileReservations from "./pages/ProfileReservations";
 import WishList from "./pages/Wishlist";
+import AdminHome from "./pages/AdminHome";
 function App() {
   return (
     <Router>
@@ -20,6 +21,7 @@ function App() {
           />
           <Route path="/profileinfo" element={<ProfileInfo />} />
           <Route path="/wishlist" element={<WishList />} />
+          <Route path="/adminhome" element={<AdminHome />} />
         </Routes>
       </div>
     </Router>

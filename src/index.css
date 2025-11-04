@@ -19,6 +19,10 @@
   @apply text-sm p-2 lg:text-lg lg:p-3  font-semibold cursor-pointer no-underline font-heading;
 }
 
+.hover-fix:hover {
+  color: #111827 !important;
+}
+
 #root {
   background-color: white;
   color: #111827 !important;

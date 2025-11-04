@@ -21,6 +21,7 @@ export default {
         // ✅ Light mode palette
         background: "#F9FAFB",
         surface: "#FFFFFF",
+        background2: "#f9fafb",
         tPrimary: "#111827",
         tSecondary: "#374151",
         tTertiary: "#9CA3AF", // for faded text/icons
