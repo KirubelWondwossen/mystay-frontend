@@ -97,7 +97,7 @@ function FilterSearchBtn({ handleOpenModal }) {
       className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
     >
       {useLocation().pathname === "/" ? (
-        <AdjustmentsHorizontalIcon className="w-6" />
+        <AdjustmentsHorizontalIcon className="w-6 text-textSecondary" />
       ) : (
         <MagnifyingGlassIcon className="w-6" />
       )}
@@ -108,18 +108,4 @@ function FilterSearchBtn({ handleOpenModal }) {
   );
 }
 
-function BtnList({ children, path }) {
-  return (
-    <li>
-      <Link
-        to={`/${path}`}
-        className={`${
-          location.pathname === "/" + path ? "underline" : "no-underline"
-        } md:text-2xl font-semibold cursor-pointer font-heading`}
-      >
-        {children}
-      </Link>
-    </li>
-  );
-}
 export default Navbar;

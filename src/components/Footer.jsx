@@ -2,7 +2,7 @@ import Logo from "./Logo";
 
 const items = [
   {
-    title: "Menu",
+    title: "Types",
     links: ["Home", "Rooms", "Features", "Community"],
   },
   {
@@ -49,7 +49,10 @@ function ItemsCol({ items }) {
         {items.title}
       </h4>
       {items.links.map((el, i) => (
-        <a className="text-xs md:text-sm font-body font-medium" key={i}>
+        <a
+          className="text-xs md:text-sm font-body font-medium text-tSecondary"
+          key={i}
+        >
           {el}
         </a>
       ))}

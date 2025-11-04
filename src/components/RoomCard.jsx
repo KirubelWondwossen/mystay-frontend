@@ -15,14 +15,14 @@ function RoomCard({ room }) {
           />
         </div>
         <div className="pb-5 text-left">
-          <h3 className="sm:text-lg md:text-xl font-heading font-semibold">
+          <h3 className="sm:text-lg md:text-xl font-heading font-semibold text-tSecondary">
             {room.title}
           </h3>
           <div className="flex gap-3 items-center">
-            <p className="font-body text-[#6A6A6A]">{room.price} per night</p>
+            <p className="font-body text-tTertiary">{room.price} per night</p>
             <div className="flex gap-1 items-center">
-              <StarIcon className="text-[#6A6A6A] w-4" />
-              <p className="font-body text-[#6A6A6A]">{room.rating}</p>
+              <StarIcon className="text-tTertiary w-4" />
+              <p className="font-body text-tTertiary">{room.rating}</p>
             </div>
           </div>
         </div>

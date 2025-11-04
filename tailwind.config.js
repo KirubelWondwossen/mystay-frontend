@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-
-const config = {
-  darkMode: "class",
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+export default {
+  darkMode: "class", // toggled via 'dark' class
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -10,35 +9,63 @@ const config = {
         body: ["Inter", "sans-serif"],
       },
       colors: {
-        primary: "#FF5A5F",
-        secondary: "#008489",
-        accent: "#00A699",
-        background: "#F7F7F7",
+        // ✅ Brand Indigo Shades
+        brand: {
+          500: "#6366F1",
+          600: "#4F46E5", // Primary
+          700: "#4338CA",
+          800: "#3730A3",
+          900: "#312E81",
+        },
+
+        // ✅ Light mode palette
+        background: "#F9FAFB",
         surface: "#FFFFFF",
-        textPrimary: "#2D2D2D",
-        textSecondary: "#767676",
-        error: "#FF385C",
+        tPrimary: "#111827",
+        tSecondary: "#374151",
+        tTertiary: "#9CA3AF", // for faded text/icons
+        primary: "#4F46E5", // uses brand-600
+        secondary: "#008489",
+        accent: "#6366F1", // uses brand-500
+        border: "#F3F4F6",
+        "color-blue-100": "#E0F2FE", // for bg of circled icons
+        "color-green-100": "#DCFCE7", // for bg of money circled icons
+
+        // ✅ State colors
+        success: "#15803D",
+        warning: "#A16207",
+        error: "#B91C1C",
+
+        // ✅ Dark mode palette
         dark: {
-          primary: "#FF5A5F",
+          background: "#111827",
+          surface: "#1F2937",
+          "text-primary": "#F9FAFB",
+          "text-secondary": "#D1D5DB",
+          "text-tertiary": "#9CA3AF",
+          border: "#374151",
+          primary: "#4F46E5",
           secondary: "#00A699",
-          accent: "#22C55E",
-          backgroundDark: "#121212",
-          surfaceDark: "#1E1E1E",
-          textPrimary: "#F5F5F5",
-          textSecondary: "#A0A0A0",
-          error: "#FF385C",
+          accent: "#6366F1",
         },
       },
-      boxShadow: {
-        card: "0 4px 10px rgba(0, 0, 0, 0.05)",
-      },
+
       borderRadius: {
-        xl: "1rem",
-        "2xl": "1.5rem",
+        tiny: "3px",
+        sm: "5px",
+        md: "7px",
+        lg: "9px",
+      },
+
+      boxShadow: {
+        sm: "0 1px 2px rgba(0, 0, 0, 0.04)",
+        md: "0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06)",
+        lg: "0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)",
+        darkSm: "0 1px 2px rgba(0, 0, 0, 0.4)",
+        darkMd: "0px 0.6rem 2.4rem rgba(0, 0, 0, 0.3)",
+        darkLg: "0 2.4rem 3.2rem rgba(0, 0, 0, 0.4)",
       },
     },
   },
   plugins: [],
 };
-
-export default config;
