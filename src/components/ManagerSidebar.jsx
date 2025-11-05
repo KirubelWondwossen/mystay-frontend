@@ -1,4 +1,4 @@
-import AdminBtnList from "./AdminBtnList";
+import ManagerBtnList from "./ManagerBtnList";
 import { useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import {
@@ -9,54 +9,54 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 
-function AdminSidebar() {
+function ManagerSidebar() {
   const location = useLocation();
 
   return (
     <aside className="w-52 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden">
       <Logo className={"p-3"} />
-      <AdminBtnList
-        path={"/adminhome"}
+      <ManagerBtnList
+        path={"/managerhome"}
         className={"w-full"}
-        loc={location.pathname === "/adminhome"}
+        loc={location.pathname === "/managerhome"}
       >
         <Icon icon={HomeIcon} />
         <SideBtnName>Home</SideBtnName>
-      </AdminBtnList>
+      </ManagerBtnList>
 
-      <AdminBtnList
-        path={"/adminbookings"}
+      <ManagerBtnList
+        path={"/managerbookings"}
         className={"w-full"}
-        loc={location.pathname === "/adminbookings"}
+        loc={location.pathname === "/managerbookings"}
       >
         <Icon icon={CalendarDateRangeIcon} />
         <SideBtnName>Bookings</SideBtnName>
-      </AdminBtnList>
+      </ManagerBtnList>
 
-      <AdminBtnList
-        path={"/admincabins"}
+      <ManagerBtnList
+        path={"/managercabins"}
         className={"w-full"}
-        loc={location.pathname === "/admincabins"}
+        loc={location.pathname === "/managercabins"}
       >
         <Icon icon={HomeModernIcon} />
         <SideBtnName>Cabins</SideBtnName>
-      </AdminBtnList>
-      <AdminBtnList
-        path={"/adminusers"}
+      </ManagerBtnList>
+      <ManagerBtnList
+        path={"/managerusers"}
         className={"w-full"}
-        loc={location.pathname === "/adminusers"}
+        loc={location.pathname === "/managerusers"}
       >
         <Icon icon={UsersIcon} />
         <SideBtnName>Users</SideBtnName>
-      </AdminBtnList>
-      <AdminBtnList
-        path={"/adminsettings"}
+      </ManagerBtnList>
+      <ManagerBtnList
+        path={"/managersettings"}
         className={"w-full"}
-        loc={location.pathname === "/adminsettings"}
+        loc={location.pathname === "/managersettings"}
       >
         <Icon icon={Cog6ToothIcon} />
         <SideBtnName>Settings</SideBtnName>
-      </AdminBtnList>
+      </ManagerBtnList>
     </aside>
   );
 }
@@ -72,4 +72,4 @@ function Icon({ icon: Icon }) {
   return <Icon className="w-6 " />;
 }
 
-export default AdminSidebar;
+export default ManagerSidebar;

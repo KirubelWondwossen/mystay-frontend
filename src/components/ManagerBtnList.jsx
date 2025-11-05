@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function AdminBtnList({ children, path, loc, className }) {
+function ManagerBtnList({ children, path, loc, className }) {
   return (
     <Link to={`${path}`} className={`cursor-pointer ${className} px-3`}>
       <div
@@ -12,4 +12,4 @@ function AdminBtnList({ children, path, loc, className }) {
     </Link>
   );
 }
-export default AdminBtnList;
+export default ManagerBtnList;
