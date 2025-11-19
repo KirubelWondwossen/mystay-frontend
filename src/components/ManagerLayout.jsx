@@ -21,7 +21,9 @@ function ManagerLayout({ children }) {
 
       <div className="flex flex-col flex-1 h-full">
         <ManagerLayoutNav isDark={isDark} handleDarkMode={handleDarkMode} />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 overflow-scroll min-h-full pt-8 px-12 pb-28">
+          {children}
+        </main>
       </div>
     </div>
   );
