@@ -13,7 +13,7 @@ function ManagerSidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-52 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden">
+    <aside className="w-52 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden bg-white">
       <Logo className={"p-3"} />
       <ManagerBtnList
         path={"/managerhome"}
