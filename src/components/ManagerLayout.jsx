@@ -3,8 +3,10 @@ import ManagerSidebar from "./ManagerSidebar";
 import {
   ArrowRightStartOnRectangleIcon,
   MoonIcon,
+  SunIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 function AdminLayout({ children }) {
   return (
@@ -56,17 +58,36 @@ function ManagerNavIcons() {
       >
         <Icon icon={UserIcon} />
       </Link>
-      <Icon icon={MoonIcon} />
+      <LightDarkIcons />
       <Icon icon={ArrowRightStartOnRectangleIcon} />
     </ManagerNavContainer>
   );
 }
 
-function Icon({ icon: Icon }) {
+function Icon({ icon: Icon, onClick }) {
   return (
-    <span className="p-1 cursor-pointer hover:bg-background rounded-sm">
+    <span
+      className="p-1 cursor-pointer hover:bg-background rounded-sm"
+      onClick={onClick}
+    >
       <Icon className="w-5 text-primary" />
     </span>
+  );
+}
+
+function LightDarkIcons() {
+  const [isDark, setIsDark] = useState(false);
+  function handleDarkMode() {
+    setIsDark((dark) => !dark);
+  }
+  return (
+    <>
+      {!isDark ? (
+        <Icon icon={MoonIcon} onClick={handleDarkMode} />
+      ) : (
+        <Icon icon={SunIcon} onClick={handleDarkMode} />
+      )}
+    </>
   );
 }
 
