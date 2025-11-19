@@ -68,6 +68,7 @@ function SideBtnName({ children }) {
   );
 }
 
+// eslint-disable-next-line
 function Icon({ icon: Icon }) {
   return <Icon className="w-6 " />;
 }

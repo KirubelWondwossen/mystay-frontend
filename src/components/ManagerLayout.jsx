@@ -64,6 +64,7 @@ function ManagerNavIcons() {
   );
 }
 
+// eslint-disable-next-line
 function Icon({ icon: Icon, onClick }) {
   return (
     <span
