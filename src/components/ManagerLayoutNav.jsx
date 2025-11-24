@@ -8,7 +8,7 @@ import {
 
 function ManagerLayoutNav({ isDark, handleDarkMode }) {
   return (
-    <nav className="bg-white border-b flex justify-end w-full">
+    <nav className="bg-white border-b flex justify-end w-full px-2 h-12">
       <ManagerProfile />
       <ManagerNavIcons isDark={isDark} handleDarkMode={handleDarkMode} />
     </nav>
@@ -21,7 +21,7 @@ function ManagerNavContainer({ children, className }) {
 
 function ManagerProfile() {
   return (
-    <ManagerNavContainer className={"gap-2 p-3"}>
+    <ManagerNavContainer className={"gap-2 px-3"}>
       <img
         src="/profile-pic.jpg"
         alt="profile picture"
@@ -37,7 +37,7 @@ function ManagerNavIcons({ isDark, handleDarkMode }) {
     <ManagerNavContainer className="gap-1">
       <Link
         to={"/managerprofile"}
-        className="p-1 hover:bg-background rounded-sm"
+        className="px-1 hover:bg-background rounded-sm"
       >
         <Icon icon={UserIcon} />
       </Link>
