@@ -41,17 +41,24 @@ function ManagerDashboardCards() {
         </ManagerDashboardCard>
       ))}
       <ManagerDashboardCard className={"col-span-2"}>
-        <ManagerDoubleStatsCard />
+        <ManagerActivityCard />
       </ManagerDashboardCard>
-      <ManagerDashboardCard className={"col-span-2"}>
-        <ManagerDoubleStatsCard />
-      </ManagerDashboardCard>
+      <ManagerDashboardCard className={"col-span-2"}></ManagerDashboardCard>
     </div>
   );
 }
 
-function ManagerDoubleStatsCard() {
-  return <div></div>;
+function ManagerActivityCard() {
+  return (
+    <div className="flex flex-col gap-4 p-3">
+      <h3 className="font-heading text-tSecondary text-xl self-start font-semibold">
+        Today
+      </h3>
+      <p className="font-body text-tSecondary font-medium">
+        No activity today...
+      </p>
+    </div>
+  );
 }
 
 // eslint-disable-next-line
