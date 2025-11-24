@@ -1,7 +1,37 @@
 import { useState } from "react";
 import ManagerLayout from "../components/ManagerLayout";
-import SectionHeader from "../components/SectionHeader";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
+
+const managerStatsData = [
+  {
+    icon: BriefcaseIcon,
+    stat: "Booking",
+    value: 11,
+    iconColor: "text-[#0369a1]",
+    iconBg: "bg-[#e0f2fe]",
+  },
+  {
+    icon: BriefcaseIcon,
+    stat: "Sales",
+    value: "$32,465.00",
+    iconColor: "text-[#15803d]",
+    iconBg: "bg-[#dcfce7]",
+  },
+  {
+    icon: BriefcaseIcon,
+    stat: "Check ins",
+    value: 4,
+    iconColor: "text-[#4338ca]",
+    iconBg: "bg-[#e0e7ff]",
+  },
+  {
+    icon: BriefcaseIcon,
+    stat: "Occupancy rate",
+    value: "36%",
+    iconColor: "text-[#a16207]",
+    iconBg: "bg-[#fef9c3]",
+  },
+];
 
 function ManagerHome() {
   return (
@@ -64,49 +94,20 @@ function FilterDays({ value, activeDay, setActiveDay }) {
 function ManagerDashboardCards() {
   return (
     <div className="grid grid-cols-4 gap-8">
-      <ManagerDashboardCard>
-        <ManagerStats
-          icon={BriefcaseIcon}
-          stat={"Booking"}
-          value={11}
-          iconColor={"text-[#0369a1]"}
-          iconBg={"bg-[#e0f2fe]"}
-        />
-      </ManagerDashboardCard>
-      <ManagerDashboardCard>
-        <ManagerStats
-          icon={BriefcaseIcon}
-          stat={"Sales"}
-          value={"$32,465.00"}
-          iconColor={"text-[#15803d]"}
-          iconBg={"bg-[#dcfce7]"}
-        />
-      </ManagerDashboardCard>
-      <ManagerDashboardCard>
-        <ManagerStats
-          icon={BriefcaseIcon}
-          stat={"Check ins"}
-          value={4}
-          iconColor={"text-[#4338ca]"}
-          iconBg={"bg-[#e0e7ff]"}
-        />
-      </ManagerDashboardCard>
-      <ManagerDashboardCard>
-        <ManagerStats
-          icon={BriefcaseIcon}
-          stat={"Occupancy rate"}
-          value={"36%"}
-          iconColor={"text-[#a16207]"}
-          iconBg={"bg-[#fef9c3]"}
-        />
-      </ManagerDashboardCard>
+      {managerStatsData.map((item, index) => (
+        <ManagerDashboardCard key={index}>
+          <ManagerStats {...item} />
+        </ManagerDashboardCard>
+      ))}
     </div>
   );
 }
 
-function ManagerDashboardCard({ children }) {
+function ManagerDashboardCard({ children, className }) {
   return (
-    <div className="border bg-white borde-border rounded-md w-full">
+    <div
+      className={`border bg-white border-border rounded-md w-full ${className}`}
+    >
       {children}
     </div>
   );
@@ -121,6 +122,7 @@ function ManagerStats({ icon: Icon, stat, value, iconColor, iconBg }) {
       >
         <Icon className={`w-7 ${iconColor}`} />
       </div>
+
       <p className="text-[#6b7280] justify-self-start text-start self-end text-xs uppercase font-semibold font-body">
         {stat}
       </p>
