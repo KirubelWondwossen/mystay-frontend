@@ -1,6 +1,9 @@
 import ManagerDashboardCard from "./ManagerDashboardCard";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
+import DoughnutChart from "./DoughnutChart";
+import LineChart from "./LineChart";
 
+// ===== Manager Stats Data ===== //
 const managerStatsData = [
   {
     icon: BriefcaseIcon,
@@ -32,28 +35,43 @@ const managerStatsData = [
   },
 ];
 
-function ManagerDashboardCards() {
+// ===== Main Dashboard Cards Layout ===== //
+export default function ManagerDashboardCards() {
   return (
     <div className="grid grid-cols-4 gap-8">
-      {managerStatsData.map((item, i) => (
-        <ManagerDashboardCard key={i}>
+      {managerStatsData.map((item, index) => (
+        <ManagerDashboardCard key={index}>
           <ManagerHomeStats {...item} />
         </ManagerDashboardCard>
       ))}
-      <ManagerDashboardCard className={"col-span-2"}>
+
+      <ManagerDashboardCard className="col-span-2">
         <ManagerActivityCard />
       </ManagerDashboardCard>
-      <ManagerDashboardCard className={"col-span-2"}></ManagerDashboardCard>
+
+      <ManagerDashboardCard className="col-span-2">
+        <ManagerDurationChart />
+      </ManagerDashboardCard>
+
+      <ManagerDashboardCard className="col-span-4">
+        <ManagerSalesChart />
+      </ManagerDashboardCard>
     </div>
+  );
+}
+
+function CardsHeader({ children }) {
+  return (
+    <h3 className="font-heading text-tSecondary text-xl font-semibold self-start">
+      {children}
+    </h3>
   );
 }
 
 function ManagerActivityCard() {
   return (
     <div className="flex flex-col gap-4 p-3">
-      <h3 className="font-heading text-tSecondary text-xl self-start font-semibold">
-        Today
-      </h3>
+      <CardsHeader>Today</CardsHeader>
       <p className="font-body text-tSecondary font-medium">
         No activity today...
       </p>
@@ -64,22 +82,36 @@ function ManagerActivityCard() {
 // eslint-disable-next-line
 function ManagerHomeStats({ icon: Icon, stat, value, iconColor, iconBg }) {
   return (
-    <div className="grid grid-cols-[4rem_1fr] grid-rows-2 px-3 py-2 w-max gap-x-1">
+    <div className="grid grid-cols-[4rem_1fr] grid-rows-2 gap-x-1 px-3 py-2 w-max">
       <div
-        className={`p-4 self-center justify-self-start aspect-square row-span-full rounded-full flex items-center justify-center text-start ${iconBg}`}
+        className={`flex items-center justify-center p-4 rounded-full aspect-square row-span-full ${iconBg}`}
       >
         <Icon className={`w-7 ${iconColor}`} />
       </div>
 
-      <p className="text-[#6b7280] justify-self-start text-start self-end text-xs uppercase font-semibold font-body">
+      <p className="text-[#6b7280] text-xs uppercase font-semibold font-body self-end">
         {stat}
       </p>
 
-      <p className="font-heading text-xl text-start justify-self-start min-w-0 break-words">
-        {value}
-      </p>
+      <p className="font-heading text-xl break-words">{value}</p>
     </div>
   );
 }
 
-export default ManagerDashboardCards;
+function ManagerDurationChart() {
+  return (
+    <div className="p-3 flex flex-col gap-4">
+      <CardsHeader>Stay Duration Summary</CardsHeader>
+      <DoughnutChart />
+    </div>
+  );
+}
+
+function ManagerSalesChart() {
+  return (
+    <div className="p-3 flex flex-col gap-4">
+      <CardsHeader>Sales from 11 23 2025 — Nov 29 2025</CardsHeader>
+      <LineChart />
+    </div>
+  );
+}
