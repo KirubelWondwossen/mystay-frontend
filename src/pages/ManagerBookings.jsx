@@ -3,7 +3,11 @@ import { ManagerFilter } from "../components/ManagerFilter";
 import ManagerLayout from "../components/ManagerLayout";
 import ManagerTopComponents from "../components/ManagerTopComponents";
 import { ManagerFilterBy } from "../components/ManagerFilterBy";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EllipsisVerticalIcon,
+} from "@heroicons/react/24/outline";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -133,6 +137,7 @@ function ManagerBookings() {
           {bookings.map((el, i) => (
             <Bookings data={el} key={i} />
           ))}
+          <PrevNext />
         </div>
       </div>
     </ManagerLayout>
@@ -187,6 +192,27 @@ function NameDate({ main, sub }) {
     <div className="flex flex-col items-start w-fit">
       <span className="text-sm">{main}</span>
       <span className="text-tTertiary font-body text-xs">{sub}</span>
+    </div>
+  );
+}
+
+function PrevNext() {
+  return (
+    <div className="p-2 border border-[#e5e7eb] rounded-b-sm flex gap-4 justify-end font-heading text-tSecondary text-sm">
+      <div
+        className="flex items-center px-2 py-1 cursor-pointer rounded-sm 
+        hover:bg-primary hover:text-white transition duration-300"
+      >
+        <ChevronLeftIcon className="w-4" />
+        <span>Previous</span>
+      </div>
+      <div
+        className="flex items-center px-2 py-1 cursor-pointer rounded-sm 
+        hover:bg-primary hover:text-white transition duration-300"
+      >
+        <span>Next</span>
+        <ChevronRightIcon className="w-4" />
+      </div>
     </div>
   );
 }
