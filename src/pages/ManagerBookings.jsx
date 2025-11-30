@@ -16,6 +16,8 @@ const bookings = [
   {
     room: "007",
     guest: "Nina Williams",
+    email: "nina@hotmail.com",
+    stay: "In 1 month → 10 night stay",
     dates: "Jan 06 2026 — Jan 16 2026",
     type: "queen",
     amount: 6050.0,
@@ -23,6 +25,8 @@ const bookings = [
   {
     room: "002",
     guest: "Emma Watson",
+    email: "emma@gmail.com",
+    stay: "In 29 days → 15 night stay",
     dates: "Dec 30 2025 — Jan 14 2026",
     type: "king",
     amount: 5325.0,
@@ -30,6 +34,8 @@ const bookings = [
   {
     room: "007",
     guest: "Taro Tanaka",
+    email: "taro@gmail.com",
+    stay: "In 28 days → 5 night stay",
     dates: "Dec 29 2025 — Jan 03 2026",
     type: "twin",
     amount: 2950.0,
@@ -37,6 +43,8 @@ const bookings = [
   {
     room: "004",
     guest: "Maria Gomez",
+    email: "maria@example.com",
+    stay: "In 14 days → 1 night stay",
     dates: "Dec 15 2025 — Dec 16 2025",
     type: "queen",
     amount: 450.0,
@@ -44,6 +52,8 @@ const bookings = [
   {
     room: "007",
     guest: "Fatimah Al-Sayed",
+    email: "fatimah@gmail.com",
+    stay: "In 13 days → 6 night stay",
     dates: "Dec 14 2025 — Dec 20 2025",
     type: "king",
     amount: 3000.0,
@@ -51,6 +61,8 @@ const bookings = [
   {
     room: "002",
     guest: "Jonathan Williams",
+    email: "jowi@gmail.com",
+    stay: "In 11 days → 3 night stay",
     dates: "Dec 12 2025 — Dec 15 2025",
     type: "twin",
     amount: 1065.0,
@@ -58,6 +70,8 @@ const bookings = [
   {
     room: "005",
     guest: "Ahmed Hassan",
+    email: "ahmed@gmail.com",
+    stay: "In 10 days → 7 night stay",
     dates: "Dec 11 2025 — Dec 18 2025",
     type: "queen",
     amount: 2975.0,
@@ -65,6 +79,8 @@ const bookings = [
   {
     room: "001",
     guest: "Jonas Mueller",
+    email: "jonas@example.eu",
+    stay: "In 8 days → 6 night stay",
     dates: "Dec 09 2025 — Dec 15 2025",
     type: "king",
     amount: 1500.0,
@@ -72,6 +88,8 @@ const bookings = [
   {
     room: "004",
     guest: "Gabriel Silva",
+    email: "gabriel@gmail.com",
+    stay: "In 8 days → 5 night stay",
     dates: "Dec 09 2025 — Dec 14 2025",
     type: "twin",
     amount: 2550.0,
@@ -79,6 +97,8 @@ const bookings = [
   {
     room: "008",
     guest: "Julie Nguyen",
+    email: "julie@gmail.com",
+    stay: "In 6 days → 3 night stay",
     dates: "Dec 07 2025 — Dec 10 2025",
     type: "queen",
     amount: 4200.0,
@@ -110,7 +130,9 @@ function ManagerBookings() {
         </ManagerTopComponents>
         <div>
           <Fields />
-          <Bookings />
+          {bookings.map((el, i) => (
+            <Bookings data={el} key={i} />
+          ))}
         </div>
       </div>
     </ManagerLayout>
@@ -143,20 +165,17 @@ function Fields() {
   );
 }
 
-function Bookings() {
+function Bookings({ data }) {
   return (
-    <div className="grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 font-heading grid p-2 items-center borde border-[#e5e7eb] bg-white overflow-hidden">
-      <span className="justify-self-start">007</span>
-      <NameDate main={"Nina Williams"} sub={"nina@hotmail.com"} />
-      <NameDate
-        main={"In 1 month → 10 night stay"}
-        sub={"Jan 06 2026 — Jan 16 2026"}
-      />
+    <div className="grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white overflow-hidden">
+      <span className="justify-self-start">{data.room}</span>
+      <NameDate main={data.guest} sub={data.email} />
+      <NameDate main={data.stay} sub={data.dates} />
       <span className="py-1 px-3 text-[#0369a1] justify-self-start text-sm w-fit rounded-full bg-[#e0f2fe]">
-        King
+        {data.type}
       </span>
       <div className="flex justify-between w-full ml-4">
-        <span className="text-sm ">$60000</span>
+        <span className="text-sm ">${data.amount}</span>
         <EllipsisVerticalIcon className="w-5 cursor-pointer  hover:bg-[#f9fafb] rounded-sm" />
       </div>
     </div>
