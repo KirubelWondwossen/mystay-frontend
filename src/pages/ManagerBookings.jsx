@@ -3,11 +3,8 @@ import { ManagerFilter } from "../components/ManagerFilter";
 import ManagerLayout from "../components/ManagerLayout";
 import ManagerTopComponents from "../components/ManagerTopComponents";
 import { ManagerFilterBy } from "../components/ManagerFilterBy";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisVerticalIcon,
-} from "@heroicons/react/24/outline";
+import ManagerBookingsTable from "../components/ManagerBookingsTable";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -113,6 +110,7 @@ const fields = ["Room", "Guest", "Dates", "Type", "Amount"];
 
 function ManagerBookings() {
   const [active, setActive] = useState(1);
+
   return (
     <ManagerLayout>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-[3.2rem]">
@@ -135,7 +133,7 @@ function ManagerBookings() {
         <div>
           <Fields />
           {bookings.map((el, i) => (
-            <Bookings data={el} key={i} />
+            <ManagerBookingsTable data={el} key={i} />
           ))}
           <PrevNext />
         </div>
@@ -166,32 +164,6 @@ function Fields() {
           {el}
         </div>
       ))}
-    </div>
-  );
-}
-
-function Bookings({ data }) {
-  return (
-    <div className="grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white overflow-hidden">
-      <span className="justify-self-start">{data.room}</span>
-      <NameDate main={data.guest} sub={data.email} />
-      <NameDate main={data.stay} sub={data.dates} />
-      <span className="py-1 px-3 text-[#0369a1] justify-self-start text-sm w-fit rounded-full bg-[#e0f2fe]">
-        {data.type}
-      </span>
-      <div className="flex justify-between w-full ml-4">
-        <span className="text-sm ">${data.amount}</span>
-        <EllipsisVerticalIcon className="w-5 cursor-pointer  hover:bg-[#f9fafb] rounded-sm" />
-      </div>
-    </div>
-  );
-}
-
-function NameDate({ main, sub }) {
-  return (
-    <div className="flex flex-col items-start w-fit">
-      <span className="text-sm">{main}</span>
-      <span className="text-tTertiary font-body text-xs">{sub}</span>
     </div>
   );
 }
