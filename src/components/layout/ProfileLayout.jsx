@@ -1,4 +1,4 @@
-import BottomNav from "./BottomNav";
+import BottomNav from "../ui/BottomNav";
 import Navbar from "./Navbar";
 import Page from "./Page";
 import ProfileSidebar from "./ProfileSidebar";

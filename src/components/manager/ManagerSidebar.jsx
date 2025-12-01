@@ -1,6 +1,6 @@
 import ManagerBtnList from "./ManagerBtnList";
 import { useLocation } from "react-router-dom";
-import Logo from "./Logo";
+import Logo from "../ui/Logo";
 import {
   HomeModernIcon,
   CalendarDateRangeIcon,

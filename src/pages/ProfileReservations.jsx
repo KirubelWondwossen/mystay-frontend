@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import ProfileLayout from "../components/ProfileLayout";
-import Subheader from "../components/Subheader";
+import ProfileLayout from "../components/layout/ProfileLayout";
+import Subheader from "../components/ui/Subheader";
 
 function ProfileReservations() {
   return (

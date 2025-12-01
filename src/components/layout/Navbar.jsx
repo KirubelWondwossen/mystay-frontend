@@ -2,7 +2,7 @@ import {
   AdjustmentsHorizontalIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import Logo from "./Logo";
+import Logo from "../ui/Logo";
 import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";

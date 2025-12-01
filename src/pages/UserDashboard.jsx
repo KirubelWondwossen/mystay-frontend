@@ -1,15 +1,15 @@
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import BottomNav from "../components/BottomNav";
-import RoomCard from "../components/RoomCard";
-import RoomCardContainer from "../components/RoomCardContainer";
-import Search from "../components/Search";
-import Sticky from "../components/Sticky";
-import Backdrop from "../components/Backdrop";
-import Filter from "../components/Filter";
+import Footer from "../components/layout/Footer";
+import Navbar from "../components/layout/Navbar";
+import BottomNav from "../components/ui/BottomNav";
+import RoomCard from "../components/cards/RoomCard";
+import RoomCardContainer from "../components/cards/RoomCardContainer";
+import Search from "../components/search/Search";
+import Sticky from "../components/layout/Sticky";
+import Backdrop from "../components/ui/Backdrop";
+import Filter from "../components/search/Filter";
 import { useState } from "react";
-import Page from "../components/Page";
-import Main from "../components/Main";
+import Page from "../components/layout/Page";
+import Main from "../components/layout/Main";
 
 const hotelRooms = [
   {

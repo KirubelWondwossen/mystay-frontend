@@ -1,7 +1,7 @@
 import ManagerDashboardCard from "./ManagerDashboardCard";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
-import DoughnutChart from "./DoughnutChart";
-import LineChart from "./LineChart";
+import DoughnutChart from "../charts/DoughnutChart";
+import LineChart from "../charts/LineChart";
 
 // ===== Manager Stats Data ===== //
 const managerStatsData = [

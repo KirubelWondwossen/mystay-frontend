@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ManagerFilter } from "../components/ManagerFilter";
-import ManagerLayout from "../components/ManagerLayout";
-import ManagerTopComponents from "../components/ManagerTopComponents";
-import { ManagerFilterBy } from "../components/ManagerFilterBy";
-import ManagerBookingsTable from "../components/ManagerBookingsTable";
+import { ManagerFilter } from "../components/manager/ManagerFilter";
+import ManagerLayout from "../components/layout/ManagerLayout";
+import ManagerTopComponents from "../components/manager/ManagerTopComponents";
+import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
+import ManagerBookingsTable from "../components/manager/ManagerBookingsTable";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const filterOptions = [

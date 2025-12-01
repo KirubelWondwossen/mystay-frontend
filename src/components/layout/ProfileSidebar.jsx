@@ -1,6 +1,6 @@
-import { Icon } from "./Icon";
-import { NavBtnName } from "./NavBtnName";
-import BtnList from "./BtnList";
+import { Icon } from "../ui/Icon";
+import { NavBtnName } from "../ui/NavBtnName";
+import BtnList from "../ui/BtnList";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import {
   CalendarDateRangeIcon,

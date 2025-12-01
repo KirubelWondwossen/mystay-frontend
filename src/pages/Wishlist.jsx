@@ -1,12 +1,11 @@
-import BottomNav from "../components/BottomNav";
-import Navbar from "../components/Navbar";
-import Page from "../components/Page";
-import Sticky from "../components/Sticky";
-import Main from "../components/Main";
-import RoomCardContainer from "../components/RoomCardContainer";
-import RoomCard from "../components/RoomCard";
-import SectionHeader from "../components/SectionHeader";
-import Subheader from "../components/Subheader";
+import BottomNav from "../components/ui/BottomNav";
+import Navbar from "../components/layout/Navbar";
+import Page from "../components/layout/Page";
+import Sticky from "../components/layout/Sticky";
+import Main from "../components/layout/Main";
+import RoomCardContainer from "../components/cards/RoomCardContainer";
+import RoomCard from "../components/cards/RoomCard";
+import SectionHeader from "../components/ui/SectionHeader";
 
 const hotelRooms = [
   {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import ProfileLayout from "../components/ProfileLayout";
-import Subheader from "../components/Subheader";
-import { Button } from "./Button";
+import ProfileLayout from "../components/layout/ProfileLayout";
+import Subheader from "../components/ui/Subheader";
+import { Button } from "../components/ui/Button";
 
 function ProfileInfo() {
   const [country, setCountry] = useState([]);

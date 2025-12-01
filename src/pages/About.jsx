@@ -1,11 +1,11 @@
-import Page from "../components/Page";
-import Navbar from "../components/Navbar";
-import Sticky from "../components/Sticky";
-import BottomNav from "../components/BottomNav";
-import Main from "../components/Main";
-import SectionHeader from "../components/SectionHeader";
+import Page from "../components/layout/Page";
+import Navbar from "../components/layout/Navbar";
+import Sticky from "../components/layout/Sticky";
+import BottomNav from "../components/ui/BottomNav";
+import Main from "../components/layout/Main";
+import SectionHeader from "../components/ui/SectionHeader";
 import { Link } from "react-router-dom";
-import { Button } from "./Button";
+import { Button } from "../components/ui/Button";
 
 function About() {
   return (

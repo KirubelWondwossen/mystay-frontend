@@ -1,4 +1,4 @@
-import ManagerSidebar from "./ManagerSidebar";
+import ManagerSidebar from "../manager/ManagerSidebar";
 import {
   ArrowRightStartOnRectangleIcon,
   MoonIcon,

@@ -1,7 +1,7 @@
-import ManagerLayout from "../components/ManagerLayout";
-import ManagerDashboardCards from "../components/ManagerDashboardCards";
-import ManagerTopComponents from "../components/ManagerTopComponents";
-import { ManagerFilter } from "../components/ManagerFilter";
+import ManagerLayout from "../components/layout/ManagerLayout";
+import ManagerDashboardCards from "../components/manager/ManagerDashboardCards";
+import ManagerTopComponents from "../components/manager/ManagerTopComponents";
+import { ManagerFilter } from "../components/manager/ManagerFilter";
 import { useState } from "react";
 
 const filterOptions = [{ value: 7 }, { value: 30 }, { value: 90 }];
