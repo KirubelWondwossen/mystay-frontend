@@ -110,6 +110,15 @@ const fields = ["Room", "Guest", "Dates", "Type", "Amount"];
 
 function ManagerBookings() {
   const [active, setActive] = useState(1);
+  const [filteredBookings, setFilteredBookings] = useState(bookings);
+
+  function handleFilter(filter) {
+    if (filter === "All") return setFilteredBookings(bookings);
+    const newBookings = bookings.filter(
+      (el) => el.type === filter.toLowerCase()
+    );
+    setFilteredBookings(newBookings);
+  }
 
   return (
     <ManagerLayout>
@@ -124,6 +133,7 @@ function ManagerBookings() {
                   active={active}
                   setActive={setActive}
                   filters={item.type}
+                  handleFilter={handleFilter}
                 />
               ))}
             </ManagerFilter>
@@ -132,7 +142,7 @@ function ManagerBookings() {
         </ManagerTopComponents>
         <div>
           <Fields />
-          {bookings.map((el, i) => (
+          {filteredBookings.map((el, i) => (
             <ManagerBookingsTable data={el} key={i} />
           ))}
           <PrevNext />
