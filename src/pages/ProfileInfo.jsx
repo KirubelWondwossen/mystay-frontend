@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ProfileLayout from "../components/layout/ProfileLayout";
 import Subheader from "../components/ui/Subheader";
-import { Button } from "../components/ui/Button";
+import Button from "../components/ui/Button";
 
 function ProfileInfo() {
   const [country, setCountry] = useState([]);
@@ -30,7 +30,9 @@ function ProfileInfo() {
         </p>
       </div>
       <Form country={country} />
-      <Button className={"self-end mb-11"}>Update Profile</Button>
+      <Button className={"self-end mb-11 bg-primary p-4 text-xl"}>
+        Update Profile
+      </Button>
     </ProfileLayout>
   );
 }

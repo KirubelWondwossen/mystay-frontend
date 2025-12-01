@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+
 import {
   ArrowDownOnSquareIcon,
   EllipsisVerticalIcon,
@@ -76,7 +78,9 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <IconDetail icon={EyeIcon} detail={"Details"} />
+      <Link to={"/managerbookingsdetail"}>
+        <IconDetail icon={EyeIcon} detail={"Details"} />
+      </Link>
       <IconDetail icon={ArrowDownOnSquareIcon} detail={"Check-in"} />
       <IconDetail icon={TrashIcon} detail={"Delete"} />
     </div>

@@ -2,6 +2,7 @@ import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import { Link } from "react-router-dom";
 import { HomeModernIcon } from "@heroicons/react/24/outline";
+import Button from "../components/ui/Button";
 function ManagerBookingDetails() {
   return (
     <ManagerLayout>
@@ -12,6 +13,10 @@ function ManagerBookingDetails() {
           </Link>
         </ManagerTopComponents>
         <BookingDetails />
+        <div className="flex gap-2 self-end">
+          <Button className={"bg-primary rounded-lg p-2"}>Check-in</Button>
+          <Button className={"bg-error rounded-lg p-2"}>Delete</Button>
+        </div>
       </div>
     </ManagerLayout>
   );

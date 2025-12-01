@@ -5,7 +5,7 @@ import BottomNav from "../components/ui/BottomNav";
 import Main from "../components/layout/Main";
 import SectionHeader from "../components/ui/SectionHeader";
 import { Link } from "react-router-dom";
-import { Button } from "../components/ui/Button";
+import Button from "../components/ui/Button";
 
 function About() {
   return (
@@ -83,7 +83,7 @@ function ParagraphImg({ children }) {
 function ButtonLink() {
   return (
     <Link to={"/"} className="text-start w-fit">
-      <Button>Explore Luxury Rooms</Button>
+      <Button className={"bg-primary p-4 text-xl"}>Explore Luxury Rooms</Button>
     </Link>
   );
 }
