@@ -8,6 +8,7 @@ import ProfileReservations from "./pages/ProfileReservations";
 import WishList from "./pages/Wishlist";
 import ManagerHome from "./pages/ManagerHome";
 import ManagerBookings from "./pages/ManagerBookings";
+import ManagerBookingsDetail from "./pages/ManagerBookingsDetail";
 function App() {
   return (
     <Router>
@@ -24,6 +25,11 @@ function App() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/managerhome" element={<ManagerHome />} />
           <Route path="/managerbookings" element={<ManagerBookings />} />
+          <Route path="/managerhome" element={<ManagerHome />} />
+          <Route
+            path="/managerbookingsdetail"
+            element={<ManagerBookingsDetail />}
+          />
         </Routes>
       </div>
     </Router>
