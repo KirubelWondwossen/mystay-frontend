@@ -34,12 +34,12 @@ function ManagerSidebar() {
       </ManagerBtnList>
 
       <ManagerBtnList
-        path={"/managercabins"}
+        path={"/managerrooms"}
         className={"w-full"}
-        loc={location.pathname === "/managercabins"}
+        loc={location.pathname === "/managerrooms"}
       >
         <Icon icon={HomeModernIcon} />
-        <SideBtnName>Cabins</SideBtnName>
+        <SideBtnName>Rooms</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
         path={"/managerusers"}

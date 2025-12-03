@@ -9,6 +9,7 @@ import WishList from "./pages/Wishlist";
 import ManagerHome from "./pages/ManagerHome";
 import ManagerBookings from "./pages/ManagerBookings";
 import ManagerBookingsDetail from "./pages/ManagerBookingsDetail";
+import ManagerRooms from "./pages/ManagerRooms";
 function App() {
   return (
     <Router>
@@ -30,6 +31,7 @@ function App() {
             path="/managerbookingsdetail"
             element={<ManagerBookingsDetail />}
           />
+          <Route path="/managerrooms" element={<ManagerRooms />} />
         </Routes>
       </div>
     </Router>

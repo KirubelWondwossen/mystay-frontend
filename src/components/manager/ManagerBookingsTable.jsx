@@ -8,6 +8,17 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
+const statusColors = {
+  UNCONFIRMED: "#e0f2fe",
+  "CHECKED IN": "#dcfce7",
+  "CHECKED OUT": "#e5e7eb",
+};
+const statusTxtColors = {
+  UNCONFIRMED: "#0369a1",
+  "CHECKED IN": "#15803d",
+  "CHECKED OUT": "#374151",
+};
+
 function ManagerBookingsTable({ data }) {
   const [popup, setPopup] = useState(false);
 
@@ -42,8 +53,13 @@ function ManagerBookingsTable({ data }) {
       <NameDate main={data.guest} sub={data.email} />
       <NameDate main={data.stay} sub={data.dates} />
 
-      <span className="py-1 px-3 text-[#0369a1] justify-self-start text-sm w-fit rounded-full bg-[#e0f2fe]">
-        {data.type}
+      <span
+        className={`py-1 px-3 text-[${
+          statusTxtColors[data.status]
+        }] justify-self-start text-xs w-fit rounded-full 
+          bg-[${statusColors[data.status]}]`}
+      >
+        {data.status}
       </span>
 
       <div className="flex justify-between w-full ml-4">

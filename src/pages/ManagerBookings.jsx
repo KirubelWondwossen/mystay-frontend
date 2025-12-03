@@ -8,9 +8,9 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const filterOptions = [
   { value: 1, type: "All" },
-  { value: 2, type: "Queen" },
-  { value: 3, type: "King" },
-  { value: 4, type: "Twin" },
+  { value: 2, type: "Checked in" },
+  { value: 3, type: "Checked out" },
+  { value: 4, type: "Unconfirmed" },
 ];
 
 const bookings = [
@@ -20,7 +20,7 @@ const bookings = [
     email: "nina@hotmail.com",
     stay: "In 1 month → 10 night stay",
     dates: "Jan 06 2026 — Jan 16 2026",
-    type: "queen",
+    status: "UNCONFIRMED",
     amount: 6050.0,
   },
   {
@@ -29,7 +29,7 @@ const bookings = [
     email: "emma@gmail.com",
     stay: "In 29 days → 15 night stay",
     dates: "Dec 30 2025 — Jan 14 2026",
-    type: "king",
+    status: "CHECKED OUT",
     amount: 5325.0,
   },
   {
@@ -38,7 +38,7 @@ const bookings = [
     email: "taro@gmail.com",
     stay: "In 28 days → 5 night stay",
     dates: "Dec 29 2025 — Jan 03 2026",
-    type: "twin",
+    status: "CHECKED IN",
     amount: 2950.0,
   },
   {
@@ -47,7 +47,7 @@ const bookings = [
     email: "maria@example.com",
     stay: "In 14 days → 1 night stay",
     dates: "Dec 15 2025 — Dec 16 2025",
-    type: "queen",
+    status: "UNCONFIRMED",
     amount: 450.0,
   },
   {
@@ -56,7 +56,7 @@ const bookings = [
     email: "fatimah@gmail.com",
     stay: "In 13 days → 6 night stay",
     dates: "Dec 14 2025 — Dec 20 2025",
-    type: "king",
+    status: "CHECKED IN",
     amount: 3000.0,
   },
   {
@@ -65,7 +65,7 @@ const bookings = [
     email: "jowi@gmail.com",
     stay: "In 11 days → 3 night stay",
     dates: "Dec 12 2025 — Dec 15 2025",
-    type: "twin",
+    status: "CHECKED OUT",
     amount: 1065.0,
   },
   {
@@ -74,7 +74,7 @@ const bookings = [
     email: "ahmed@gmail.com",
     stay: "In 10 days → 7 night stay",
     dates: "Dec 11 2025 — Dec 18 2025",
-    type: "queen",
+    status: "UNCONFIRMED",
     amount: 2975.0,
   },
   {
@@ -83,7 +83,7 @@ const bookings = [
     email: "jonas@example.eu",
     stay: "In 8 days → 6 night stay",
     dates: "Dec 09 2025 — Dec 15 2025",
-    type: "king",
+    status: "CHECKED IN",
     amount: 1500.0,
   },
   {
@@ -92,7 +92,7 @@ const bookings = [
     email: "gabriel@gmail.com",
     stay: "In 8 days → 5 night stay",
     dates: "Dec 09 2025 — Dec 14 2025",
-    type: "twin",
+    status: "CHECKED OUT",
     amount: 2550.0,
   },
   {
@@ -101,7 +101,7 @@ const bookings = [
     email: "julie@gmail.com",
     stay: "In 6 days → 3 night stay",
     dates: "Dec 07 2025 — Dec 10 2025",
-    type: "queen",
+    status: "UNCONFIRMED",
     amount: 4200.0,
   },
 ];
@@ -115,7 +115,7 @@ function ManagerBookings() {
   function handleFilter(filter) {
     if (filter === "All") return setFilteredBookings(bookings);
     const newBookings = bookings.filter(
-      (el) => el.type === filter.toLowerCase()
+      (el) => el.status === filter.toUpperCase()
     );
     setFilteredBookings(newBookings);
   }
