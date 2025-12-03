@@ -1,8 +1,14 @@
+import { useEffect, useRef, useState } from "react";
+import {
+  EllipsisVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+
 import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import { ManagerFilter } from "../components/manager/ManagerFilter";
-import { useState } from "react";
 import SortBy from "../components/ui/SortBy";
 
 const rooms = [
@@ -90,13 +96,17 @@ const sortOptions = [
   },
 ];
 
+const fields = ["Room", "Type", "Capacity", "Price"];
+
 function ManagerRooms() {
   const [active, setActive] = useState(1);
   const [filteredRooms, setFilteredRooms] = useState(rooms);
 
   function handleFilter(filter) {
+    console.log(filter);
+
     if (filter === "All") return setFilteredRooms(rooms);
-    const newRooms = rooms.filter((el) => el.type === filter.toLowerCase());
+    const newRooms = rooms.filter((el) => el.type === filter);
     setFilteredRooms(newRooms);
   }
   return (
@@ -119,8 +129,106 @@ function ManagerRooms() {
             <SortBy sortOptions={sortOptions} />
           </div>
         </ManagerTopComponents>
+        <div>
+          <Fields fields={fields} />
+          {filteredRooms.map((el, i) => (
+            <Rooms rooms={el} key={i} />
+          ))}
+        </div>
       </div>
     </ManagerLayout>
+  );
+}
+
+function Fields({ fields }) {
+  return (
+    <div className="grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] gap-2 border border-[#e5e7eb] rounded-t-sm">
+      <div></div>
+      {fields.map((el, i) => (
+        <div
+          className="justify-self-start text-sm font-heading p-2 text-tSecondary font-semibold"
+          key={i}
+        >
+          {el.toUpperCase()}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Rooms({ rooms }) {
+  const [popup, setPopup] = useState(false);
+
+  const popupRef = useRef(null);
+  const iconRef = useRef(null);
+
+  function handlePopup() {
+    setPopup((el) => !el);
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (
+        popup &&
+        popupRef.current &&
+        !popupRef.current.contains(e.target) &&
+        iconRef.current &&
+        !iconRef.current.contains(e.target)
+      ) {
+        setPopup(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [popup]);
+
+  return (
+    <div className="relative grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
+      <img
+        src={rooms.img}
+        alt="room"
+        className="aspect-[3/2] object-cover object-center"
+      />
+      <span className="justify-self-start py-4">{rooms.id}</span>
+      <span className="justify-self-start py-4 text-sm">
+        {rooms.type.toUpperCase()}
+      </span>
+      <span className="justify-self-start py-4 text-sm font-body">
+        {rooms.fits}
+      </span>
+      <span className="justify-self-start py-4 ml-2">${rooms.price}</span>
+      <EllipsisVerticalIcon
+        ref={iconRef}
+        className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
+        onClick={handlePopup}
+      />
+      <BookingOption popup={popup} popupRef={popupRef} />
+    </div>
+  );
+}
+
+function BookingOption({ popup, popupRef }) {
+  return (
+    <div
+      ref={popupRef}
+      className={`${
+        popup ? "visible" : "invisible"
+      } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
+    >
+      <IconDetail icon={PencilIcon} detail={"Edit"} />
+      <IconDetail icon={TrashIcon} detail={"Delete"} />
+    </div>
+  );
+}
+
+// eslint-disable-next-line
+function IconDetail({ icon: Icon, detail }) {
+  return (
+    <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">
+      <Icon className="w-4" />
+      <span className="font-body text-xs">{detail}</span>
+    </div>
   );
 }
 

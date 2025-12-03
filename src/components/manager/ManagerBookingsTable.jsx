@@ -103,7 +103,7 @@ function BookingOption({ popup, popupRef }) {
   );
 }
 
-//Ignore
+// eslint-disable-next-line
 function IconDetail({ icon: Icon, detail }) {
   return (
     <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">

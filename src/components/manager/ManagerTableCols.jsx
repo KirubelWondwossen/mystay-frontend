@@ -6,7 +6,7 @@ export default function ManagerTableCols({ fields }) {
           className="justify-self-start text-sm font-heading p-2 text-tSecondary font-semibold"
           key={i}
         >
-          {el}
+          {el.toUpperCase()}
         </div>
       ))}
     </div>
