@@ -1,16 +1,26 @@
 import { useState } from "react";
 import { ManagerFilter } from "../components/manager/ManagerFilter";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
 import ManagerBookingsTable from "../components/manager/ManagerBookingsTable";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import SortBy from "../components/ui/SortBy";
+import ManagerTableCols from "../components/manager/ManagerTableCols";
 
 const filterOptions = [
   { value: 1, type: "All" },
   { value: 2, type: "Checked in" },
   { value: 3, type: "Checked out" },
   { value: 4, type: "Unconfirmed" },
+];
+
+const sortOptions = [
+  { value: "recent", text: "Sort by date (recent first)" },
+  { value: "earlier", text: "Sort by date (earlier first)" },
+  { value: "high", text: "Sort by amount (high first)" },
+  { value: "low", text: "Sort by amount (low first)" },
 ];
 
 const bookings = [
@@ -137,11 +147,11 @@ function ManagerBookings() {
                 />
               ))}
             </ManagerFilter>
-            <SortBy />
+            <SortBy sortOptions={sortOptions} />
           </div>
         </ManagerTopComponents>
         <div>
-          <Fields />
+          <ManagerTableCols fields={fields} />
           {filteredBookings.map((el, i) => (
             <ManagerBookingsTable data={el} key={i} />
           ))}
@@ -149,32 +159,6 @@ function ManagerBookings() {
         </div>
       </div>
     </ManagerLayout>
-  );
-}
-
-function SortBy() {
-  return (
-    <select className="bg-white p-1 rounded-md shadow-sm font-body text-sm  focus:outline-none focus:ring-2 focus:ring-primary">
-      <option value="recent">Sort by date(recent first)</option>
-      <option value="earlier">Sort by date(earlier first)</option>
-      <option value="high">Sort by amount(high first)</option>
-      <option value="recent">Sort by amount(low first)</option>
-    </select>
-  );
-}
-
-function Fields() {
-  return (
-    <div className="grid grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 border border-[#e5e7eb] rounded-t-sm">
-      {fields.map((el, i) => (
-        <div
-          className="justify-self-start text-sm font-heading p-2 text-tSecondary font-semibold"
-          key={i}
-        >
-          {el}
-        </div>
-      ))}
-    </div>
   );
 }
 
