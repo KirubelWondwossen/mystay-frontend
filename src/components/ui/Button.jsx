@@ -1,6 +1,10 @@
-function Button({ children, className, onClick }) {
+function Button({ children, className, onClick, type }) {
   return (
-    <button onClick={onClick} className={`${className} w-fit font-heading`}>
+    <button
+      onClick={onClick}
+      className={`${className} w-fit font-heading`}
+      type={type}
+    >
       {children}
     </button>
   );

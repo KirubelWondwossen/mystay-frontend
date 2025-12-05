@@ -151,7 +151,7 @@ function ManagerRooms() {
         </Button>
 
         {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
-        {openModal && <ManagerAddRoomPopup />}
+        {openModal && <ManagerAddRoomPopup handleOpenModal={handleOpenModal} />}
       </div>
     </ManagerLayout>
   );

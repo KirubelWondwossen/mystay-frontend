@@ -51,14 +51,18 @@ function Popup({ handleOpenModal }) {
         />
       ))}
       <div className="flex items-start self-end p-3 gap-3">
-        <Button className={"add-room-btn"} onClick={handleOpenModal}>
+        <Button
+          type={"button"}
+          className={"add-room-btn"}
+          onClick={handleOpenModal}
+        >
           Cancel
         </Button>
         <Button
           className={
             "text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
           }
-          onClick={handleOpenModal}
+          type={"button"}
         >
           Create new room
         </Button>
@@ -71,8 +75,11 @@ function PopupHeader({ handleOpenModal }) {
   return (
     <div className="w-full p-2 relative">
       <XMarkIcon
-        className="w-6 mt-4 absolute right-[2%] bottom-[25%] cursor-pointer"
-        onClick={handleOpenModal}
+        className="w-6 mt-4 absolute right-[2%] bottom-[25%] cursor-pointer z-50"
+        onClick={(e) => {
+          e.preventDefault(); // stops form submission
+          handleOpenModal();
+        }}
       />
     </div>
   );
@@ -104,15 +111,6 @@ function LabelInput({ label, name, type, formElement: Element }) {
         />
       )}
     </div>
-  );
-}
-
-function FilterList({ children }) {
-  return (
-    <span className="flex gap-2 items-center">
-      <input className="h-4 w-4 text-logo cursor-pointer" type="checkbox" />
-      <span className="text-lg font-body font-medium">{children}</span>
-    </span>
   );
 }
 
