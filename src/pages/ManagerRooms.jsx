@@ -105,18 +105,36 @@ function ManagerRooms() {
   const [active, setActive] = useState(1);
   const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [openModal, setOpenModal] = useState(false);
+  const [sortBy, setSortBy] = useState("name-asc");
 
   function handleOpenModal() {
     setOpenModal((openModal) => !openModal);
   }
 
   function handleFilter(filter) {
-    console.log(filter);
-
     if (filter === "All") return setFilteredRooms(rooms);
     const newRooms = rooms.filter((el) => el.type === filter);
     setFilteredRooms(newRooms);
   }
+
+  function handleSort(option) {
+    setSortBy(option);
+
+    let sortedRooms = [...filteredRooms];
+
+    if (option === "name-asc")
+      sortedRooms.sort((a, b) => a.type.localeCompare(b.type));
+    if (option === "name-desc")
+      sortedRooms.sort((a, b) => b.type.localeCompare(a.type));
+
+    if (option === "regularPrice-asc")
+      sortedRooms.sort((a, b) => a.price - b.price);
+    if (option === "regularPrice-desc")
+      sortedRooms.sort((a, b) => b.price - a.price);
+
+    setFilteredRooms(sortedRooms);
+  }
+
   return (
     <ManagerLayout>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
@@ -134,7 +152,11 @@ function ManagerRooms() {
                 />
               ))}
             </ManagerFilter>
-            <SortBy sortOptions={sortOptions} />
+            <SortBy
+              sortOptions={sortOptions}
+              sortBy={sortBy}
+              onChange={handleSort}
+            />
           </div>
         </ManagerTopComponents>
         <div>
