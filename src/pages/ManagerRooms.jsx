@@ -10,6 +10,9 @@ import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import { ManagerFilter } from "../components/manager/ManagerFilter";
 import SortBy from "../components/ui/SortBy";
+import Button from "../components/ui/Button";
+import Backdrop from "../components/ui/Backdrop";
+import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
 
 const rooms = [
   {
@@ -101,6 +104,11 @@ const fields = ["Room", "Type", "Capacity", "Price"];
 function ManagerRooms() {
   const [active, setActive] = useState(1);
   const [filteredRooms, setFilteredRooms] = useState(rooms);
+  const [openModal, setOpenModal] = useState(false);
+
+  function handleOpenModal() {
+    setOpenModal((openModal) => !openModal);
+  }
 
   function handleFilter(filter) {
     console.log(filter);
@@ -111,7 +119,7 @@ function ManagerRooms() {
   }
   return (
     <ManagerLayout>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-[3.2rem]">
+      <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
         <ManagerTopComponents header={"All Bookings"}>
           <div className="flex gap-3">
             <ManagerFilter>
@@ -135,6 +143,15 @@ function ManagerRooms() {
             <Rooms rooms={el} key={i} />
           ))}
         </div>
+        <Button
+          className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+          onClick={handleOpenModal}
+        >
+          Add new room
+        </Button>
+
+        {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
+        {openModal && <ManagerAddRoomPopup />}
       </div>
     </ManagerLayout>
   );

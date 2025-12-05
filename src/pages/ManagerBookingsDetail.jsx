@@ -14,8 +14,18 @@ function ManagerBookingDetails() {
         </ManagerTopComponents>
         <BookingDetails />
         <div className="flex gap-2 self-end">
-          <Button className={"bg-primary rounded-lg p-2"}>Check-in</Button>
-          <Button className={"bg-error rounded-lg p-2"}>Delete</Button>
+          <Button
+            className={
+              "bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
+            }
+          >
+            Check-in
+          </Button>
+          <Button
+            className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+          >
+            Delete
+          </Button>
         </div>
       </div>
     </ManagerLayout>

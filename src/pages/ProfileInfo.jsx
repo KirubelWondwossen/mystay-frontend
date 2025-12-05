@@ -30,7 +30,11 @@ function ProfileInfo() {
         </p>
       </div>
       <Form country={country} />
-      <Button className={"self-end mb-11 bg-primary p-4 text-xl"}>
+      <Button
+        className={
+          "self-end mb-11 bg-primary p-4 text-xl hover:bg-[#4338ca] text-white"
+        }
+      >
         Update Profile
       </Button>
     </ProfileLayout>

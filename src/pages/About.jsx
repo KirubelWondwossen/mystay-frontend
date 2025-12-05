@@ -83,7 +83,11 @@ function ParagraphImg({ children }) {
 function ButtonLink() {
   return (
     <Link to={"/"} className="text-start w-fit">
-      <Button className={"bg-primary p-4 text-xl"}>Explore Luxury Rooms</Button>
+      <Button
+        className={"bg-primary p-4 text-xl text-white hover:bg-[#4338ca]"}
+      >
+        Explore Luxury Rooms
+      </Button>
     </Link>
   );
 }

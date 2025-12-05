@@ -1,6 +1,6 @@
-function Button({ children, className }) {
+function Button({ children, className, onClick }) {
   return (
-    <button className={`${className} w-fit font-heading text-white`}>
+    <button onClick={onClick} className={`${className} w-fit font-heading`}>
       {children}
     </button>
   );

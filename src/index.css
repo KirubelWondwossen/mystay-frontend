@@ -45,3 +45,12 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.custom-file {
+  @apply font-heading font-medium text-tSecondary text-sm
+    file:rounded-sm file:bg-primary file:text-white file:border-none
+    file:px-2 file:py-1 file:hover:bg-[#4338ca] file:cursor-pointer;
+}
+.add-room-btn {
+  @apply text-tSecondary border border-[#e5e7eb] hover:bg-[#f9fafb] p-2 rounded-lg text-sm;
+}
