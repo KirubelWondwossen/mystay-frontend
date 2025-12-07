@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import {
   EllipsisVerticalIcon,
   PencilIcon,
@@ -14,7 +16,7 @@ import Button from "../components/ui/Button";
 import Backdrop from "../components/ui/Backdrop";
 import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
 
-const rooms = [
+const roomsTemp = [
   {
     id: "001",
     fits: "Fits up to 2",
@@ -81,58 +83,62 @@ const filterOptions = [
 ];
 
 const sortOptions = [
-  {
-    value: "name-asc",
-    text: "Sort by name (A-Z)",
-  },
-  {
-    value: "name-desc",
-    text: "Sort by name (Z-A)",
-  },
-  {
-    value: "regularPrice-asc",
-    text: "Sort by price (low first)",
-  },
-  {
-    value: "regularPrice-desc",
-    text: "Sort by price (high first)",
-  },
+  { value: "name-asc", text: "Sort by name (A-Z)" },
+  { value: "name-desc", text: "Sort by name (Z-A)" },
+  { value: "regularPrice-asc", text: "Sort by price (low first)" },
+  { value: "regularPrice-desc", text: "Sort by price (high first)" },
 ];
 
 const fields = ["Room", "Type", "Capacity", "Price"];
 
 function ManagerRooms() {
   const [active, setActive] = useState(1);
+  const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [openModal, setOpenModal] = useState(false);
-  const [sortBy, setSortBy] = useState("name-asc");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const filter = searchParams.get("filter") || "All";
+
+  // For API call
+  useEffect(() => {
+    setRooms(roomsTemp);
+  }, []);
+
+  useEffect(() => {
+    let updatedRooms = [...rooms];
+
+    if (filter !== "All") {
+      updatedRooms = updatedRooms.filter((room) => room.type === filter);
+    }
+
+    if (sortBy === "name-asc")
+      updatedRooms.sort((a, b) => a.type.localeCompare(b.type));
+    if (sortBy === "name-desc")
+      updatedRooms.sort((a, b) => b.type.localeCompare(a.type));
+    if (sortBy === "regularPrice-asc")
+      updatedRooms.sort((a, b) => a.price - b.price);
+    if (sortBy === "regularPrice-desc")
+      updatedRooms.sort((a, b) => b.price - a.price);
+
+    setFilteredRooms(updatedRooms);
+  }, [sortBy, filter, rooms]);
 
   function handleOpenModal() {
-    setOpenModal((openModal) => !openModal);
+    setOpenModal((prev) => !prev);
   }
 
-  function handleFilter(filter) {
-    if (filter === "All") return setFilteredRooms(rooms);
-    const newRooms = rooms.filter((el) => el.type === filter);
-    setFilteredRooms(newRooms);
+  function handleFilter(selectedFilter) {
+    if (selectedFilter === "All") searchParams.delete("filter");
+    else searchParams.set("filter", selectedFilter);
+
+    setSearchParams(searchParams);
   }
 
   function handleSort(option) {
-    setSortBy(option);
-
-    let sortedRooms = [...filteredRooms];
-
-    if (option === "name-asc")
-      sortedRooms.sort((a, b) => a.type.localeCompare(b.type));
-    if (option === "name-desc")
-      sortedRooms.sort((a, b) => b.type.localeCompare(a.type));
-
-    if (option === "regularPrice-asc")
-      sortedRooms.sort((a, b) => a.price - b.price);
-    if (option === "regularPrice-desc")
-      sortedRooms.sort((a, b) => b.price - a.price);
-
-    setFilteredRooms(sortedRooms);
+    searchParams.set("sortBy", option);
+    setSearchParams(searchParams);
   }
 
   return (
@@ -159,12 +165,14 @@ function ManagerRooms() {
             />
           </div>
         </ManagerTopComponents>
+
         <div>
           <Fields fields={fields} />
           {filteredRooms.map((el, i) => (
             <Rooms rooms={el} key={i} />
           ))}
         </div>
+
         <Button
           className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
           onClick={handleOpenModal}
@@ -197,12 +205,11 @@ function Fields({ fields }) {
 
 function Rooms({ rooms }) {
   const [popup, setPopup] = useState(false);
-
   const popupRef = useRef(null);
   const iconRef = useRef(null);
 
   function handlePopup() {
-    setPopup((el) => !el);
+    setPopup((prev) => !prev);
   }
 
   useEffect(() => {
@@ -217,7 +224,6 @@ function Rooms({ rooms }) {
         setPopup(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [popup]);

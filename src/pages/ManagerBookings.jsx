@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import { ManagerFilter } from "../components/manager/ManagerFilter";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
@@ -23,7 +25,7 @@ const sortOptions = [
   { value: "low", text: "Sort by amount (low first)" },
 ];
 
-const bookings = [
+const bookingsTemp = [
   {
     room: "007",
     guest: "Nina Williams",
@@ -120,14 +122,34 @@ const fields = ["Room", "Guest", "Dates", "Type", "Amount"];
 
 function ManagerBookings() {
   const [active, setActive] = useState(1);
-  const [filteredBookings, setFilteredBookings] = useState(bookings);
+  const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  function handleFilter(filter) {
-    if (filter === "All") return setFilteredBookings(bookings);
-    const newBookings = bookings.filter(
-      (el) => el.status === filter.toUpperCase()
-    );
-    setFilteredBookings(newBookings);
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const filter = searchParams.get("filter") || "All";
+
+  // For API call
+  useEffect(() => {
+    setBookings(bookingsTemp);
+  }, []);
+
+  useEffect(() => {
+    let updatedBookings = [...bookings];
+
+    if (filter !== "All") {
+      updatedBookings = updatedBookings.filter(
+        (booking) => booking.status === filter.toUpperCase()
+      );
+    }
+    setFilteredBookings(updatedBookings);
+  }, [bookings, sortBy, filter]);
+
+  function handleFilter(selectedFilter) {
+    if (selectedFilter === "All") searchParams.delete("filter");
+    else searchParams.set("filter", selectedFilter);
+
+    setSearchParams(searchParams);
   }
 
   return (
