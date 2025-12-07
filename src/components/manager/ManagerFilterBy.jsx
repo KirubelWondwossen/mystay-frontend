@@ -1,3 +1,5 @@
+import { useSearchParams } from "react-router-dom";
+
 export function ManagerFilterBy({
   value,
   active: active,
@@ -5,7 +7,9 @@ export function ManagerFilterBy({
   filters,
   handleFilter,
 }) {
-  const isActive = active === value;
+  const [searchParams] = useSearchParams();
+  const currentFilter = searchParams.get("filter") || "All";
+  const isActive = currentFilter === filters;
 
   return (
     <span
