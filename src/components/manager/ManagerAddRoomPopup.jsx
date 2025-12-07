@@ -89,7 +89,7 @@ function LabelInput({ label, name, type, formElement: Element }) {
   return (
     <div className="flex items-center justify-between p-3 border-b border-[#f3f4f6] w-full">
       <label
-        htmlFor="name"
+        htmlFor={name}
         className="font-heading font-medium text-tSecondary"
       >
         {label}
