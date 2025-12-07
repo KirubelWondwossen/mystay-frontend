@@ -77,7 +77,7 @@ function PopupHeader({ handleOpenModal }) {
       <XMarkIcon
         className="w-6 mt-4 absolute right-[2%] bottom-[25%] cursor-pointer z-50"
         onClick={(e) => {
-          e.preventDefault(); // stops form submission
+          e.preventDefault();
           handleOpenModal();
         }}
       />

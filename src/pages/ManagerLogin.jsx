@@ -1,5 +1,6 @@
 import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
+import LabelInput from "../components/ui/LabelInput";
 
 function ManagerLogin() {
   return (
@@ -30,19 +31,4 @@ function Form() {
   );
 }
 
-function LabelInput({ label, name, type }) {
-  return (
-    <div className="flex flex-col items-start p-3 gap-2">
-      <label htmlFor={name} className="font-body font-medium text-tSecondary">
-        {label}
-      </label>
-      <input
-        type={type}
-        name={name}
-        id={name}
-        className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-2 py-1 w-72 "
-      />
-    </div>
-  );
-}
 export default ManagerLogin;
