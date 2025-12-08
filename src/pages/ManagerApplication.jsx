@@ -82,6 +82,7 @@ function ManagerApplication() {
     }));
   }, [coords]);
 
+  // For POST
   function handleSubmit(e) {
     e.preventDefault();
     console.log("Sending:", formData);

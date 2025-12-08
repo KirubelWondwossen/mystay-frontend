@@ -35,12 +35,6 @@ function ManagerProfile() {
 function ManagerNavIcons({ isDark, handleDarkMode }) {
   return (
     <ManagerNavContainer className="gap-1 py-3">
-      {/* <Link
-        to={"/managerprofile"}
-        className="px-1 hover:bg-background rounded-sm"
-      >
-        <Icon icon={UserIcon} />
-      </Link> */}
       <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />
       <Icon icon={ArrowRightStartOnRectangleIcon} />
     </ManagerNavContainer>
