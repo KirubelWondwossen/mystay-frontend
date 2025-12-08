@@ -6,7 +6,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import ManagerLayoutNav from "./ManagerLayoutNav";
+import ManagerLayoutNav from "../admin/AdminLayoutNav";
 
 function ManagerLayout({ children }) {
   const [isDark, setIsDark] = useState(false);
