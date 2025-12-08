@@ -1,10 +1,171 @@
+import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
+import SortBy from "../components/ui/SortBy";
+import { ManagerFilter } from "../components/manager/ManagerFilter";
+import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import AdminAppTable from "../components/admin/AdminAppTable";
+
+const applicationsTemp = [
+  {
+    manager_name: "John Doe",
+    manager_email: "john@example.com",
+    hotel_name: "Sunrise Hotel",
+    hotel_address: "123 Main St, City",
+    manager_phone: "+251900000001",
+    hotel_description: "A cozy hotel near the beach.",
+    hotel_star_rating: 4,
+    created_at: "2025-12-01T10:00:00Z",
+    status: "approved",
+  },
+  {
+    manager_name: "Jane Smith",
+    manager_email: "jane@example.com",
+    hotel_name: "Mountain View Inn",
+    hotel_address: "456 Hill Rd, City",
+    manager_phone: "+251900000002",
+    hotel_description: "A scenic hotel in the mountains.",
+    hotel_star_rating: 3,
+    created_at: "2025-12-03T14:30:00Z",
+    status: "pending",
+  },
+  {
+    manager_name: "Michael Brown",
+    manager_email: "michael@example.com",
+    hotel_name: "City Center Lodge",
+    hotel_address: "789 Center Ave, City",
+    manager_phone: "+251900000003",
+    hotel_description: "Hotel in the heart of the city.",
+    hotel_star_rating: 5,
+    created_at: "2025-12-05T08:15:00Z",
+    status: "rejected",
+  },
+  {
+    manager_name: "Emily White",
+    manager_email: "emily@example.com",
+    hotel_name: "Riverside Suites",
+    hotel_address: "321 River Rd, City",
+    manager_phone: "+251900000004",
+    hotel_description: "Luxury suites with river views.",
+    hotel_star_rating: 4,
+    created_at: "2025-12-07T12:45:00Z",
+    status: "approved",
+  },
+  {
+    manager_name: "David Green",
+    manager_email: "david@example.com",
+    hotel_name: "Garden Paradise",
+    hotel_address: "654 Garden St, City",
+    manager_phone: "+251900000005",
+    hotel_description: "Relaxing hotel with beautiful gardens.",
+    hotel_star_rating: 3,
+    created_at: "2025-12-08T09:20:00Z",
+    status: "pending",
+  },
+];
+
+const filterOptions = [
+  { value: 1, type: "All" },
+  { value: 2, type: "Pending" },
+  { value: 3, type: "Rejected" },
+  { value: 4, type: "Approved" },
+];
+
+const sortOptions = [
+  { value: "name-asc", text: "Sort by name (A-Z)" },
+  { value: "name-desc", text: "Sort by name (Z-A)" },
+];
+
+const fields = ["Manager Name", "Hotel Name", "Status", "Star Rating"];
 
 function AdminApplication() {
+  const [applications, setApplications] = useState([]);
+  const [filteredApps, setFilteredApps] = useState(applications);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const filter = searchParams.get("filter") || "All";
+
+  // For API call
+  useEffect(() => {
+    setApplications(applicationsTemp);
+  }, []);
+
+  useEffect(() => {
+    let updatedApps = [...applications];
+
+    if (filter !== "All") {
+      updatedApps = updatedApps.filter(
+        (app) => app.status === filter.toLowerCase()
+      );
+    }
+
+    if (sortBy === "name-asc")
+      updatedApps.sort((a, b) => a.manager_name.localeCompare(b.manager_name));
+    if (sortBy === "name-desc")
+      updatedApps.sort((a, b) => b.manager_name.localeCompare(a.manager_name));
+
+    setFilteredApps(updatedApps);
+  }, [sortBy, filter, applications]);
+
+  function handleFilter(selectedFilter) {
+    if (selectedFilter === "All") searchParams.delete("filter");
+    else searchParams.set("filter", selectedFilter);
+
+    setSearchParams(searchParams);
+  }
+
+  function handleSort(option) {
+    searchParams.set("sortBy", option);
+    setSearchParams(searchParams);
+  }
+
   return (
     <AdminDashboardLayout>
-      <h1>Hello</h1>
+      <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
+        <ManagerTopComponents header={"All Application"}>
+          <div className="flex gap-3">
+            <ManagerFilter>
+              {filterOptions.map((item, index) => (
+                <ManagerFilterBy
+                  key={index}
+                  filters={item.type}
+                  handleFilter={handleFilter}
+                />
+              ))}
+            </ManagerFilter>
+            <SortBy
+              sortOptions={sortOptions}
+              sortBy={sortBy}
+              onChange={handleSort}
+            />
+          </div>
+        </ManagerTopComponents>
+        <div>
+          <Fields fields={fields} />
+          {filteredApps.map((items, i) => (
+            <AdminAppTable data={items} key={i} />
+          ))}
+        </div>
+      </div>
     </AdminDashboardLayout>
+  );
+}
+
+function Fields({ fields }) {
+  return (
+    <div className="grid grid-cols-[1.6fr_1.6fr_0.6fr_2fr_0.6fr] gap-2 border border-[#e5e7eb] rounded-t-sm">
+      {fields.map((el, i) => (
+        <div
+          className="justify-self-start text-sm font-heading p-2 text-tSecondary font-semibold"
+          key={i}
+        >
+          {el.toUpperCase()}
+        </div>
+      ))}
+    </div>
   );
 }
 

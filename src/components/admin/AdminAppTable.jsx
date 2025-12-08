@@ -2,24 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import {
-  ArrowDownOnSquareIcon,
   EllipsisVerticalIcon,
   EyeIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
 const statusColors = {
-  UNCONFIRMED: "#e0f2fe",
-  "CHECKED IN": "#dcfce7",
-  "CHECKED OUT": "#e5e7eb",
+  approved: "#dcfce7",
+  pending: "#FEF9C3",
+  rejected: "#FECACA",
 };
 const statusTxtColors = {
-  UNCONFIRMED: "#0369a1",
-  "CHECKED IN": "#15803d",
-  "CHECKED OUT": "#374151",
+  pending: "#D97706",
+  approved: "#15803d",
+  rejected: "#B91C1C",
 };
 
-function ManagerBookingsTable({ data }) {
+function AdminAppTable({ data }) {
   const [popup, setPopup] = useState(false);
 
   const popupRef = useRef(null);
@@ -47,11 +46,9 @@ function ManagerBookingsTable({ data }) {
   }, [popup]);
 
   return (
-    <div className="relative grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
-      <span className="justify-self-start">{data.room}</span>
-
-      <NameDate main={data.guest} sub={data.email} />
-      <NameDate main={data.stay} sub={data.dates} />
+    <div className="relative grid-cols-[1.6fr_1.6fr_0.6fr_2fr_0.6fr] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
+      <NameDate main={data.manager_name} sub={data.manager_email} />
+      <NameDate main={data.hotel_name} sub={data.hotel_address} />
 
       <span
         className="py-1 px-3 justify-self-start text-xs w-fit rounded-full"
@@ -60,11 +57,11 @@ function ManagerBookingsTable({ data }) {
           color: statusTxtColors[data.status],
         }}
       >
-        {data.status}
+        {data.status.toUpperCase()}
       </span>
 
       <div className="flex justify-between w-full ml-4">
-        <span className="text-sm ">${data.amount}</span>
+        <span className="text-sm ">{data.hotel_star_rating}</span>
 
         <EllipsisVerticalIcon
           ref={iconRef}
@@ -95,10 +92,9 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <Link to={"/managerbookingsdetail"}>
+      <Link to={"/adminapplicationdetail"}>
         <IconDetail icon={EyeIcon} detail={"Details"} />
       </Link>
-      <IconDetail icon={ArrowDownOnSquareIcon} detail={"Check-in"} />
       <IconDetail icon={TrashIcon} detail={"Delete"} />
     </div>
   );
@@ -114,4 +110,4 @@ function IconDetail({ icon: Icon, detail }) {
   );
 }
 
-export default ManagerBookingsTable;
+export default AdminAppTable;

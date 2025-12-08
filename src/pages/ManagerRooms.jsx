@@ -7,9 +7,9 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
-import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
+import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
 import { ManagerFilter } from "../components/manager/ManagerFilter";
 import SortBy from "../components/ui/SortBy";
 import Button from "../components/ui/Button";
@@ -92,7 +92,6 @@ const sortOptions = [
 const fields = ["Room", "Type", "Capacity", "Price"];
 
 function ManagerRooms() {
-  const [active, setActive] = useState(1);
   const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [openModal, setOpenModal] = useState(false);
@@ -150,9 +149,6 @@ function ManagerRooms() {
               {filterOptions.map((item, index) => (
                 <ManagerFilterBy
                   key={index}
-                  value={item.value}
-                  active={active}
-                  setActive={setActive}
                   filters={item.type}
                   handleFilter={handleFilter}
                 />
