@@ -1,7 +1,7 @@
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import { Link } from "react-router-dom";
-import { HomeModernIcon } from "@heroicons/react/24/outline";
+import { HomeModernIcon, UserIcon } from "@heroicons/react/24/outline";
 import Button from "../components/ui/Button";
 function ManagerBookingDetails() {
   return (
@@ -26,6 +26,15 @@ function ManagerBookingDetails() {
           >
             Delete
           </Button>
+          <Link to={"/managerbookings"} className="font-heading text-primary">
+            <Button
+              className={
+                "border border-tSecondary rounded-lg p-2 text-tSecondary"
+              }
+            >
+              Back
+            </Button>
+          </Link>
         </div>
       </div>
     </ManagerLayout>
@@ -44,8 +53,10 @@ function BookingDetails() {
           Sat, Jan 10 2026 (In 1 month) — Tue, Jan 20 2026
         </span>
       </div>
-      <ul className="flex gap-3 p-4 font-body">
-        <li>🏁</li>
+      <ul className="flex gap-3 p-4 font-body items-center">
+        <li>
+          <UserIcon className={"w-5"} />{" "}
+        </li>
         <li>Nina Williams</li>
         <li> + 6 guests</li>
         <li className="text-tTertiary">nina@hotmail.com</li>

@@ -102,8 +102,9 @@ function AdminApplication() {
       );
     }
 
-    if (sortBy === "name-asc")
+    if (sortBy === "name-asc") {
       updatedApps.sort((a, b) => a.manager_name.localeCompare(b.manager_name));
+    }
     if (sortBy === "name-desc")
       updatedApps.sort((a, b) => b.manager_name.localeCompare(a.manager_name));
 
