@@ -13,29 +13,7 @@ function ManagerBookingDetails() {
           </Link>
         </ManagerTopComponents>
         <BookingDetails />
-        <div className="flex gap-2 self-end">
-          <Button
-            className={
-              "bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
-            }
-          >
-            Check-in
-          </Button>
-          <Button
-            className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-          >
-            Delete
-          </Button>
-          <Link to={"/managerbookings"} className="font-heading text-primary">
-            <Button
-              className={
-                "border border-tSecondary rounded-lg p-2 text-tSecondary"
-              }
-            >
-              Back
-            </Button>
-          </Link>
-        </div>
+        <DetailButtons />
       </div>
     </ManagerLayout>
   );
@@ -73,6 +51,30 @@ function BookingDetails() {
       <span className="text-xs self-end mb-4 font-body text-tSecondary p-4">
         Booked Mon, Nov 24 2025, 6:02 AM
       </span>
+    </div>
+  );
+}
+
+function DetailButtons() {
+  return (
+    <div className="flex gap-2 self-end">
+      <Button
+        className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+      >
+        Check-in
+      </Button>
+      <Button
+        className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+      >
+        Delete
+      </Button>
+      <Link to={"/managerbookings"} className="font-heading text-primary">
+        <Button
+          className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}
+        >
+          Back
+        </Button>
+      </Link>
     </div>
   );
 }
