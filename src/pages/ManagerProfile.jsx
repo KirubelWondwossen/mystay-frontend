@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ManagerLayout from "../components/layout/ManagerLayout";
+import Button from "../components/ui/Button";
 
 const applicationsTemp = {
   manager_name: "John Doe",
@@ -14,7 +15,7 @@ const applicationsTemp = {
 };
 
 function ManagerProfile() {
-  const [manager, setManager] = useState([]);
+  const [manager, setManager] = useState({});
 
   // For API call
   useEffect(() => {
@@ -31,6 +32,8 @@ function ManagerProfile() {
         </div>
         <HeaderT> Manager Info</HeaderT>
         <ManagerInfo data={manager} />
+        <HeaderT> Update Password</HeaderT>
+        <ManagerPassword />
       </div>
     </ManagerLayout>
   );
@@ -85,7 +88,55 @@ function ManagerInfo({ data }) {
   );
 }
 
+function ManagerPassword() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (password !== confirmPassword)
+      return alert("Passwords donot match try again!!!");
+
+    // fetch("/api/manager/application", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(formData),
+    // });
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3"
+    >
+      <LabelInput
+        label={"Password"}
+        type="password"
+        name="password"
+        required
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <LabelInput
+        label={"Confirm password"}
+        type="password"
+        name="confirmPassword"
+        required
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      <Button
+        className={
+          "text-white px-4 py-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca] self-end "
+        }
+      >
+        Update password
+      </Button>
+    </form>
+  );
+}
+
 function LabelInput({ className, label, ...props }) {
+  const safeValue = props.value !== undefined ? props.value : "";
+
   return (
     <div className="border-b py-3 border-[#f3f4f6]">
       <div className="flex items-center justify-between w-1/2">
@@ -98,6 +149,7 @@ function LabelInput({ className, label, ...props }) {
 
         <input
           {...props}
+          value={safeValue}
           className={`border text-sm text-body border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1 ${className}`}
         />
       </div>
