@@ -13,6 +13,7 @@ import ManagerRooms from "./pages/ManagerRooms";
 import ManagerLogin from "./pages/ManagerLogin";
 import ManagerApplication from "./pages/ManagerApplication";
 import AdminApplication from "./pages/AdminApplication";
+import AdminApplicationDetails from "./pages/AdminApplicationDetalis";
 function App() {
   return (
     <Router>
@@ -38,6 +39,10 @@ function App() {
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerapplication" element={<ManagerApplication />} />
           <Route path="/adminapplication" element={<AdminApplication />} />
+          <Route
+            path="/adminapplicationdetails"
+            element={<AdminApplicationDetails />}
+          />
         </Routes>
       </div>
     </Router>

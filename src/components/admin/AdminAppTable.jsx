@@ -92,7 +92,7 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <Link to={"/adminapplicationdetail"}>
+      <Link to={"/adminapplicationdetails"}>
         <IconDetail icon={EyeIcon} detail={"Details"} />
       </Link>
       <IconDetail icon={TrashIcon} detail={"Delete"} />
