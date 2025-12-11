@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import ManagerLayout from "../components/layout/ManagerLayout";
 
+const applicationsTemp = {
+  manager_name: "John Doe",
+  manager_email: "john@example.com",
+  hotel_name: "Sunrise Hotel",
+  hotel_address: "123 Main St, City",
+  manager_phone: "+251900000001",
+  hotel_description: "A cozy hotel near the beach.",
+  hotel_star_rating: 4,
+  created_at: "2025-12-01T10:00:00Z",
+  status: "approved",
+};
+
 function ManagerProfile() {
+  const [manager, setManager] = useState([]);
+
+  // For API call
+  useEffect(() => {
+    setManager(applicationsTemp);
+  }, []);
+
   return (
     <ManagerLayout>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
@@ -10,7 +30,7 @@ function ManagerProfile() {
           </h1>
         </div>
         <HeaderT> Manager Info</HeaderT>
-        <ManagerInfo />
+        <ManagerInfo data={manager} />
       </div>
     </ManagerLayout>
   );
@@ -26,14 +46,14 @@ function HeaderT({ children }) {
   );
 }
 
-function ManagerInfo() {
+function ManagerInfo({ data }) {
   return (
     <div className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3">
       <LabelInput
         label={"Email address"}
         type={"email"}
         readOnly
-        value={"test@example.com"}
+        value={data.manager_email}
         className={"bg-[#e5e7eb] text-[#6b7280]"}
         name="email"
       />
@@ -41,7 +61,7 @@ function ManagerInfo() {
         label={"Full Name"}
         type={"text"}
         readOnly
-        value={"test"}
+        value={data.manager_name}
         name="name"
         className={"text-tSecondary"}
       />
@@ -49,7 +69,7 @@ function ManagerInfo() {
         label={"Phone Number"}
         type={"text"}
         readOnly
-        value={"0942065501"}
+        value={data.manager_phone}
         name="name"
         className={"text-tSecondary"}
       />
@@ -57,7 +77,7 @@ function ManagerInfo() {
         label={"Hotel Name"}
         type={"text"}
         readOnly
-        value={"Hilton Hotel"}
+        value={data.hotel_name}
         name="name"
         className={"text-tSecondary"}
       />
