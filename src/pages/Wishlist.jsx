@@ -1,5 +1,5 @@
 import BottomNav from "../components/ui/BottomNav";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/manager/Navbar";
 import Page from "../components/layout/Page";
 import Sticky from "../components/layout/Sticky";
 import Main from "../components/layout/Main";

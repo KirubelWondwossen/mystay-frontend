@@ -14,6 +14,7 @@ import ManagerLogin from "./pages/ManagerLogin";
 import ManagerApplication from "./pages/ManagerApplication";
 import AdminApplication from "./pages/AdminApplication";
 import AdminApplicationDetails from "./pages/AdminApplicationDetalis";
+import ManagerProfile from "./pages/ManagerProfile";
 function App() {
   return (
     <Router>
@@ -43,6 +44,7 @@ function App() {
             path="/adminapplicationdetails"
             element={<AdminApplicationDetails />}
           />
+          <Route path="/managerprofile" element={<ManagerProfile />} />
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,5 @@
 import BottomNav from "../ui/BottomNav";
-import Navbar from "./Navbar";
+import Navbar from "../manager/Navbar";
 import Page from "./Page";
 import ProfileSidebar from "./ProfileSidebar";
 import Sticky from "./Sticky";

@@ -1,5 +1,5 @@
 import Footer from "../components/layout/Footer";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/manager/Navbar";
 import BottomNav from "../components/ui/BottomNav";
 import RoomCard from "../components/cards/RoomCard";
 import RoomCardContainer from "../components/cards/RoomCardContainer";
