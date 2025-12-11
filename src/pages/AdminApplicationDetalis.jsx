@@ -5,6 +5,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import Button from "../components/ui/Button";
+import { useEffect, useState } from "react";
 
 const applicationsTemp = {
   manager_name: "John Doe",
@@ -18,16 +19,34 @@ const applicationsTemp = {
   status: "approved",
 };
 
+const statusColors = {
+  approved: "#dcfce7",
+  pending: "#FEF9C3",
+  rejected: "#FECACA",
+};
+const statusTxtColors = {
+  pending: "#D97706",
+  approved: "#15803d",
+  rejected: "#B91C1C",
+};
+
 function AdminApplicationDetails() {
+  const [application, setApplication] = useState({});
+
+  useEffect(() => {
+    setApplication(applicationsTemp);
+  }, []);
+
   return (
     <AdminDashboardLayout>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
-        <ManagerTopComponents header={"Application #"}>
+        <ManagerTopComponents header={"Application #524655"}>
+          <Status data={application} />
           <Link to={"/adminapplication"} className="font-heading text-primary">
             ← Back
           </Link>
         </ManagerTopComponents>
-        <ApplicationDetails app={applicationsTemp} />
+        <ApplicationDetails app={application} />
         <DetailButtons />
       </div>
     </AdminDashboardLayout>
@@ -114,7 +133,7 @@ function HoteDescription({ description }) {
   return (
     <div
       className={`flex gap-3 ${
-        description.length > 77 ? "items-start" : "items-center"
+        description?.length > 77 ? "items-start" : "items-center"
       }  px-4`}
     >
       <span className="font-heading text-tSecondary font-semibold bg-[#f9fafb] p-3 rounded-md">
@@ -126,6 +145,20 @@ function HoteDescription({ description }) {
         {description}
       </p>
     </div>
+  );
+}
+
+function Status({ data }) {
+  return (
+    <span
+      className="py-1 px-3 justify-self-start text-sm w-fit font-heading font-medium rounded-full absolute left-[38%]"
+      style={{
+        backgroundColor: statusColors[data.status],
+        color: statusTxtColors[data.status],
+      }}
+    >
+      {data.status?.toUpperCase()}
+    </span>
   );
 }
 
