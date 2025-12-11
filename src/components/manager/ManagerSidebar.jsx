@@ -20,7 +20,7 @@ function ManagerSidebar() {
         className={"w-full"}
         loc={location.pathname === "/managerhome"}
       >
-        <Icon icon={HomeIcon} />
+        <Icon icon={HomeIcon} color={location.pathname === "/managerhome"} />
         <SideBtnName>Home</SideBtnName>
       </ManagerBtnList>
 
@@ -29,7 +29,10 @@ function ManagerSidebar() {
         className={"w-full"}
         loc={location.pathname === "/managerbookings"}
       >
-        <Icon icon={CalendarDateRangeIcon} />
+        <Icon
+          icon={CalendarDateRangeIcon}
+          color={location.pathname === "/managerbookings"}
+        />
         <SideBtnName>Bookings</SideBtnName>
       </ManagerBtnList>
 
@@ -38,7 +41,10 @@ function ManagerSidebar() {
         className={"w-full"}
         loc={location.pathname === "/managerrooms"}
       >
-        <Icon icon={HomeModernIcon} />
+        <Icon
+          icon={HomeModernIcon}
+          color={location.pathname === "/managerrooms"}
+        />
         <SideBtnName>Rooms</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
@@ -46,7 +52,7 @@ function ManagerSidebar() {
         className={"w-full"}
         loc={location.pathname === "/managerusers"}
       >
-        <Icon icon={UsersIcon} />
+        <Icon icon={UsersIcon} color={location.pathname === "/managerusers"} />
         <SideBtnName>Users</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
@@ -54,7 +60,10 @@ function ManagerSidebar() {
         className={"w-full"}
         loc={location.pathname === "/managersettings"}
       >
-        <Icon icon={Cog6ToothIcon} />
+        <Icon
+          icon={Cog6ToothIcon}
+          color={location.pathname === "/managersettings"}
+        />
         <SideBtnName>Settings</SideBtnName>
       </ManagerBtnList>
     </aside>
@@ -69,8 +78,8 @@ function SideBtnName({ children }) {
 }
 
 // eslint-disable-next-line
-function Icon({ icon: Icon }) {
-  return <Icon className={`w-6`} />;
+function Icon({ icon: Icon, color }) {
+  return <Icon className={`w-6 ${color && "text-primary"}`} />;
 }
 
 export default ManagerSidebar;
