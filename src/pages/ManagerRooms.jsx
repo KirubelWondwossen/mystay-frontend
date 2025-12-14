@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
 import {
   EllipsisVerticalIcon,
   PencilIcon,
@@ -161,7 +160,6 @@ function ManagerRooms() {
             />
           </div>
         </ManagerTopComponents>
-
         <div>
           <Fields fields={fields} />
           {filteredRooms.map((el, i) => (
@@ -175,7 +173,6 @@ function ManagerRooms() {
         >
           Add new room
         </Button>
-
         {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
         {openModal && <ManagerAddRoomPopup handleOpenModal={handleOpenModal} />}
       </div>
