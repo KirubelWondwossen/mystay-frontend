@@ -1,6 +1,13 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import Button from "../ui/Button";
 
+const filterOptions = [
+  { value: 1, type: "All" },
+  { value: 2, type: "Queen" },
+  { value: 3, type: "King" },
+  { value: 4, type: "Twin" },
+];
+
 function Filter({ handleOpenModal }) {
   return (
     <div
@@ -34,8 +41,9 @@ function Filters({ handleOpenModal }) {
         Room Category
       </h4>
       <div className="flex flex-col">
-        <FilterList>King Size</FilterList>
-        <FilterList>Queen Size</FilterList>
+        {filterOptions.map((item, i) => (
+          <FilterList key={i}>{item.type}</FilterList>
+        ))}
       </div>
       <div className="flex gap-1 self-end w-full">
         <Button
