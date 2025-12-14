@@ -8,14 +8,18 @@ const filterOptions = [
   { value: 4, type: "Twin" },
 ];
 
-function Filter({ handleOpenModal }) {
+function Filter({ handleOpenModal, setSelFilterType, selectedType }) {
   return (
     <div
       className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
     rounded-xl shadow-lg w-96 mx-auto flex flex-col items-start gap-4 py-3"
     >
       <FilterHeader handleOpenModal={handleOpenModal} />
-      <Filters handleOpenModal={handleOpenModal} />
+      <Filters
+        selectedType={selectedType}
+        setSelFilterType={setSelFilterType}
+        handleOpenModal={handleOpenModal}
+      />
     </div>
   );
 }
@@ -34,15 +38,22 @@ function FilterHeader({ handleOpenModal }) {
   );
 }
 
-function Filters({ handleOpenModal }) {
+function Filters({ handleOpenModal, selectedType, setSelFilterType }) {
   return (
-    <div className="flex flex-col gap-4 items-start w-fit px-3">
+    <form className="flex flex-col gap-4 items-start w-fit px-3">
       <h4 className="sm:text-xs md:text-base font-heading font-medium text-left">
         Room Category
       </h4>
       <div className="flex flex-col">
         {filterOptions.map((item, i) => (
-          <FilterList key={i}>{item.type}</FilterList>
+          <FilterList
+            setSelFilterType={setSelFilterType}
+            value={item.type}
+            selectedType={selectedType}
+            key={i}
+          >
+            {item.type}
+          </FilterList>
         ))}
       </div>
       <div className="flex gap-1 self-end w-full">
@@ -62,14 +73,23 @@ function Filters({ handleOpenModal }) {
           Cancel
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 
-function FilterList({ children }) {
+function FilterList({ children, setSelFilterType, selectedType, ...props }) {
   return (
     <span className="flex gap-2 items-center">
-      <input className="h-4 w-4 text-logo cursor-pointer" type="checkbox" />
+      <input
+        className="h-4 w-4 text-logo cursor-pointer"
+        {...props}
+        type="radio"
+        name="roomType"
+        checked={selectedType === props.value}
+        onChange={(e) => {
+          e.target.checked && setSelFilterType(e.target.value);
+        }}
+      />
       <span className="text-lg font-body font-medium">{children}</span>
     </span>
   );
