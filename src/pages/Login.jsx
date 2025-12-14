@@ -1,8 +1,13 @@
 import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
-import LabelInput from "../components/ui/LabelInput";
+// import LabelInput from "../components/ui/LabelInput";
+import { useState } from "react";
 
 function Login() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   return (
     <main className="bg-[#f9fafb] flex flex-col gap-5 items-center justify-center h-screen">
       <Logo />
@@ -28,6 +33,24 @@ function Form() {
         Log in
       </Button>
     </form>
+  );
+}
+
+function LabelInput({ label, ...props }) {
+  return (
+    <div className="flex flex-col items-start p-3 gap-2">
+      <label
+        htmlFor={props.id || props.name}
+        className="font-body font-medium text-tSecondary"
+      >
+        {label}
+      </label>
+
+      <input
+        {...props}
+        className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1"
+      />
+    </div>
   );
 }
 
