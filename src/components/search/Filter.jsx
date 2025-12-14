@@ -8,7 +8,7 @@ const filterOptions = [
   { value: 4, type: "Twin" },
 ];
 
-function Filter({ handleOpenModal, setSelFilterType, selectedType }) {
+function Filter({ handleOpenModal, filterType, handleFilter }) {
   return (
     <div
       className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
@@ -16,9 +16,9 @@ function Filter({ handleOpenModal, setSelFilterType, selectedType }) {
     >
       <FilterHeader handleOpenModal={handleOpenModal} />
       <Filters
-        selectedType={selectedType}
-        setSelFilterType={setSelFilterType}
+        filterType={filterType}
         handleOpenModal={handleOpenModal}
+        handleFilter={handleFilter}
       />
     </div>
   );
@@ -38,7 +38,7 @@ function FilterHeader({ handleOpenModal }) {
   );
 }
 
-function Filters({ handleOpenModal, selectedType, setSelFilterType }) {
+function Filters({ handleOpenModal, filterType, handleFilter }) {
   return (
     <form className="flex flex-col gap-4 items-start w-fit px-3">
       <h4 className="sm:text-xs md:text-base font-heading font-medium text-left">
@@ -47,37 +47,27 @@ function Filters({ handleOpenModal, selectedType, setSelFilterType }) {
       <div className="flex flex-col">
         {filterOptions.map((item, i) => (
           <FilterList
-            setSelFilterType={setSelFilterType}
             value={item.type}
-            selectedType={selectedType}
+            filterType={filterType}
+            handleFilter={handleFilter}
             key={i}
           >
             {item.type}
           </FilterList>
         ))}
       </div>
-      <div className="flex gap-1 self-end w-full">
-        <Button
-          className={
-            "text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
-          }
-          type={"button"}
-        >
-          Filter
-        </Button>
-        <Button
-          type={"button"}
-          className={"add-room-btn"}
-          onClick={handleOpenModal}
-        >
-          Cancel
-        </Button>
-      </div>
+      <Button
+        type={"button"}
+        className={"add-room-btn"}
+        onClick={handleOpenModal}
+      >
+        Cancel
+      </Button>
     </form>
   );
 }
 
-function FilterList({ children, setSelFilterType, selectedType, ...props }) {
+function FilterList({ children, filterType, handleFilter, ...props }) {
   return (
     <span className="flex gap-2 items-center">
       <input
@@ -85,9 +75,9 @@ function FilterList({ children, setSelFilterType, selectedType, ...props }) {
         {...props}
         type="radio"
         name="roomType"
-        checked={selectedType === props.value}
+        checked={filterType === props.value}
         onChange={(e) => {
-          e.target.checked && setSelFilterType(e.target.value);
+          handleFilter(e.target.value);
         }}
       />
       <span className="text-lg font-body font-medium">{children}</span>
