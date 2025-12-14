@@ -1,4 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
+import Button from "../ui/Button";
 
 function Filter({ handleOpenModal }) {
   return (
@@ -7,7 +8,7 @@ function Filter({ handleOpenModal }) {
     rounded-xl shadow-lg w-96 mx-auto flex flex-col items-start gap-4 py-3"
     >
       <FilterHeader handleOpenModal={handleOpenModal} />
-      <Filters />
+      <Filters handleOpenModal={handleOpenModal} />
     </div>
   );
 }
@@ -26,7 +27,7 @@ function FilterHeader({ handleOpenModal }) {
   );
 }
 
-function Filters() {
+function Filters({ handleOpenModal }) {
   return (
     <div className="flex flex-col gap-4 items-start w-fit px-3">
       <h4 className="sm:text-xs md:text-base font-heading font-medium text-left">
@@ -35,6 +36,23 @@ function Filters() {
       <div className="flex flex-col">
         <FilterList>King Size</FilterList>
         <FilterList>Queen Size</FilterList>
+      </div>
+      <div className="flex gap-1 self-end w-full">
+        <Button
+          className={
+            "text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
+          }
+          type={"button"}
+        >
+          Filter
+        </Button>
+        <Button
+          type={"button"}
+          className={"add-room-btn"}
+          onClick={handleOpenModal}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
