@@ -57,5 +57,5 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom hook
+// eslint-disable-next-line
 export const useAuth = () => useContext(AuthContext);

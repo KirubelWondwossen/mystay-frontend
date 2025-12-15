@@ -91,8 +91,6 @@ function AdminApplication() {
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
 
-  console.log(user);
-
   // For API call
   useEffect(() => {
     setApplications(applicationsTemp);
@@ -132,7 +130,7 @@ function AdminApplication() {
   }
 
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout user={user}>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
         <ManagerTopComponents header={"All Application"}>
           <div className="flex gap-3">

@@ -1,16 +1,24 @@
-import { Link } from "react-router-dom";
 import {
   ArrowRightStartOnRectangleIcon,
   MoonIcon,
   SunIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 
-function AdminLayoutNav({ isDark, handleDarkMode }) {
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+function AdminLayoutNav({ isDark, handleDarkMode, user }) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   return (
     <nav className="bg-white border-b flex justify-end w-full px-2 h-12">
-      <ManagerProfile />
-      <ManagerNavIcons isDark={isDark} handleDarkMode={handleDarkMode} />
+      <ManagerProfile user={user} />
+      <ManagerNavIcons
+        isDark={isDark}
+        handleDarkMode={handleDarkMode}
+        logout={logout}
+        navigate={navigate}
+      />
     </nav>
   );
 }
@@ -19,7 +27,7 @@ function ManagerNavContainer({ children, className }) {
   return <div className={`${className} flex items-center`}>{children}</div>;
 }
 
-function ManagerProfile() {
+function ManagerProfile({ user }) {
   return (
     <ManagerNavContainer className={"gap-2 px-3"}>
       <img
@@ -27,16 +35,22 @@ function ManagerProfile() {
         alt="profile picture"
         className="w-8 rounded-full"
       />
-      <p className="font-body text-sm">Admin</p>
+      <p className="font-body text-sm">{user?.name || "Admin1"}</p>
     </ManagerNavContainer>
   );
 }
 
-function ManagerNavIcons({ isDark, handleDarkMode }) {
+function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
   return (
     <ManagerNavContainer className="gap-1 py-3">
       <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />
-      <Icon icon={ArrowRightStartOnRectangleIcon} />
+      <Icon
+        onClick={() => {
+          logout();
+          navigate("/login");
+        }}
+        icon={ArrowRightStartOnRectangleIcon}
+      />
     </ManagerNavContainer>
   );
 }
