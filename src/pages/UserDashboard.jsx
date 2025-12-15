@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Footer from "../components/layout/Footer";
-import Navbar from "../components/manager/Navbar";
+import Navbar from "../components/ui/Navbar";
 import BottomNav from "../components/ui/BottomNav";
 import RoomCard from "../components/cards/RoomCard";
 import RoomCardContainer from "../components/cards/RoomCardContainer";
