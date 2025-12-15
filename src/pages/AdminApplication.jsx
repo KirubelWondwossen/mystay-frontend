@@ -3,10 +3,11 @@ import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import SortBy from "../components/ui/SortBy";
 import { ManagerFilter } from "../components/manager/ManagerFilter";
 import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
+import AdminAppTable from "../components/admin/AdminAppTable";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import AdminAppTable from "../components/admin/AdminAppTable";
+import { useAuth } from "../context/AuthContext";
 
 const applicationsTemp = [
   {
@@ -81,12 +82,16 @@ const sortOptions = [
 const fields = ["Manager Name", "Hotel Name", "Status", "Star Rating"];
 
 function AdminApplication() {
+  const { user, isAuthenticated } = useAuth();
+
   const [applications, setApplications] = useState([]);
   const [filteredApps, setFilteredApps] = useState(applications);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
+
+  console.log(user);
 
   // For API call
   useEffect(() => {
@@ -110,6 +115,9 @@ function AdminApplication() {
 
     setFilteredApps(updatedApps);
   }, [sortBy, filter, applications]);
+
+  if (isAuthenticated === null) return <div>Loading...</div>;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   function handleFilter(selectedFilter) {
     if (selectedFilter === "All") searchParams.delete("filter");
