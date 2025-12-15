@@ -6,6 +6,7 @@ import {
 
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function AdminLayoutNav({ isDark, handleDarkMode, user }) {
   const { logout } = useAuth();
@@ -41,15 +42,23 @@ function ManagerProfile({ user }) {
 }
 
 function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
+  function handleLogout() {
+    logout();
+    setTimeout(() => {
+      toast.success("You have logged out");
+      navigate("/login");
+    }, 1000);
+  }
   return (
     <ManagerNavContainer className="gap-1 py-3">
       <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />
-      <Icon
-        onClick={() => {
-          logout();
-          navigate("/login");
+      <Icon onClick={handleLogout} icon={ArrowRightStartOnRectangleIcon} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 1000,
         }}
-        icon={ArrowRightStartOnRectangleIcon}
       />
     </ManagerNavContainer>
   );
