@@ -4,6 +4,8 @@ import Logo from "../components/ui/Logo";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import toast, { Toaster } from "react-hot-toast";
+
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -16,17 +18,28 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const res = await fetch("http://127.0.0.1:8000/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    login(data);
-    console.log("Success:", data);
-    navigate("/adminapplication");
+      if (res.ok) {
+        toast.success("Login Successful");
+        login(data);
+        setTimeout(() => {
+          navigate("/adminapplication");
+        }, 1000);
+      } else {
+        toast.error(data.detail || "Wrong email or password");
+      }
+    } catch (err) {
+      toast.error("Network error, please try again");
+      console.error(err);
+    }
   }
 
   return (
@@ -39,6 +52,13 @@ function Login() {
         setFormData={setFormData}
         formData={formData}
         handleSubmit={handleSubmit}
+      />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+        }}
       />
     </main>
   );
