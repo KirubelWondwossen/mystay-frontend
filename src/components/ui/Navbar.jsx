@@ -25,7 +25,7 @@ function NavBtns({ isOpen, handleOpenModal }) {
     <ul
       className={`${
         !isOpen && "invisible absolute"
-      } relative md:visible flex-col flex md:justify-between md:gap-7 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
+      } relative md:visible flex-col flex md:justify-between md:gap-3 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
       {useLocation().pathname === "/" ? (
         <FilterSearchBtn handleOpenModal={handleOpenModal} />
@@ -35,7 +35,37 @@ function NavBtns({ isOpen, handleOpenModal }) {
         </Link>
       )}
       <DarkLightModeBtns />
+      <BecomeHostBtn />
     </ul>
+  );
+}
+
+function FilterSearchBtn({ handleOpenModal }) {
+  return (
+    <div
+      onClick={handleOpenModal}
+      className="flex gap-1 border p-2 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
+    >
+      {useLocation().pathname === "/" ? (
+        <AdjustmentsHorizontalIcon className="w-5 text-textSecondary" />
+      ) : (
+        <MagnifyingGlassIcon className="w-5" />
+      )}
+      <h3 className="font-heading font-semibold">
+        {useLocation().pathname === "/" ? "Filters" : "Search"}
+      </h3>
+    </div>
+  );
+}
+
+function BecomeHostBtn() {
+  return (
+    <Link
+      to="managerapplication"
+      className="font-heading font-semibold border p-2 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
+    >
+      Become a Host
+    </Link>
   );
 }
 
@@ -63,10 +93,10 @@ function DarkLightModeBtns() {
   return (
     <div className="flex border rounded-xl overflow-hidden">
       <IconHolder active={!isDarkMode} onClick={() => setIsDarkMode(false)}>
-        <SunIcon className="w-6 h-6" />
+        <SunIcon className="w-5" />
       </IconHolder>
       <IconHolder active={isDarkMode} onClick={() => setIsDarkMode(true)}>
-        <MoonIcon className="w-6 h-6" />
+        <MoonIcon className="w-5" />
       </IconHolder>
     </div>
   );
@@ -76,7 +106,7 @@ function IconHolder({ children, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`p-3 w-full transition-colors duration-200
+      className={`p-2 w-full transition-colors duration-200
         ${
           active
             ? "bg-gray-200 dark:bg-slate-700 overflow-hidden rounded-xl"
@@ -89,23 +119,4 @@ function IconHolder({ children, active, onClick }) {
     </button>
   );
 }
-
-function FilterSearchBtn({ handleOpenModal }) {
-  return (
-    <div
-      onClick={handleOpenModal}
-      className="flex gap-1 border p-3 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
-    >
-      {useLocation().pathname === "/" ? (
-        <AdjustmentsHorizontalIcon className="w-6 text-textSecondary" />
-      ) : (
-        <MagnifyingGlassIcon className="w-6" />
-      )}
-      <h3 className="sm:text-lg md:text-xl font-heading font-semibold">
-        {useLocation().pathname === "/" ? "Filters" : "Search"}
-      </h3>
-    </div>
-  );
-}
-
 export default Navbar;
