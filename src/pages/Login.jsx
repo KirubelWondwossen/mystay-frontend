@@ -84,6 +84,7 @@ function Form({ formData, setFormData, handleSubmit }) {
         name={"email"}
         label={"Email Address"}
         value={formData.email}
+        required
         onChange={(e) => {
           handleChange(e);
         }}
@@ -93,6 +94,7 @@ function Form({ formData, setFormData, handleSubmit }) {
         type={"password"}
         name={"password"}
         label={"Password"}
+        required
         onChange={(e) => {
           handleChange(e);
         }}
