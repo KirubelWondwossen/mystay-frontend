@@ -29,6 +29,7 @@ export default function LabelInput({
           id={name}
           className="border w-full h-24 border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-4 py-2"
           onChange={handleChange}
+          required
         />
       ) : (
         <input
@@ -38,7 +39,15 @@ export default function LabelInput({
           className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1"
           {...(min ? { min } : {})}
           {...(max ? { max } : {})}
+          {...(type === "tel"
+            ? {
+                pattern: "^09[0-9]{8}$",
+                placeholder: "0912345678",
+                maxLength: 10,
+              }
+            : {})}
           onChange={handleChange}
+          required
         />
       )}
     </div>

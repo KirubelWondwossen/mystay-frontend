@@ -1,6 +1,7 @@
 import LabelInput from "../components/ui/LabelInput";
 import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
+import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 const formEL = [
   {
@@ -82,9 +83,28 @@ function ManagerApplication() {
     }));
   }, [coords]);
 
+  const isNotEmpty = (value) => {
+    if (value === null || value === undefined) return false;
+
+    if (typeof value === "string") {
+      return value.trim() !== "";
+    }
+
+    if (typeof value === "object") {
+      return Object.values(value).every(isNotEmpty);
+    }
+
+    return true;
+  };
+
   // For POST
   function handleSubmit(e) {
     e.preventDefault();
+
+    const isFormValid = isNotEmpty(formData);
+    if (!isFormValid)
+      return toast.error("Invalid data please fill all the inputs");
+    toast.success("Registration Succesfull Please wait for an email");
     console.log("Sending:", formData);
 
     // fetch("/api/manager/application", {
@@ -98,9 +118,20 @@ function ManagerApplication() {
     <main className="bg-[#f9fafb] flex flex-col gap-5 items-center justify-center h-screen">
       <Logo />
       <h4 className="font-heading text-tSecondary text-2xl font-semibold ">
-        Manager application form
+        Hotel application form
       </h4>
       <Form setFormData={setFormData} handleSubmit={handleSubmit} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            minWidth: "250px",
+            maxWidth: "600px",
+          },
+        }}
+      />
     </main>
   );
 }
