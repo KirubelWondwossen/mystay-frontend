@@ -73,7 +73,7 @@ function AdminAppTable({ data }) {
         />
       </div>
 
-      <BookingOption popup={popup} popupRef={popupRef} />
+      <BookingOption popup={popup} popupRef={popupRef} appId={data.id} />
     </div>
   );
 }
@@ -87,7 +87,7 @@ function NameDate({ main, sub }) {
   );
 }
 
-function BookingOption({ popup, popupRef }) {
+function BookingOption({ popup, popupRef, appId }) {
   return (
     <div
       ref={popupRef}
@@ -95,7 +95,7 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <Link to={"/adminapplicationdetails"}>
+      <Link to={`/application/${appId}`}>
         <IconDetail icon={EyeIcon} detail={"Details"} />
       </Link>
       <IconDetail icon={TrashIcon} detail={"Delete"} />

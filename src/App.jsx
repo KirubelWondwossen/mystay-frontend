@@ -20,47 +20,44 @@ import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-      <Router>
-        <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-          <Routes>
-            <Route path="/" element={<UserDasboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/profilehome" element={<ProfileHome />} />
-            <Route
-              path="/profilereservations"
-              element={<ProfileReservations />}
-            />
-            <Route path="/profileinfo" element={<ProfileInfo />} />
-            <Route path="/wishlist" element={<WishList />} />
-            <Route path="/managerhome" element={<ManagerHome />} />
-            <Route path="/managerbookings" element={<ManagerBookings />} />
-            <Route path="/managerhome" element={<ManagerHome />} />
-            <Route
-              path="/managerbookingsdetail"
-              element={<ManagerBookingsDetail />}
-            />
-            <Route path="/managerrooms" element={<ManagerRooms />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/managerapplication"
-              element={<ManagerApplication />}
-            />
-            <Route
-              path="/adminapplication"
-              element={
-                <ProtectedRoute>
-                  <AdminApplication />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/adminapplicationdetails"
-              element={<AdminApplicationDetails />}
-            />
-            <Route path="/managerprofile" element={<ManagerProfile />} />
-          </Routes>
-        </div>
-      </Router>
+    <Router>
+      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
+        <Routes>
+          <Route path="/" element={<UserDasboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/profilehome" element={<ProfileHome />} />
+          <Route
+            path="/profilereservations"
+            element={<ProfileReservations />}
+          />
+          <Route path="/profileinfo" element={<ProfileInfo />} />
+          <Route path="/wishlist" element={<WishList />} />
+          <Route path="/managerhome" element={<ManagerHome />} />
+          <Route path="/managerbookings" element={<ManagerBookings />} />
+          <Route path="/managerhome" element={<ManagerHome />} />
+          <Route
+            path="/managerbookingsdetail"
+            element={<ManagerBookingsDetail />}
+          />
+          <Route path="/managerrooms" element={<ManagerRooms />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/managerapplication" element={<ManagerApplication />} />
+          <Route
+            path="/adminapplication"
+            element={
+              <ProtectedRoute>
+                <AdminApplication />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/application/:id"
+            element={<AdminApplicationDetails />}
+          />
+          <Route path="/managerprofile" element={<ManagerProfile />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { HomeModernIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import Button from "../components/ui/Button";
-import { useEffect, useState } from "react";
 
 const applicationsTemp = {
   manager_name: "John Doe",
@@ -32,6 +33,8 @@ const statusTxtColors = {
 
 function AdminApplicationDetails() {
   const [application, setApplication] = useState({});
+  const { id } = useParams();
+  console.log(id);
 
   useEffect(() => {
     setApplication(applicationsTemp);

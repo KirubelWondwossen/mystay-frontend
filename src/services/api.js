@@ -1,24 +1,28 @@
-import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
-export function useApi() {
-  const { token, logout } = useAuth();
-
-  const request = async (url, options = {}) => {
+export async function fetchData(token, url) {
+  try {
     const res = await fetch(url, {
-      ...options,
+      method: "GET",
       headers: {
-        ...options.headers,
         Authorization: `Bearer ${token}`,
+        Accept: "application/json",
       },
     });
 
-    if (res.status === 401) {
-      logout();
-      throw new Error("Unauthorized");
+    if (!res.ok) {
+      if (res.status === 401) {
+        throw new Error("Unauthorized. Please login again.");
+      }
+      const message = res.statusText;
+      throw new Error(message || "Failed to fetch data");
     }
 
-    return res.json();
-  };
-
-  return { request };
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    toast.error(err.message || "Something went wrong");
+    throw err;
+  }
 }

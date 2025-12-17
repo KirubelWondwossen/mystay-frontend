@@ -174,8 +174,6 @@ function AdminApplication() {
     setSearchParams(params);
   }
 
-  console.log(applications);
-
   return (
     <AdminDashboardLayout user={user}>
       {loading && <Loader loading />}
