@@ -3,6 +3,9 @@ import { HomeModernIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { Loader } from "../components/ui/Loader";
+import { RetryError } from "../components/ui/RetryError";
 
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
@@ -33,12 +36,53 @@ const statusTxtColors = {
 
 function AdminApplicationDetails() {
   const [application, setApplication] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const token = localStorage.getItem("token");
   const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
-    setApplication(applicationsTemp);
-  }, []);
+    async function getData(token) {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/hotel/application/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            throw new Error("Unauthorized. Please login again.");
+          }
+
+          const message = res.statusText;
+          throw new Error(message || "Failed to fetch data");
+        }
+
+        const data = await res.json();
+        console.log(data);
+
+        setApplication(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Something went wrong");
+        toast.error("Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getData(token);
+  }, [token, id]);
 
   return (
     <AdminDashboardLayout>
