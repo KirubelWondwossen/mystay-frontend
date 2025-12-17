@@ -10,6 +10,8 @@ import { RetryError } from "../components/ui/RetryError";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import Button from "../components/ui/Button";
+import { formatDate } from "../utils/formatDate";
+import { useAuth } from "../context/AuthContext";
 
 const applicationsTemp = {
   manager_name: "John Doe",
@@ -41,6 +43,7 @@ function AdminApplicationDetails() {
 
   const token = localStorage.getItem("token");
   const { id } = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function getData(token) {
@@ -69,7 +72,6 @@ function AdminApplicationDetails() {
         }
 
         const data = await res.json();
-        console.log(data);
 
         setApplication(data);
       } catch (err) {
@@ -85,9 +87,9 @@ function AdminApplicationDetails() {
   }, [token, id]);
 
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout user={user}>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
-        <ManagerTopComponents header={"Application #524655"}>
+        <ManagerTopComponents header={`Application ${id}`}>
           <Status data={application} />
           <Link to={"/adminapplication"} className="font-heading text-primary">
             ← Back
@@ -113,7 +115,9 @@ function ApplicationDetails({ app }) {
       <TitleValue title={"Hotel Star"} star={app.hotel_star_rating} />
       <HoteDescription description={app.hotel_description} />
       <span className="text-xs self-end mb-4 font-body text-tSecondary p-4">
-        Booked Mon, Nov 24 2025, 6:02 AM
+        {`Booked on ${formatDate(app.created_at).date} at ${
+          formatDate(app.created_at).time
+        } `}
       </span>
     </div>
   );
