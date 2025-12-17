@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import { Loader } from "../components/ui/Loader";
+import { RetryError } from "../components/ui/RetryError";
 
 // const applicationsTemp = [
 //   {
@@ -86,7 +88,7 @@ function AdminApplication() {
   const { user, isAuthenticated } = useAuth();
 
   const [applications, setApplications] = useState([]);
-  const [filteredApps, setFilteredApps] = useState(applications);
+  const [filteredApps, setFilteredApps] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -113,25 +115,24 @@ function AdminApplication() {
           throw new Error("Unauthorized. Please login again.");
         }
 
-        const message = await res.text();
+        const message = res.statusText;
         throw new Error(message || "Failed to fetch data");
       }
 
       const data = await res.json();
-      setApplications(data);
+      setApplications([...data]);
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong");
       setError(err.message || "Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (token) {
-      getData(token);
-    }
+    if (!token) return;
+    getData(token);
   }, [token]);
 
   useEffect(() => {
@@ -152,7 +153,7 @@ function AdminApplication() {
     setFilteredApps(updatedApps);
   }, [sortBy, filter, applications]);
 
-  if (isAuthenticated === null) return <div>Loading...</div>;
+  if (isAuthenticated === null) return <Loader loading={loading} page={true} />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   function handleFilter(selectedFilter) {
@@ -175,11 +176,13 @@ function AdminApplication() {
 
   return (
     <AdminDashboardLayout user={user}>
-      {loading ? (
-        <div className="flex justify-center py-6">
-          <div className="w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-        </div>
-      ) : (
+      {loading && <Loader loading />}
+
+      {!loading && error && (
+        <RetryError getData={getData} error={error} token={token} />
+      )}
+
+      {!loading && !error && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
           <ManagerTopComponents header={"All Application"}>
             <div className="flex gap-3">
@@ -201,19 +204,17 @@ function AdminApplication() {
           </ManagerTopComponents>
           <div>
             <Fields fields={fields} />
-            {filteredApps.map((items, i) => (
-              <AdminAppTable data={items} key={i} />
+            {filteredApps.map((items, index) => (
+              <AdminAppTable
+                data={items}
+                key={items.id ?? `${items.manager_email}-${index}`}
+              />
             ))}
           </div>
         </div>
       )}
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{
-          duration: 10000,
-        }}
-      />
+
+      <Toaster position="top-center" />
     </AdminDashboardLayout>
   );
 }
