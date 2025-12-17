@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-
+import { formatDate } from "../../utils/formatDate";
 import {
   EllipsisVerticalIcon,
   EyeIcon,
@@ -60,8 +60,11 @@ function AdminAppTable({ data }) {
         {data.status.toUpperCase()}
       </span>
 
-      <div className="flex justify-between w-full ml-4">
-        <span className="text-sm ">{data.hotel_star_rating}</span>
+      <div className="flex justify-between w-full ml-2">
+        <NameDate
+          main={formatDate(data.created_at).date}
+          sub={formatDate(data.created_at).time}
+        />
 
         <EllipsisVerticalIcon
           ref={iconRef}

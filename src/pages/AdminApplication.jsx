@@ -82,7 +82,7 @@ const sortOptions = [
   { value: "name-desc", text: "Sort by name (Z-A)" },
 ];
 
-const fields = ["Manager Name", "Hotel Name", "Status", "Star Rating"];
+const fields = ["Manager Name", "Hotel Name", "Status", "Date"];
 
 function AdminApplication() {
   const { user, isAuthenticated } = useAuth();
@@ -173,6 +173,8 @@ function AdminApplication() {
     params.set("sortBy", option);
     setSearchParams(params);
   }
+
+  console.log(applications);
 
   return (
     <AdminDashboardLayout user={user}>
