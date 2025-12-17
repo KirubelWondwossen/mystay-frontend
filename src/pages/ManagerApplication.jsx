@@ -98,20 +98,35 @@ function ManagerApplication() {
   };
 
   // For POST
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const isFormValid = isNotEmpty(formData);
     if (!isFormValid)
-      return toast.error("Invalid data please fill all the inputs");
-    toast.success("Registration Succesfull Please wait for an email");
+      return toast.error("Invalid data please fill all the inputs correctly");
+
     console.log("Sending:", formData);
 
-    // fetch("/api/manager/application", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Registration Succesfull Please wait for an email");
+      } else {
+        toast.error(
+          data.detail || "Invalid data please fill all the inputs correctly"
+        );
+      }
+    } catch (err) {
+      toast.error("Network error, please try again");
+      console.error(err);
+    }
   }
 
   return (

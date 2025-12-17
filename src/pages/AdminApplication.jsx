@@ -8,64 +8,65 @@ import AdminAppTable from "../components/admin/AdminAppTable";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import toast, { Toaster } from "react-hot-toast";
 
-const applicationsTemp = [
-  {
-    manager_name: "John Doe",
-    manager_email: "john@example.com",
-    hotel_name: "Sunrise Hotel",
-    hotel_address: "123 Main St, City",
-    manager_phone: "+251900000001",
-    hotel_description: "A cozy hotel near the beach.",
-    hotel_star_rating: 4,
-    created_at: "2025-12-01T10:00:00Z",
-    status: "approved",
-  },
-  {
-    manager_name: "Jane Smith",
-    manager_email: "jane@example.com",
-    hotel_name: "Mountain View Inn",
-    hotel_address: "456 Hill Rd, City",
-    manager_phone: "+251900000002",
-    hotel_description: "A scenic hotel in the mountains.",
-    hotel_star_rating: 3,
-    created_at: "2025-12-03T14:30:00Z",
-    status: "pending",
-  },
-  {
-    manager_name: "Michael Brown",
-    manager_email: "michael@example.com",
-    hotel_name: "City Center Lodge",
-    hotel_address: "789 Center Ave, City",
-    manager_phone: "+251900000003",
-    hotel_description: "Hotel in the heart of the city.",
-    hotel_star_rating: 5,
-    created_at: "2025-12-05T08:15:00Z",
-    status: "rejected",
-  },
-  {
-    manager_name: "Emily White",
-    manager_email: "emily@example.com",
-    hotel_name: "Riverside Suites",
-    hotel_address: "321 River Rd, City",
-    manager_phone: "+251900000004",
-    hotel_description: "Luxury suites with river views.",
-    hotel_star_rating: 4,
-    created_at: "2025-12-07T12:45:00Z",
-    status: "approved",
-  },
-  {
-    manager_name: "David Green",
-    manager_email: "david@example.com",
-    hotel_name: "Garden Paradise",
-    hotel_address: "654 Garden St, City",
-    manager_phone: "+251900000005",
-    hotel_description: "Relaxing hotel with beautiful gardens.",
-    hotel_star_rating: 3,
-    created_at: "2025-12-08T09:20:00Z",
-    status: "pending",
-  },
-];
+// const applicationsTemp = [
+//   {
+//     manager_name: "John Doe",
+//     manager_email: "john@example.com",
+//     hotel_name: "Sunrise Hotel",
+//     hotel_address: "123 Main St, City",
+//     manager_phone: "+251900000001",
+//     hotel_description: "A cozy hotel near the beach.",
+//     hotel_star_rating: 4,
+//     created_at: "2025-12-01T10:00:00Z",
+//     status: "approved",
+//   },
+//   {
+//     manager_name: "Jane Smith",
+//     manager_email: "jane@example.com",
+//     hotel_name: "Mountain View Inn",
+//     hotel_address: "456 Hill Rd, City",
+//     manager_phone: "+251900000002",
+//     hotel_description: "A scenic hotel in the mountains.",
+//     hotel_star_rating: 3,
+//     created_at: "2025-12-03T14:30:00Z",
+//     status: "pending",
+//   },
+//   {
+//     manager_name: "Michael Brown",
+//     manager_email: "michael@example.com",
+//     hotel_name: "City Center Lodge",
+//     hotel_address: "789 Center Ave, City",
+//     manager_phone: "+251900000003",
+//     hotel_description: "Hotel in the heart of the city.",
+//     hotel_star_rating: 5,
+//     created_at: "2025-12-05T08:15:00Z",
+//     status: "rejected",
+//   },
+//   {
+//     manager_name: "Emily White",
+//     manager_email: "emily@example.com",
+//     hotel_name: "Riverside Suites",
+//     hotel_address: "321 River Rd, City",
+//     manager_phone: "+251900000004",
+//     hotel_description: "Luxury suites with river views.",
+//     hotel_star_rating: 4,
+//     created_at: "2025-12-07T12:45:00Z",
+//     status: "approved",
+//   },
+//   {
+//     manager_name: "David Green",
+//     manager_email: "david@example.com",
+//     hotel_name: "Garden Paradise",
+//     hotel_address: "654 Garden St, City",
+//     manager_phone: "+251900000005",
+//     hotel_description: "Relaxing hotel with beautiful gardens.",
+//     hotel_star_rating: 3,
+//     created_at: "2025-12-08T09:20:00Z",
+//     status: "pending",
+//   },
+// ];
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -86,15 +87,52 @@ function AdminApplication() {
 
   const [applications, setApplications] = useState([]);
   const [filteredApps, setFilteredApps] = useState(applications);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
+  const token = localStorage.getItem("token");
 
-  // For API call
+  async function getData(token) {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("Unauthorized. Please login again.");
+        }
+
+        const message = await res.text();
+        throw new Error(message || "Failed to fetch data");
+      }
+
+      const data = await res.json();
+      setApplications(data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    setApplications(applicationsTemp);
-  }, []);
+    if (token) {
+      getData(token);
+    }
+  }, [token]);
 
   useEffect(() => {
     let updatedApps = [...applications];
@@ -157,6 +195,13 @@ function AdminApplication() {
           ))}
         </div>
       </div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 10000,
+        }}
+      />
     </AdminDashboardLayout>
   );
 }
