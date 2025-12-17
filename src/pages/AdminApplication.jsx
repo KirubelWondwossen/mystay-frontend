@@ -156,45 +156,57 @@ function AdminApplication() {
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   function handleFilter(selectedFilter) {
-    if (selectedFilter === "All") searchParams.delete("filter");
-    else searchParams.set("filter", selectedFilter);
+    const params = new URLSearchParams(searchParams);
 
-    setSearchParams(searchParams);
+    if (selectedFilter === "All") {
+      params.delete("filter");
+    } else {
+      params.set("filter", selectedFilter);
+    }
+
+    setSearchParams(params);
   }
 
   function handleSort(option) {
-    searchParams.set("sortBy", option);
-    setSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams);
+    params.set("sortBy", option);
+    setSearchParams(params);
   }
 
   return (
     <AdminDashboardLayout user={user}>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
-        <ManagerTopComponents header={"All Application"}>
-          <div className="flex gap-3">
-            <ManagerFilter>
-              {filterOptions.map((item, index) => (
-                <ManagerFilterBy
-                  key={index}
-                  filters={item.type}
-                  handleFilter={handleFilter}
-                />
-              ))}
-            </ManagerFilter>
-            <SortBy
-              sortOptions={sortOptions}
-              sortBy={sortBy}
-              onChange={handleSort}
-            />
-          </div>
-        </ManagerTopComponents>
-        <div>
-          <Fields fields={fields} />
-          {filteredApps.map((items, i) => (
-            <AdminAppTable data={items} key={i} />
-          ))}
+      {loading ? (
+        <div className="flex justify-center py-6">
+          <div className="w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
         </div>
-      </div>
+      ) : (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
+          <ManagerTopComponents header={"All Application"}>
+            <div className="flex gap-3">
+              <ManagerFilter>
+                {filterOptions.map((item, index) => (
+                  <ManagerFilterBy
+                    key={index}
+                    filters={item.type}
+                    handleFilter={handleFilter}
+                  />
+                ))}
+              </ManagerFilter>
+              <SortBy
+                sortOptions={sortOptions}
+                sortBy={sortBy}
+                onChange={handleSort}
+              />
+            </div>
+          </ManagerTopComponents>
+          <div>
+            <Fields fields={fields} />
+            {filteredApps.map((items, i) => (
+              <AdminAppTable data={items} key={i} />
+            ))}
+          </div>
+        </div>
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}
