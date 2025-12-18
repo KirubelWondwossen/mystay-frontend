@@ -71,6 +71,43 @@ function AdminApplicationDetails() {
     }
   }
 
+  async function updateApplicationStatus({ token, id, action }) {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/admin/${id}/${action}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("Unauthorized. Please login again.");
+        }
+
+        const errorText = await res.text();
+        throw new Error(errorText || `Failed to ${action} application`);
+      }
+
+      const data = await res.json();
+      console.log(data);
+
+      toast.success(
+        `Application ${
+          action === "approve" ? "approved" : "rejected"
+        } successfully`
+      );
+
+      await getData(token);
+    } catch (err) {
+      toast.error(err.message || "Network error, please try again");
+      console.error(err);
+    }
+  }
+
   useEffect(() => {
     getData(token);
   }, [token, id]);
@@ -92,8 +129,24 @@ function AdminApplicationDetails() {
           </Link>
         </ManagerTopComponents>
         <ApplicationDetails app={application} />
-        <DetailButtons status={application.status} />
+        <DetailButtons
+          status={application.status}
+          updateApplicationStatus={updateApplicationStatus}
+          token={token}
+          id={id}
+        />
       </div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            minWidth: "250px",
+            maxWidth: "600px",
+          },
+        }}
+      />
     </AdminDashboardLayout>
   );
 }
@@ -119,23 +172,35 @@ function ApplicationDetails({ app }) {
   );
 }
 
-function DetailButtons({ status }) {
+function DetailButtons({ status, updateApplicationStatus, id, token }) {
+  const handleApprove = () => {
+    updateApplicationStatus({ token, id, action: "approve" });
+  };
+
+  const handleReject = () => {
+    updateApplicationStatus({ token, id, action: "reject" });
+  };
   return (
     <div className="flex gap-2 self-end">
       {status === "pending" && (
-        <Button
-          className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-        >
-          Approve
-        </Button>
+        <>
+          <Button
+            className={
+              "bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
+            }
+            onClick={handleApprove}
+          >
+            Approve
+          </Button>
+          <Button
+            className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
+            onClick={handleReject}
+          >
+            Reject
+          </Button>
+        </>
       )}
-      {status === "pending" && (
-        <Button
-          className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
-        >
-          Reject
-        </Button>
-      )}
+
       <Link to={"/adminapplication"} className="font-heading text-primary">
         <Button
           className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}

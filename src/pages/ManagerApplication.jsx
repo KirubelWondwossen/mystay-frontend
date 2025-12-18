@@ -105,8 +105,6 @@ function ManagerApplication() {
     if (!isFormValid)
       return toast.error("Invalid data please fill all the inputs correctly");
 
-    console.log("Sending:", formData);
-
     try {
       const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
         method: "POST",
