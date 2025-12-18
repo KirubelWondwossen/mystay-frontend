@@ -17,18 +17,30 @@ export function AuthProvider({ children }) {
       setUser(JSON.parse(savedUser));
       setIsAuthenticated(true);
     } else {
-      setIsAuthenticated(false); // explicitly set false if no user
+      setIsAuthenticated(false);
     }
   }, []);
 
-  // LOGIN
-  const login = (data) => {
-    const userData = {
-      id: data.admin_id,
-      name: data.admin_name,
-      email: data.admin_email,
-      role: "admin",
-    };
+  const login = (data, role) => {
+    let userData = null;
+
+    if (role === "admin") {
+      userData = {
+        id: data.admin_id,
+        name: data.admin_name,
+        email: data.admin_email,
+        role: "admin",
+      };
+    }
+
+    if (role === "manager") {
+      userData = {
+        id: data.manager_id,
+        name: data.manager_name,
+        email: data.manager_email,
+        role: "manager",
+      };
+    }
 
     localStorage.setItem("token", data.access_token);
     localStorage.setItem("user", JSON.stringify(userData));
