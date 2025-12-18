@@ -13,23 +13,12 @@ import Button from "../components/ui/Button";
 import { formatDate } from "../utils/formatDate";
 import { useAuth } from "../context/AuthContext";
 
-const applicationsTemp = {
-  manager_name: "John Doe",
-  manager_email: "john@example.com",
-  hotel_name: "Sunrise Hotel",
-  hotel_address: "123 Main St, City",
-  manager_phone: "+251900000001",
-  hotel_description: "A cozy hotel near the beach.",
-  hotel_star_rating: 4,
-  created_at: "2025-12-01T10:00:00Z",
-  status: "approved",
-};
-
 const statusColors = {
   approved: "#dcfce7",
   pending: "#FEF9C3",
   rejected: "#FECACA",
 };
+
 const statusTxtColors = {
   pending: "#D97706",
   approved: "#15803d",
@@ -43,51 +32,58 @@ function AdminApplicationDetails() {
 
   const token = localStorage.getItem("token");
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    async function getData(token) {
-      setLoading(true);
-      setError(null);
+  async function getData(token) {
+    setLoading(true);
+    setError(null);
 
-      try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/api/hotel/application/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          }
-        );
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/hotel/application/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
 
-        if (!res.ok) {
-          if (res.status === 401) {
-            throw new Error("Unauthorized. Please login again.");
-          }
-
-          const message = res.statusText;
-          throw new Error(message || "Failed to fetch data");
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("Unauthorized. Please login again.");
         }
 
-        const data = await res.json();
-
-        setApplication(data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || "Something went wrong");
-        toast.error("Something went wrong");
-      } finally {
-        setLoading(false);
+        const message = res.statusText;
+        throw new Error(message || "Failed to fetch data");
       }
-    }
 
+      const data = await res.json();
+
+      setApplication(data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Something went wrong");
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
     getData(token);
   }, [token, id]);
 
+  if (isAuthenticated === null) return <Loader loading={loading} page={true} />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return (
     <AdminDashboardLayout user={user}>
+      {loading && <Loader loading />}
+      {!loading && error && (
+        <RetryError getData={getData} error={error} token={token} />
+      )}
+
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
         <ManagerTopComponents header={`Application ${id}`}>
           <Status data={application} />
@@ -96,7 +92,7 @@ function AdminApplicationDetails() {
           </Link>
         </ManagerTopComponents>
         <ApplicationDetails app={application} />
-        <DetailButtons />
+        <DetailButtons status={application.status} />
       </div>
     </AdminDashboardLayout>
   );
@@ -123,19 +119,23 @@ function ApplicationDetails({ app }) {
   );
 }
 
-function DetailButtons() {
+function DetailButtons({ status }) {
   return (
     <div className="flex gap-2 self-end">
-      <Button
-        className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-      >
-        Approve
-      </Button>
-      <Button
-        className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-      >
-        Reject
-      </Button>
+      {status === "pending" && (
+        <Button
+          className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+        >
+          Approve
+        </Button>
+      )}
+      {status === "pending" && (
+        <Button
+          className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
+        >
+          Reject
+        </Button>
+      )}
       <Link to={"/adminapplication"} className="font-heading text-primary">
         <Button
           className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}
@@ -202,7 +202,7 @@ function HoteDescription({ description }) {
 function Status({ data }) {
   return (
     <span
-      className="py-1 px-3 justify-self-start text-sm w-fit font-heading font-medium rounded-full absolute left-[38%]"
+      className="py-1 px-3 justify-self-start text-sm w-fit font-heading font-medium rounded-full absolute left-[25%]"
       style={{
         backgroundColor: statusColors[data.status],
         color: statusTxtColors[data.status],

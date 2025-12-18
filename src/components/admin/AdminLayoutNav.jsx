@@ -44,10 +44,8 @@ function ManagerProfile({ user }) {
 function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
   function handleLogout() {
     logout();
-    setTimeout(() => {
-      toast.success("You have logged out");
-      navigate("/login");
-    }, 1000);
+    toast.success("You have logged out");
+    navigate("/login");
   }
   return (
     <ManagerNavContainer className="gap-1 py-3">
