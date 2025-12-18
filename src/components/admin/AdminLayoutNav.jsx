@@ -36,7 +36,7 @@ function ManagerProfile({ user }) {
         alt="profile picture"
         className="w-8 rounded-full"
       />
-      <p className="font-body text-sm">{user?.name || "Admin1"}</p>
+      <p className="font-body text-sm">{user?.name || "Admin"}</p>
     </ManagerNavContainer>
   );
 }
@@ -45,7 +45,7 @@ function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
   function handleLogout() {
     logout();
     toast.success("You have logged out");
-    navigate("/login");
+    navigate("/adminlogin");
   }
   return (
     <ManagerNavContainer className="gap-1 py-3">

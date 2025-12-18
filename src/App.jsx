@@ -10,13 +10,14 @@ import ManagerHome from "./pages/ManagerHome";
 import ManagerBookings from "./pages/ManagerBookings";
 import ManagerBookingsDetail from "./pages/ManagerBookingsDetail";
 import ManagerRooms from "./pages/ManagerRooms";
-import Login from "./pages/Login";
+import Login from "./pages/AdminLogin";
 import ManagerApplication from "./pages/ManagerApplication";
 import AdminApplication from "./pages/AdminApplication";
 import AdminApplicationDetails from "./pages/AdminApplicationDetalis";
 import ManagerProfile from "./pages/ManagerProfile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import AdminLogin from "./pages/AdminLogin";
 
 function App() {
   return (
@@ -32,29 +33,65 @@ function App() {
           />
           <Route path="/profileinfo" element={<ProfileInfo />} />
           <Route path="/wishlist" element={<WishList />} />
-          <Route path="/managerhome" element={<ManagerHome />} />
-          <Route path="/managerbookings" element={<ManagerBookings />} />
-          <Route path="/managerhome" element={<ManagerHome />} />
+          <Route
+            path="/managerhome"
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerHome />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/managerbookings"
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerBookings />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/managerbookingsdetail"
-            element={<ManagerBookingsDetail />}
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerBookingsDetail />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/managerrooms" element={<ManagerRooms />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/managerrooms"
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerRooms />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/managerprofile"
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/managerapplication" element={<ManagerApplication />} />
           <Route
             path="/adminapplication"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminApplication />
               </ProtectedRoute>
             }
           />
           <Route
             path="/application/:id"
-            element={<AdminApplicationDetails />}
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminApplicationDetails />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/managerprofile" element={<ManagerProfile />} />
         </Routes>
       </div>
     </Router>
