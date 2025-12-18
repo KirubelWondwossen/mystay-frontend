@@ -155,7 +155,7 @@ function AdminApplication() {
     setFilteredApps(updatedApps);
   }, [sortBy, filter, applications]);
 
-  if (isAuthenticated === null) return <Loader loading={loading} page={true} />;
+  if (isAuthenticated === null) return <Loader loading page={true} />;
   if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
 
   function handleFilter(selectedFilter) {
@@ -180,9 +180,7 @@ function AdminApplication() {
     <AdminDashboardLayout user={user}>
       {loading && <Loader loading />}
 
-      {!loading && error && (
-        <RetryError getData={getData} error={error} token={token} />
-      )}
+      {!loading && error && <RetryError getData={getData} error={error} />}
       {!hasData && (
         <EmptyState title={"No data"} description={"Wait for applications"} />
       )}

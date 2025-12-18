@@ -8,10 +8,13 @@ import {
 import { useState } from "react";
 import ManagerLayoutNav from "../manager/ManagerLayoutNav";
 import { useAuth } from "../../context/AuthContext";
+import { Loader } from "../../components/ui/Loader";
+import { RetryError } from "../../components/ui/RetryError";
 
-function ManagerLayout({ children }) {
+function ManagerLayout({ children, loading, error, getData }) {
   const [isDark, setIsDark] = useState(false);
   const { user, isAuthenticated } = useAuth();
+  const token = localStorage.getItem("token");
 
   if (!isAuthenticated) return <Navigate to="/managerlogin" replace />;
   function handleDarkMode() {
@@ -30,6 +33,8 @@ function ManagerLayout({ children }) {
           user={user}
         />
         <main className="flex-1 overflow-scroll min-h-full pt-8 px-12 pb-28">
+          {loading && <Loader loading />}
+          {!loading && error && <RetryError getData={getData} error={error} />}
           {children}
         </main>
       </div>

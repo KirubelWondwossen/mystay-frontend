@@ -27,7 +27,7 @@ const statusTxtColors = {
 
 function AdminApplicationDetails() {
   const [application, setApplication] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
@@ -105,6 +105,8 @@ function AdminApplicationDetails() {
     } catch (err) {
       toast.error(err.message || "Network error, please try again");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -117,9 +119,7 @@ function AdminApplicationDetails() {
   return (
     <AdminDashboardLayout user={user}>
       {loading && <Loader loading />}
-      {!loading && error && (
-        <RetryError getData={getData} error={error} token={token} />
-      )}
+      {!loading && error && <RetryError getData={getData} error={error} />}
 
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
         <ManagerTopComponents header={`Application ${id}`}>

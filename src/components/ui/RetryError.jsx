@@ -1,4 +1,6 @@
-export function RetryError({ getData, error, token }) {
+export function RetryError({ getData, error }) {
+  const token = localStorage.getItem("token");
+
   return (
     <div className="max-w-xl mx-auto mt-10 bg-red-50 border border-red-200 p-4 rounded">
       <p className="text-red-600 font-medium">{error}</p>
