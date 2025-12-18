@@ -5,12 +5,23 @@ import {
   SunIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../../context/AuthContext";
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-function ManagerLayoutNav({ isDark, handleDarkMode }) {
+function ManagerLayoutNav({ isDark, handleDarkMode, user }) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <nav className="bg-white border-b flex justify-end w-full px-2 h-12">
-      <ManagerProfile />
-      <ManagerNavIcons isDark={isDark} handleDarkMode={handleDarkMode} />
+      <ManagerProfile user={user} />
+      <ManagerNavIcons
+        isDark={isDark}
+        handleDarkMode={handleDarkMode}
+        logout={logout}
+        navigate={navigate}
+      />
     </nav>
   );
 }
@@ -19,7 +30,7 @@ function ManagerNavContainer({ children, className }) {
   return <div className={`${className} flex items-center`}>{children}</div>;
 }
 
-function ManagerProfile() {
+function ManagerProfile({ user }) {
   return (
     <ManagerNavContainer className={"gap-2 px-3"}>
       <img
@@ -27,19 +38,31 @@ function ManagerProfile() {
         alt="profile picture"
         className="w-8 rounded-full"
       />
-      <p className="font-body text-sm">Admin</p>
+      <p className="font-body text-sm">{user.name.split(" ")[0]}</p>
     </ManagerNavContainer>
   );
 }
 
-function ManagerNavIcons({ isDark, handleDarkMode }) {
+function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
+  function handleLogout() {
+    logout();
+    toast.success("You have logged out");
+    navigate("/adminlogin");
+  }
   return (
     <ManagerNavContainer className="gap-1 py-3">
       <Link to="/managerprofile">
         <UserIcon className="w-5  text-primary" />
       </Link>
       <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />
-      <Icon icon={ArrowRightStartOnRectangleIcon} />
+      <Icon onClick={handleLogout} icon={ArrowRightStartOnRectangleIcon} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 1000,
+        }}
+      />
     </ManagerNavContainer>
   );
 }

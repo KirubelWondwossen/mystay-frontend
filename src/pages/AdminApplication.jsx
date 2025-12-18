@@ -156,7 +156,7 @@ function AdminApplication() {
   }, [sortBy, filter, applications]);
 
   if (isAuthenticated === null) return <Loader loading={loading} page={true} />;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
 
   function handleFilter(selectedFilter) {
     const params = new URLSearchParams(searchParams);
