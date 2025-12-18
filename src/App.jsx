@@ -18,6 +18,7 @@ import ManagerProfile from "./pages/ManagerProfile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import AdminLogin from "./pages/AdminLogin";
+import ManagerLogin from "./pages/ManagerLogin";
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
           />
           <Route path="/profileinfo" element={<ProfileInfo />} />
           <Route path="/wishlist" element={<WishList />} />
+
+          <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route
             path="/managerhome"
             element={
