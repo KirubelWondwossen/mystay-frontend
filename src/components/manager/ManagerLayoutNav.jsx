@@ -21,6 +21,7 @@ function ManagerLayoutNav({ isDark, handleDarkMode, user }) {
         handleDarkMode={handleDarkMode}
         logout={logout}
         navigate={navigate}
+        id={user.id}
       />
     </nav>
   );
@@ -43,7 +44,7 @@ function ManagerProfile({ user }) {
   );
 }
 
-function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
+function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate, id }) {
   function handleLogout() {
     logout();
     toast.success("You have logged out");
@@ -51,7 +52,7 @@ function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate }) {
   }
   return (
     <ManagerNavContainer className="gap-1 py-3">
-      <Link to="/managerprofile">
+      <Link to={`/managerprofile/${id}`}>
         <UserIcon className="w-5  text-primary" />
       </Link>
       <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />

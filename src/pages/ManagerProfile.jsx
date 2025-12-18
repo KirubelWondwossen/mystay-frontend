@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ManagerLayout from "../components/layout/ManagerLayout";
 import Button from "../components/ui/Button";
+import { useParams } from "react-router-dom";
 
 const applicationsTemp = {
   manager_name: "John Doe",
@@ -16,6 +17,9 @@ const applicationsTemp = {
 
 function ManagerProfile() {
   const [manager, setManager] = useState({});
+  const { id } = useParams();
+
+  async function getData(id) {}
 
   // For API call
   useEffect(() => {

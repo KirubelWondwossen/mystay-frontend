@@ -70,7 +70,7 @@ function App() {
             }
           />
           <Route
-            path="/managerprofile"
+            path="/managerprofile/:id"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerProfile />
