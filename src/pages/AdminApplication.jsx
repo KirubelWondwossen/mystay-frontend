@@ -11,6 +11,7 @@ import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader } from "../components/ui/Loader";
 import { RetryError } from "../components/ui/RetryError";
+import { EmptyState } from "../components/ui/EmptyState";
 
 // const applicationsTemp = [
 //   {
@@ -96,6 +97,7 @@ function AdminApplication() {
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
   const token = localStorage.getItem("token");
+  const hasData = applications.length > 0;
 
   async function getData(token) {
     setLoading(true);
@@ -181,8 +183,10 @@ function AdminApplication() {
       {!loading && error && (
         <RetryError getData={getData} error={error} token={token} />
       )}
-
-      {!loading && !error && (
+      {!hasData && (
+        <EmptyState title={"No data"} description={"Wait for applications"} />
+      )}
+      {!loading && !error && hasData && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
           <ManagerTopComponents header={"All Application"}>
             <div className="flex gap-3">
