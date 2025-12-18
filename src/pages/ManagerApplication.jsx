@@ -58,6 +58,8 @@ function ManagerApplication() {
       longitude: "",
     },
   });
+  const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -116,6 +118,20 @@ function ManagerApplication() {
 
       if (res.ok) {
         toast.success("Registration Succesfull Please wait for an email");
+        setFormData({
+          manager_name: "",
+          manager_email: "",
+          hotel_name: "",
+          hotel_address: "",
+          manager_phone: "",
+          hotel_description: "",
+          hotel_star_rating: "",
+          hotel_exact_location: {
+            latitude: "",
+            longitude: "",
+          },
+        });
+        setSubmitted(true);
       } else {
         toast.error(
           data.detail || "Invalid data please fill all the inputs correctly"
@@ -130,10 +146,16 @@ function ManagerApplication() {
   return (
     <main className="bg-[#f9fafb] flex flex-col gap-5 items-center justify-center h-screen">
       <Logo />
-      <h4 className="font-heading text-tSecondary text-2xl font-semibold ">
-        Hotel application form
-      </h4>
-      <Form setFormData={setFormData} handleSubmit={handleSubmit} />
+      {!submitted ? (
+        <>
+          <h4 className="font-heading text-tSecondary text-2xl font-semibold ">
+            Hotel application form
+          </h4>
+          <Form setFormData={setFormData} handleSubmit={handleSubmit} />
+        </>
+      ) : (
+        <SuccessMessage />
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -175,4 +197,18 @@ function Form({ setFormData, handleSubmit }) {
     </form>
   );
 }
+
+function SuccessMessage() {
+  return (
+    <div className="bg-white p-8 rounded-md shadow-md text-center max-w-md">
+      <h3 className="font-heading text-xl text-primary font-semibold">
+        Application sent successfully
+      </h3>
+      <p className="font-body text-sm text-tSecondary mt-3">
+        Thank you for your application. Please wait for a confirmation email.
+      </p>
+    </div>
+  );
+}
+
 export default ManagerApplication;

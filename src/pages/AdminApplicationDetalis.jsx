@@ -87,13 +87,13 @@ function AdminApplicationDetails() {
         if (res.status === 401) {
           throw new Error("Unauthorized. Please login again.");
         }
+        console.log(res);
 
         const errorText = await res.text();
         throw new Error(errorText || `Failed to ${action} application`);
       }
 
       const data = await res.json();
-      console.log(data);
 
       toast.success(
         `Application ${
