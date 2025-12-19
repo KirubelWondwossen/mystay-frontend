@@ -145,6 +145,8 @@ function ManagerPassword({ id, token }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
+  const passwordPattern =
+    "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -171,9 +173,13 @@ function ManagerPassword({ id, token }) {
       );
 
       const data = await res.json();
+      console.log(data);
 
       if (res.ok) {
         toast.success("Password Updated Successfully");
+        setConfirmPassword("");
+        setPassword("");
+        setCurrentPassword("");
       } else {
         toast.error(data.detail || "Current password is incorrect");
       }
@@ -202,6 +208,7 @@ function ManagerPassword({ id, token }) {
         value={password}
         name="newPassword"
         required
+        pattern={passwordPattern}
         onChange={(e) => setPassword(e.target.value)}
       />
       <LabelInput
@@ -210,6 +217,7 @@ function ManagerPassword({ id, token }) {
         value={confirmPassword}
         name="confirmPassword"
         required
+        title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
       <Button
