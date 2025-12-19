@@ -1,7 +1,7 @@
 import ManagerBtnList from "../manager/ManagerBtnList";
 import { useLocation } from "react-router-dom";
 import Logo from "../ui/Logo";
-import { HomeIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, UsersIcon } from "@heroicons/react/24/outline";
 
 function AdminSidebar() {
   const location = useLocation();
@@ -16,6 +16,14 @@ function AdminSidebar() {
       >
         <Icon icon={HomeIcon} />
         <SideBtnName>Applications</SideBtnName>
+      </ManagerBtnList>
+      <ManagerBtnList
+        path={"/adminmanagerslist"}
+        className={"w-full"}
+        loc={location.pathname === "/adminmanagerslist"}
+      >
+        <Icon icon={UsersIcon} />
+        <SideBtnName>Managers</SideBtnName>
       </ManagerBtnList>
     </aside>
   );

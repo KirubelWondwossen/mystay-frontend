@@ -17,6 +17,7 @@ import ManagerProfile from "./pages/ManagerProfile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLogin from "./pages/AdminLogin";
 import ManagerLogin from "./pages/ManagerLogin";
+import AdminManagerList from "./pages/AdminManagersList";
 
 function App() {
   return (
@@ -90,6 +91,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminApplicationDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/adminmanagerslist"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminManagerList />
               </ProtectedRoute>
             }
           />
