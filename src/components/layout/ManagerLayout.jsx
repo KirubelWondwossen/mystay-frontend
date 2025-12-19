@@ -1,10 +1,4 @@
 import ManagerSidebar from "../manager/ManagerSidebar";
-import {
-  ArrowRightStartOnRectangleIcon,
-  MoonIcon,
-  SunIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ManagerLayoutNav from "../manager/ManagerLayoutNav";
 import { useAuth } from "../../context/AuthContext";
