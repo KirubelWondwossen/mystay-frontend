@@ -10,7 +10,6 @@ import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader } from "../components/ui/Loader";
-import { RetryError } from "../components/ui/RetryError";
 import { EmptyState } from "../components/ui/EmptyState";
 
 // const applicationsTemp = [
@@ -178,11 +177,11 @@ function AdminApplication() {
 
   return (
     <AdminDashboardLayout user={user}>
-      {loading && <Loader loading />}
-
-      {!loading && error && <RetryError getData={getData} error={error} />}
       {!hasData && (
-        <EmptyState title={"No data"} description={"Wait for applications"} />
+        <EmptyState
+          title={"No applications"}
+          description={"Wait for applications"}
+        />
       )}
       {!loading && !error && hasData && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-5">

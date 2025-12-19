@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
+import toast, { Toaster } from "react-hot-toast";
+import { EmptyState } from "../components/ui/EmptyState";
+import ManagerTopComponents from "../components/manager/ManagerTopComponents";
+const fields = ["Manager Name", "Hotel Name", "Phone", "Location"];
 
 function AdminManagerList() {
   const [managers, setManagers] = useState([]);
@@ -13,7 +17,7 @@ function AdminManagerList() {
     setError(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
+      const res = await fetch("http://127.0.0.1:8000/api/hotelmanager/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,6 +35,8 @@ function AdminManagerList() {
       }
 
       const data = await res.json();
+      console.log(data);
+
       setManagers([...data]);
     } catch (err) {
       console.error(err);
@@ -43,14 +49,40 @@ function AdminManagerList() {
 
   useEffect(() => {
     if (!token) return;
-    // getData(token);
+    getData(token);
   }, [token]);
 
   return (
-    <AdminDashboardLayout
-      loading={loading}
-      error={error}
-    ></AdminDashboardLayout>
+    <AdminDashboardLayout loading={loading} error={error}>
+      {!hasData && (
+        <EmptyState
+          title={"No mangers yet"}
+          description={"Wait for managers"}
+        />
+      )}
+      {!loading && !error && hasData && (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
+          <ManagerTopComponents header={"Managers"}></ManagerTopComponents>
+          <Fields fields={fields} />
+        </div>
+      )}
+    </AdminDashboardLayout>
   );
 }
+
+function Fields({ fields }) {
+  return (
+    <div className="grid grid-cols-[2fr_1.6fr_1.6fr_2fr_0.6fr] gap-2 border border-[#e5e7eb] rounded-t-sm">
+      {fields.map((el, i) => (
+        <div
+          className="justify-self-start text-sm font-heading p-2 text-tSecondary font-semibold"
+          key={i}
+        >
+          {el.toUpperCase()}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default AdminManagerList;
