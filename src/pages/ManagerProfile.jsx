@@ -146,8 +146,48 @@ function ManagerPassword({ id, token }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (password !== confirmPassword)
+      return toast.error("Passwords do not match please try again!");
+
+    const formData = {
+      current_password: currentPassword,
+      new_password: password,
+    };
+
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/hotelmanager/${id}/update-password`,
+        {
+          method: "PATCH",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Password Updated Successfully");
+      } else {
+        toast.error(data.detail || "Current password is incorrect");
+      }
+    } catch (err) {
+      toast.error("Network error, please try again");
+      console.error(err);
+    }
+  }
+
   return (
-    <form className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3"
+    >
       <LabelInput
         label={"Current Password"}
         type="password"
