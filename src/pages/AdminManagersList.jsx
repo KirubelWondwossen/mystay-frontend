@@ -3,7 +3,7 @@ import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import toast, { Toaster } from "react-hot-toast";
 import { EmptyState } from "../components/ui/EmptyState";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
-const fields = ["Manager Name", "Hotel Name", "Phone", "Location"];
+const fields = ["Manager Name", "Hotel Name", "Phone"];
 
 function AdminManagerList() {
   const [managers, setManagers] = useState([]);
