@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ManagerLayout from "../components/layout/ManagerLayout";
 import Button from "../components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 // const applicationsTemp = {
 //   manager_name: "John Doe",
@@ -20,6 +22,7 @@ function ManagerProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
+  const { id } = useParams();
 
   async function getData(token) {
     setLoading(true);
@@ -78,7 +81,7 @@ function ManagerProfile() {
             <HeaderT> Manager Info</HeaderT>
             <ManagerInfo data={manager} />
             <HeaderT> Update Password</HeaderT>
-            <ManagerPassword />
+            <ManagerPassword id={id} token={token} />
           </div>
         </>
       )}
@@ -138,44 +141,33 @@ function ManagerInfo({ data }) {
   );
 }
 
-function ManagerPassword() {
+function ManagerPassword({ id, token }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (password !== confirmPassword)
-      return alert("Passwords donot match try again!!!");
-
-    // fetch("/api/manager/application", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
-  }
+  const [currentPassword, setCurrentPassword] = useState("");
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3"
-    >
+    <form className="bg-white shadow-md rounded-sm flex flex-col gap-3 p-3">
       <LabelInput
         label={"Current Password"}
         type="password"
-        name="password"
+        value={currentPassword}
+        name="currentPassword"
         required
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => setCurrentPassword(e.target.value)}
       />
       <LabelInput
         label={"New password"}
         type="password"
+        value={password}
         name="newPassword"
         required
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <LabelInput
         label={"Confirm password"}
         type="password"
+        value={confirmPassword}
         name="confirmPassword"
         required
         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -192,23 +184,40 @@ function ManagerPassword() {
 }
 
 function LabelInput({ className, label, ...props }) {
+  const [showPass, setShowPass] = useState(false);
   const safeValue = props.value !== undefined ? props.value : "";
 
   return (
     <div className="border-b py-3 border-[#f3f4f6]">
-      <div className="flex items-center justify-between w-1/2">
+      <div className="flex items-center justify-between w-1/2 relative">
         <label
           htmlFor={props.id || props.name}
           className="font-body font-medium text-tSecondary"
         >
           {label}
         </label>
-
         <input
           {...props}
           value={safeValue}
+          type={props.type === "password" && showPass ? "text" : props.type}
           className={`border text-sm text-body border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1 ${className}`}
         />
+        {props.type === "password" && (
+          <>
+            {showPass === false && (
+              <EyeIcon
+                className="w-4 absolute z-50 right-[2%] cursor-pointer"
+                onClick={() => setShowPass(!showPass)}
+              />
+            )}
+            {showPass === true && (
+              <EyeSlashIcon
+                className="w-4 absolute z-50 right-[2%] cursor-pointer"
+                onClick={() => setShowPass(!showPass)}
+              />
+            )}
+          </>
+        )}
       </div>
     </div>
   );

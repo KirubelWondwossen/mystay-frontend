@@ -14,7 +14,6 @@ import { RetryError } from "../../components/ui/RetryError";
 function ManagerLayout({ children, loading, error, getData }) {
   const [isDark, setIsDark] = useState(false);
   const { user, isAuthenticated } = useAuth();
-  const token = localStorage.getItem("token");
 
   if (!isAuthenticated) return <Navigate to="/managerlogin" replace />;
   function handleDarkMode() {
