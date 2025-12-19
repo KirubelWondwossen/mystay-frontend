@@ -6,11 +6,13 @@ import {
   CalendarDateRangeIcon,
   HomeIcon,
   UsersIcon,
-  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../../context/AuthContext";
 
 function ManagerSidebar() {
   const location = useLocation();
+  const { user } = useAuth();
+  const id = user.id;
 
   return (
     <aside className="w-42 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden bg-white">
@@ -48,23 +50,15 @@ function ManagerSidebar() {
         <SideBtnName>Rooms</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
-        path={"/managerusers"}
+        path={`/managerprofile/${id}`}
         className={"w-full"}
-        loc={location.pathname === "/managerusers"}
-      >
-        <Icon icon={UsersIcon} color={location.pathname === "/managerusers"} />
-        <SideBtnName>Users</SideBtnName>
-      </ManagerBtnList>
-      <ManagerBtnList
-        path={"/managersettings"}
-        className={"w-full"}
-        loc={location.pathname === "/managersettings"}
+        loc={location.pathname === `/managerprofile/${id}`}
       >
         <Icon
-          icon={Cog6ToothIcon}
-          color={location.pathname === "/managersettings"}
+          icon={UsersIcon}
+          color={location.pathname === `/managerprofile/${id}`}
         />
-        <SideBtnName>Settings</SideBtnName>
+        <SideBtnName>Profile</SideBtnName>
       </ManagerBtnList>
     </aside>
   );

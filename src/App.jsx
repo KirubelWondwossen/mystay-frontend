@@ -10,13 +10,11 @@ import ManagerHome from "./pages/ManagerHome";
 import ManagerBookings from "./pages/ManagerBookings";
 import ManagerBookingsDetail from "./pages/ManagerBookingsDetail";
 import ManagerRooms from "./pages/ManagerRooms";
-import Login from "./pages/AdminLogin";
 import ManagerApplication from "./pages/ManagerApplication";
 import AdminApplication from "./pages/AdminApplication";
 import AdminApplicationDetails from "./pages/AdminApplicationDetalis";
 import ManagerProfile from "./pages/ManagerProfile";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { AuthProvider } from "./context/AuthContext";
 import AdminLogin from "./pages/AdminLogin";
 import ManagerLogin from "./pages/ManagerLogin";
 

@@ -48,7 +48,7 @@ function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate, id }) {
   function handleLogout() {
     logout();
     toast.success("You have logged out");
-    navigate("/adminlogin");
+    navigate("/managerlogin");
   }
   return (
     <ManagerNavContainer className="gap-1 py-3">
