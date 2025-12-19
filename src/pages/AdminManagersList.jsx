@@ -3,6 +3,7 @@ import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import toast, { Toaster } from "react-hot-toast";
 import { EmptyState } from "../components/ui/EmptyState";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
+import AdminManagerListTable from "../components/admin/AdminManagerListTable";
 const fields = ["Manager Name", "Hotel Name", "Phone"];
 
 function AdminManagerList() {
@@ -35,7 +36,6 @@ function AdminManagerList() {
       }
 
       const data = await res.json();
-      console.log(data);
 
       setManagers([...data]);
     } catch (err) {
@@ -63,9 +63,18 @@ function AdminManagerList() {
       {!loading && !error && hasData && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
           <ManagerTopComponents header={"Managers"}></ManagerTopComponents>
-          <Fields fields={fields} />
+          <div>
+            <Fields fields={fields} />
+            {managers.map((items, index) => (
+              <AdminManagerListTable
+                data={items}
+                key={items.id ?? `${items.manager_email}-${index}`}
+              />
+            ))}
+          </div>
         </div>
       )}
+      <Toaster position="top-center" />
     </AdminDashboardLayout>
   );
 }

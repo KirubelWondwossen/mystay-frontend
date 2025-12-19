@@ -34,15 +34,15 @@ function AdminManagerListTable({ data }) {
   }, [popup]);
 
   return (
-    <div className="relative  grid-cols-[1.6fr_1.6fr_0.6fr_2fr_0.6fr] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
+    <div className="relative grid-cols-[2fr_1.6fr_1.6fr_2fr_0.6fr] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
       <NameDate main={data.name} sub={data.email} />
       <NameDate
         main={data.hotel_name || "Not yet"}
         sub={data.hotel_address || "Not yet"}
       />
 
-      <div className="flex justify-between w-full ml-2">
-        <span className=""></span>
+      <div className="flex justify-between w-full mr-2">
+        <span className="px-2">{data.phone}</span>
         <EllipsisVerticalIcon
           ref={iconRef}
           className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
@@ -57,7 +57,7 @@ function AdminManagerListTable({ data }) {
 
 function NameDate({ main, sub }) {
   return (
-    <div className="flex flex-col items-start w-fit">
+    <div className="flex flex-col items-start justify-self-start px-2">
       <span className="text-sm">{main}</span>
       <span className="text-tTertiary font-body text-xs">{sub}</span>
     </div>
@@ -70,12 +70,11 @@ function BookingOption({ popup, popupRef, appId }) {
       ref={popupRef}
       className={`${
         popup ? "visible" : "invisible"
-      } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
+      } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-[18%] top-[20%]`}
     >
-      <Link to={`/application/${appId}`}>
+      <Link to={`/manager/${appId}`}>
         <IconDetail icon={EyeIcon} detail={"Details"} />
       </Link>
-      <IconDetail icon={TrashIcon} detail={"Delete"} />
     </div>
   );
 }
