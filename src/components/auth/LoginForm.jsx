@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 import Button from "../ui/Button";
 import Logo from "../ui/Logo";
@@ -92,14 +93,33 @@ function LoginForm({ endpoint, role, redirectTo }) {
 }
 
 function LabelInput({ label, ...props }) {
+  const [showPass, setShowPass] = useState(false);
+
   return (
-    <div className="flex flex-col items-start p-3 gap-2">
-      <label className="font-body font-medium text-tSecondary">{label}</label>
+    <div className="flex flex-col items-start p-3 gap-2 relative">
+      <label className="font-body font-medium text-tSecondary ">{label}</label>
 
       <input
         {...props}
+        type={props.type === "password" && showPass ? "text" : props.type}
         className="border border-[#d1d5db] rounded-sm shadow-sm w-72 px-2 py-1"
       />
+      {props.type === "password" && (
+        <>
+          {showPass === false && (
+            <EyeIcon
+              className="w-4 absolute z-50 right-[7%] bottom-[23%] cursor-pointer"
+              onClick={() => setShowPass(!showPass)}
+            />
+          )}
+          {showPass === true && (
+            <EyeSlashIcon
+              className="w-4 absolute z-50 right-[7%] bottom-[23%] cursor-pointer"
+              onClick={() => setShowPass(!showPass)}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }
