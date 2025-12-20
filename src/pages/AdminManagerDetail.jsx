@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
@@ -41,7 +42,11 @@ function AdminManagerDetail() {
   return (
     <AdminDashboardLayout loading={loading} error={error} getData={getManager}>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
-        <ManagerTopComponents header={`Manager ${id}`}></ManagerTopComponents>
+        <ManagerTopComponents header={`Manager ${id}`}>
+          <Link to={"/adminmanagerslist"} className="font-heading text-primary">
+            ← Back
+          </Link>
+        </ManagerTopComponents>
         <AdminManagerListDetails hotel={hotel} manager={manager} />
       </div>
       <Toaster

@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { EmptyState } from "../components/ui/EmptyState";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminManagerListTable from "../components/admin/AdminManagerListTable";
+import { getManagers } from "../services/adminAPi";
 const fields = ["Manager Name", "Hotel Name", "Phone"];
 
 function AdminManagerList() {
@@ -13,44 +14,26 @@ function AdminManagerList() {
   const token = localStorage.getItem("token");
   const hasData = managers.length > 0;
 
-  async function getData(token) {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch("http://127.0.0.1:8000/api/hotelmanager/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          throw new Error("Unauthorized. Please login again.");
-        }
-
-        const message = res.statusText;
-        throw new Error(message || "Failed to fetch data");
-      }
-
-      const data = await res.json();
-
-      setManagers([...data]);
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "Something went wrong");
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    if (!token) return;
-    getData(token);
+    const load = async () => {
+      try {
+        setLoading(true);
+        const manager = await getManagers(token);
+        setManagers(manager);
+      } catch (e) {
+        setError(e.message);
+        toast.error(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, [token]);
+
+  //   if (!token) return;
+  //   getData(token);
+  // }, [token]);
 
   return (
     <AdminDashboardLayout loading={loading} error={error}>
@@ -68,7 +51,7 @@ function AdminManagerList() {
             {managers.map((items, index) => (
               <AdminManagerListTable
                 data={items}
-                key={items.id ?? `${items.manager_email}-${index}`}
+                key={items.id ?? `${items.email}-${index}`}
               />
             ))}
           </div>

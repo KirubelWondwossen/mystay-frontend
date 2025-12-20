@@ -19,3 +19,5 @@ export async function apiFetch(url, token) {
 export const getManager = (id, token) => apiFetch(`/hotelmanager/${id}`, token);
 
 export const getHotel = (id, token) => apiFetch(`/hotels/${id}`, token);
+
+export const getManagers = (token) => apiFetch("/hotelmanager/", token);

@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import {
-  EllipsisVerticalIcon,
-  EyeIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 function AdminManagerListTable({ data }) {
   const [popup, setPopup] = useState(false);
@@ -36,10 +32,8 @@ function AdminManagerListTable({ data }) {
   return (
     <div className="relative grid-cols-[2fr_1.6fr_1.6fr_2fr_0.6fr] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
       <NameDate main={data.name} sub={data.email} />
-      <NameDate
-        main={data.hotel_name || "Not yet"}
-        sub={data.hotel_address || "Not yet"}
-      />
+
+      <span className="justify-self-start ">{data.hotel.name}</span>
 
       <div className="flex justify-between w-full mr-2">
         <span className="px-2">{data.phone}</span>
