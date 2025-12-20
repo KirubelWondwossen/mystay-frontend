@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { HomeModernIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -11,6 +11,7 @@ import { formatDate } from "../utils/formatDate";
 import { useAuth } from "../context/AuthContext";
 import { HoteDescription } from "../components/ui/HoteDescription";
 import { TextIcon } from "../components/ui/TextIcon";
+import { AdminAppTitleValue } from "../components/admin/AdminAppTitleValue";
 
 const statusColors = {
   approved: "#dcfce7",
@@ -33,42 +34,43 @@ function AdminApplicationDetails() {
   const { id } = useParams();
   const { isAuthenticated } = useAuth();
 
-  async function getData(token) {
-    setLoading(true);
-    setError(null);
+  const getData = useCallback(
+    async (token) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/hotel/application/${id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/hotel/application/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            throw new Error("Unauthorized. Please login again.");
+          }
+
+          throw new Error(res.statusText || "Failed to fetch data");
         }
-      );
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          throw new Error("Unauthorized. Please login again.");
-        }
-
-        const message = res.statusText;
-        throw new Error(message || "Failed to fetch data");
+        const data = await res.json();
+        setApplication(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Something went wrong");
+        toast.error(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
       }
-
-      const data = await res.json();
-
-      setApplication(data);
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "Something went wrong");
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  }
+    },
+    [id]
+  );
 
   async function updateApplicationStatus({ token, id, action }) {
     try {
@@ -108,8 +110,9 @@ function AdminApplicationDetails() {
   }
 
   useEffect(() => {
+    if (!token) return;
     getData(token);
-  }, [token, id]);
+  }, [token, getData]);
 
   if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
   return (
@@ -151,10 +154,10 @@ function ApplicationDetails({ app }) {
         <TextIcon text={app.hotel_name} icon={HomeModernIcon} />
         <TextIcon text={app.hotel_address} icon={MapPinIcon} />
       </div>
-      <TitleValue title={"Manager Name"} value={app.manager_name} />
-      <TitleValue title={"Manager Email"} value={app.manager_email} />
-      <TitleValue title={"Manager Phone"} value={app.manager_phone} />
-      <TitleValue title={"Hotel Star"} star={app.hotel_star_rating} />
+      <AdminAppTitleValue title={"Manager Name"} value={app.manager_name} />
+      <AdminAppTitleValue title={"Manager Email"} value={app.manager_email} />
+      <AdminAppTitleValue title={"Manager Phone"} value={app.manager_phone} />
+      <AdminAppTitleValue title={"Hotel Star"} star={app.hotel_star_rating} />
       <HoteDescription description={app.hotel_description} />
       <span className="text-xs self-end mb-4 font-body text-tSecondary p-4">
         {`Booked on ${formatDate(app.created_at).date} at ${

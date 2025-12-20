@@ -1,6 +1,6 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 
-function AdminAppTitleValue({ title, value, star }) {
+export function AdminAppTitleValue({ title, value, star }) {
   return (
     <div className="flex gap-3 items-center px-4 py-">
       <span className="font-heading text-tSecondary font-semibold bg-[#f9fafb] p-3 rounded-md">
