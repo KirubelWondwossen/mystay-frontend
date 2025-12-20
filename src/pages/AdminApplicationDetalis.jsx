@@ -1,17 +1,16 @@
 import { Link } from "react-router-dom";
 import { HomeModernIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { Loader } from "../components/ui/Loader";
-import { RetryError } from "../components/ui/RetryError";
 
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import Button from "../components/ui/Button";
 import { formatDate } from "../utils/formatDate";
 import { useAuth } from "../context/AuthContext";
+import { HoteDescription } from "../components/ui/HoteDescription";
+import { TextIcon } from "../components/ui/TextIcon";
 
 const statusColors = {
   approved: "#dcfce7",
@@ -32,7 +31,7 @@ function AdminApplicationDetails() {
 
   const token = localStorage.getItem("token");
   const { id } = useParams();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   async function getData(token) {
     setLoading(true);
@@ -93,8 +92,6 @@ function AdminApplicationDetails() {
         throw new Error(errorText || `Failed to ${action} application`);
       }
 
-      const data = await res.json();
-
       toast.success(
         `Application ${
           action === "approve" ? "approved" : "rejected"
@@ -114,13 +111,9 @@ function AdminApplicationDetails() {
     getData(token);
   }, [token, id]);
 
-  if (isAuthenticated === null) return <Loader loading={loading} page={true} />;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
   return (
-    <AdminDashboardLayout user={user}>
-      {loading && <Loader loading />}
-      {!loading && error && <RetryError getData={getData} error={error} />}
-
+    <AdminDashboardLayout loading={loading} getData={getData} error={error}>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
         <ManagerTopComponents header={`Application ${id}`}>
           <Status data={application} />
@@ -208,58 +201,6 @@ function DetailButtons({ status, updateApplicationStatus, id, token }) {
           Back
         </Button>
       </Link>
-    </div>
-  );
-}
-
-function TitleValue({ title, value, star }) {
-  return (
-    <div className="flex gap-3 items-center px-4 py-">
-      <span className="font-heading text-tSecondary font-semibold bg-[#f9fafb] p-3 rounded-md">
-        {title}
-      </span>
-      {star ? (
-        <div className="flex items-center">
-          {Array.from({ length: star }, (_, i) => i + 1).map((_, i) => (
-            <StarIcon className="w-5 text-[#FFD700]" key={i} />
-          ))}
-        </div>
-      ) : (
-        <span className="font-body text-tPrimary font-medium text-sm">
-          {value}
-        </span>
-      )}
-    </div>
-  );
-}
-
-// eslint-disable-next-line
-function TextIcon({ text, icon: Icon }) {
-  return (
-    <div className="flex gap-3 items-center px-4">
-      <div className="flex gap-3 items-center">
-        <Icon className="w-8" />
-        <span className="text-lg">{text}</span>
-      </div>
-    </div>
-  );
-}
-
-function HoteDescription({ description }) {
-  return (
-    <div
-      className={`flex gap-3 ${
-        description?.length > 77 ? "items-start" : "items-center"
-      }  px-4`}
-    >
-      <span className="font-heading text-tSecondary font-semibold bg-[#f9fafb] p-3 rounded-md">
-        Hotel Description
-      </span>
-      <p
-        className={`font-body text-sm text-tPrimary text-start max-w-lg leading-relaxed `}
-      >
-        {description}
-      </p>
     </div>
   );
 }
