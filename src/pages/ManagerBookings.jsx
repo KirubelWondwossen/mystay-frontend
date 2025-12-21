@@ -149,7 +149,7 @@ function ManagerBookings() {
         ref.current = manager.hotel.id;
         const bookingData = await getManagerBookings(ref.current, token);
 
-        // setBookings(bookingData);
+        setBookings(bookingData);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);

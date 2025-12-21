@@ -3,6 +3,7 @@ import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { SuccessMessage } from "../components/ui/SuccessMessage";
 const formEL = [
   {
     label: "Manager Name",
@@ -154,7 +155,12 @@ function ManagerApplication() {
           <Form setFormData={setFormData} handleSubmit={handleSubmit} />
         </>
       ) : (
-        <SuccessMessage />
+        <SuccessMessage
+          title={"Application sent successfully"}
+          description={
+            "Thank you for your application. Please wait for a confirmation email."
+          }
+        />
       )}
       <Toaster
         position="top-center"
@@ -195,19 +201,6 @@ function Form({ setFormData, handleSubmit }) {
         Submit
       </Button>
     </form>
-  );
-}
-
-function SuccessMessage() {
-  return (
-    <div className="bg-white p-8 rounded-md shadow-md text-center max-w-md">
-      <h3 className="font-heading text-xl text-primary font-semibold">
-        Application sent successfully
-      </h3>
-      <p className="font-body text-sm text-tSecondary mt-3">
-        Thank you for your application. Please wait for a confirmation email.
-      </p>
-    </div>
   );
 }
 

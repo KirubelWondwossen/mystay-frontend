@@ -1,22 +1,36 @@
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function apiFetch(url, token, data) {
+export async function apiFetchFormData(url, token, data) {
+  const formData = new FormData();
+
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
+  });
+
   const res = await fetch(`${API_URL}${url}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify(data),
+    body: formData,
   });
 
   if (!res.ok) {
+    if (res.status === 422) {
+      const errData = await res.json();
+      const error = new Error("Validation error");
+      error.type = "validation";
+      error.errors = errData.detail || errData.errors || {};
+      throw error;
+    }
     if (res.status === 401) throw new Error("Unauthorized");
     throw new Error("Request failed");
   }
 
   return res.json();
 }
+
 // For managers
-export const postRooms = (id, token) => apiFetch(`/hotels/${id}/rooms`, token);
+export const postRooms = (id, token, data) =>
+  apiFetchFormData(`/hotels/${id}/rooms`, token, data);

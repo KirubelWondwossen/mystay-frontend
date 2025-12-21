@@ -222,7 +222,10 @@ function ManagerRooms() {
           </Button>
           {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
           {openModal && (
-            <ManagerAddRoomPopup handleOpenModal={handleOpenModal} />
+            <ManagerAddRoomPopup
+              handleOpenModal={handleOpenModal}
+              id={ref.current}
+            />
           )}
         </div>
       )}
