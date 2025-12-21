@@ -58,7 +58,6 @@ const formEl = [
 ];
 
 const requiredFields = (mode) => {
-  // In edit mode, remove "image" from required fields
   if (mode === "edit") {
     return [
       "room_number",
@@ -68,7 +67,6 @@ const requiredFields = (mode) => {
       "description",
     ];
   }
-  // In create mode, all fields are required
   return [
     "room_number",
     "room_type",
@@ -89,7 +87,7 @@ const initialFormData = {
   image_url: "",
 };
 
-function Popup({ handleOpenModal, mode, initialData, id }) {
+function Popup({ handleOpenModal, mode, initialData, id, setRefresh }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialFormData);
@@ -106,7 +104,7 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
 
   const validateForm = () => {
     const newErrors = {};
-    const fieldsToCheck = requiredFields(mode); // pass current mode
+    const fieldsToCheck = requiredFields(mode);
 
     fieldsToCheck.forEach((field) => {
       if (
@@ -177,6 +175,7 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
             : "Room updated successfully!")
       );
       resetForm();
+      setRefresh((prev) => !prev);
     } catch (err) {
       if (err.type === "validation" && err.errors) {
         const backendErrors = {};

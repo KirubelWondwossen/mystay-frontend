@@ -20,6 +20,7 @@ import Button from "../components/ui/Button";
 import Backdrop from "../components/ui/Backdrop";
 import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
 import { getManagerInfo, getRooms } from "../services/getAPi";
+import { deleteRoom } from "../services/deleteAPI";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -27,14 +28,6 @@ const filterOptions = [
   { value: 3, type: "King" },
   { value: 4, type: "Twin" },
 ];
-// const filterOptions = [
-//   { type: "All" },
-//   { type: "Standard" },
-//   { type: "Single" },
-//   { type: "Double" },
-//   { type: "Suite" },
-//   { type: "Deluxe" },
-// ];
 const sortOptions = [
   { value: "name-asc", text: "Sort by name (A-Z)" },
   { value: "name-desc", text: "Sort by name (Z-A)" },
@@ -52,6 +45,9 @@ function ManagerRooms() {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [roomToDelete, setRoomToDelete] = useState(null); // FIXED
+  const [refresh, setRefresh] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
@@ -82,7 +78,7 @@ function ManagerRooms() {
     };
 
     load();
-  }, [token]);
+  }, [token, refresh]);
 
   useEffect(() => {
     let updatedRooms = [...rooms];
@@ -108,6 +104,9 @@ function ManagerRooms() {
   function handleOpenModal() {
     setOpenModal((prev) => !prev);
   }
+  const handleOpenDelete = (room) => setRoomToDelete(room); // FIXED
+  const handleCloseDelete = () => setRoomToDelete(null); // FIXED
+
   const handleCreateRoom = () => {
     setMode("create");
     setSelectedRoom(null);
@@ -124,8 +123,6 @@ function ManagerRooms() {
   }
 
   function handleFilter(selectedFilter) {
-    console.log(selectedFilter);
-
     if (selectedFilter === "all") searchParams.delete("filter");
     else searchParams.set("filter", selectedFilter);
 
@@ -136,6 +133,26 @@ function ManagerRooms() {
     searchParams.set("sortBy", option);
     setSearchParams(searchParams);
   }
+
+  const handleDelete = async () => {
+    if (!roomToDelete) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await deleteRoom(ref.current, roomToDelete.id, token);
+      setRooms((prev) => prev.filter((r) => r.id !== roomToDelete.id));
+      toast.success("Room deleted successfully");
+      setRoomToDelete(null);
+    } catch (err) {
+      const message = err.message || "Failed to delete room";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ManagerLayout
@@ -171,8 +188,15 @@ function ManagerRooms() {
               </ManagerTopComponents>
               <div>
                 <Fields fields={fields} />
-                {filteredRooms.map((el, i) => (
-                  <Rooms rooms={el} key={i} handleEditRoom={handleEditRoom} />
+                {filteredRooms.map((el) => (
+                  <Rooms
+                    room={el} // rename prop to singular
+                    key={el.id} // use id instead of index
+                    handleEditRoom={handleEditRoom}
+                    handleOpenDelete={handleOpenDelete}
+                    handleDelete={handleDelete}
+                    handleCloseDelete={handleCloseDelete}
+                  />
                 ))}
               </div>
             </>
@@ -182,7 +206,7 @@ function ManagerRooms() {
             className={`bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca] ${
               !hasData && "self-center"
             }`}
-            onClick={() => handleCreateRoom()}
+            onClick={handleCreateRoom}
           >
             Add new room
           </Button>
@@ -194,7 +218,19 @@ function ManagerRooms() {
               id={ref.current}
               mode={mode}
               initialData={selectedRoom}
+              setRefresh={setRefresh}
             />
+          )}
+
+          {roomToDelete && (
+            <>
+              <Backdrop handleOpenModal={handleCloseDelete} />
+              <WarningPopup
+                handleDelete={handleDelete}
+                handleCloseDelete={handleCloseDelete}
+                room={roomToDelete}
+              />
+            </>
           )}
         </div>
       )}
@@ -225,7 +261,11 @@ function Fields({ fields }) {
   );
 }
 
-function Rooms({ rooms, handleEditRoom }) {
+function Rooms({
+  room, // renamed from rooms
+  handleEditRoom,
+  handleOpenDelete,
+}) {
   const [popup, setPopup] = useState(false);
   const popupRef = useRef(null);
   const iconRef = useRef(null);
@@ -254,23 +294,22 @@ function Rooms({ rooms, handleEditRoom }) {
     <div className="relative grid grid-cols-[0.6fr_1.2fr_1fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
       <img
         src={
-          rooms.image_url
-            ? `http://127.0.0.1:8000${rooms.image_url}`
+          room.image_url
+            ? `http://127.0.0.1:8000${room.image_url}`
             : "/placeholder.png"
         }
         alt="room"
         className="aspect-[3/2] object-cover object-center"
       />
-      <span className="justify-self-start py-4">{rooms.room_number}</span>
-
+      <span className="justify-self-start py-4">{room.room_number}</span>
       <span className="justify-self-start py-4 text-sm">
-        {rooms.room_type.toUpperCase()}
+        {room.room_type.toUpperCase()}
       </span>
       <span className="justify-self-start py-4 text-sm ">
-        {rooms.bed_type.toUpperCase()}
+        {room.bed_type.toUpperCase()}
       </span>
       <span className="justify-self-start py-4 ml-2">
-        ${rooms.price_per_night}
+        ${room.price_per_night}
       </span>
       <EllipsisVerticalIcon
         ref={iconRef}
@@ -280,14 +319,21 @@ function Rooms({ rooms, handleEditRoom }) {
       <BookingOption
         popup={popup}
         popupRef={popupRef}
-        room={rooms}
+        room={room}
         handleEditRoom={handleEditRoom}
+        handleOpenDelete={handleOpenDelete}
       />
     </div>
   );
 }
 
-function BookingOption({ popup, popupRef, room, handleEditRoom }) {
+function BookingOption({
+  popup,
+  popupRef,
+  room,
+  handleEditRoom,
+  handleOpenDelete,
+}) {
   return (
     <div
       ref={popupRef}
@@ -300,7 +346,11 @@ function BookingOption({ popup, popupRef, room, handleEditRoom }) {
         detail={"Edit"}
         onClick={() => handleEditRoom(room)}
       />
-      <IconDetail icon={TrashIcon} detail={"Delete"} />
+      <IconDetail
+        icon={TrashIcon}
+        detail={"Delete"}
+        onClick={() => handleOpenDelete(room)}
+      />
     </div>
   );
 }
@@ -318,4 +368,31 @@ function IconDetail({ icon: Icon, detail, onClick }) {
   );
 }
 
+function WarningPopup({ handleCloseDelete, handleDelete, room }) {
+  return (
+    <div
+      className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+      rounded-xl shadow-lg  mx-auto flex flex-col items-start gap-4 py-3 px-2"
+    >
+      <p className="text-tSecondary self-center font-medium">Are you sure?</p>
+      <div className="flex items-start p-3 gap-3">
+        <Button
+          type="button"
+          className="add-room-btn"
+          onClick={handleCloseDelete}
+        >
+          No
+        </Button>
+
+        <Button
+          className="text-white p-2 rounded-lg text-sm bg-error hover:bg-[#a71919]"
+          type="button"
+          onClick={handleDelete}
+        >
+          Yes
+        </Button>
+      </div>
+    </div>
+  );
+}
 export default ManagerRooms;
