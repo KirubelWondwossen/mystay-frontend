@@ -46,11 +46,14 @@ const fields = ["Room", "Bed Type", "Room Type", "Price"];
 
 function ManagerRooms() {
   const [rooms, setRooms] = useState([]);
-  const [filteredRooms, setFilteredRooms] = useState({});
+  const [filteredRooms, setFilteredRooms] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [mode, setMode] = useState("create");
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
   const { token } = useAuth();
@@ -79,19 +82,12 @@ function ManagerRooms() {
     load();
   }, [token]);
 
-  // For API call
-  // useEffect(() => {
-  //   setRooms(roomsTemp);
-  // }, []);
-
-  console.log(rooms);
-
   useEffect(() => {
     let updatedRooms = [...rooms];
 
     if (filter !== "All") {
       updatedRooms = updatedRooms.filter(
-        (room) => room.bed_type === filter.toLowerCase()
+        (room) => room.bed_type?.toLowerCase() === filter.toLowerCase()
       );
     }
 
@@ -109,6 +105,20 @@ function ManagerRooms() {
 
   function handleOpenModal() {
     setOpenModal((prev) => !prev);
+  }
+  const handleCreateRoom = () => {
+    setMode("create");
+    setSelectedRoom(null);
+    setOpenModal(true);
+  };
+
+  const handleEditRoom = (room) => {
+    setMode("edit");
+    setSelectedRoom(room);
+    setOpenModal(true);
+  };
+  function handleCloseModal() {
+    setOpenModal(false);
   }
 
   function handleFilter(selectedFilter) {
@@ -160,7 +170,7 @@ function ManagerRooms() {
               <div>
                 <Fields fields={fields} />
                 {filteredRooms.map((el, i) => (
-                  <Rooms rooms={el} key={i} />
+                  <Rooms rooms={el} key={i} handleEditRoom={handleEditRoom} />
                 ))}
               </div>
             </>
@@ -170,15 +180,18 @@ function ManagerRooms() {
             className={`bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca] ${
               !hasData && "self-center"
             }`}
-            onClick={handleOpenModal}
+            onClick={() => handleCreateRoom()}
           >
             Add new room
           </Button>
-          {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
+          {openModal && <Backdrop handleOpenModal={handleCloseModal} />}
+
           {openModal && (
             <ManagerAddRoomPopup
               handleOpenModal={handleOpenModal}
               id={ref.current}
+              mode={mode}
+              initialData={selectedRoom}
             />
           )}
         </div>
@@ -210,7 +223,7 @@ function Fields({ fields }) {
   );
 }
 
-function Rooms({ rooms }) {
+function Rooms({ rooms, handleEditRoom }) {
   const [popup, setPopup] = useState(false);
   const popupRef = useRef(null);
   const iconRef = useRef(null);
@@ -238,7 +251,11 @@ function Rooms({ rooms }) {
   return (
     <div className="relative grid grid-cols-[0.6fr_1.2fr_1fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
       <img
-        src={`http://127.0.0.1:8000${rooms.image_url}`}
+        src={
+          rooms.image_url
+            ? `http://127.0.0.1:8000${rooms.image_url}`
+            : "/placeholder.png"
+        }
         alt="room"
         className="aspect-[3/2] object-cover object-center"
       />
@@ -258,12 +275,17 @@ function Rooms({ rooms }) {
         className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
         onClick={handlePopup}
       />
-      <BookingOption popup={popup} popupRef={popupRef} />
+      <BookingOption
+        popup={popup}
+        popupRef={popupRef}
+        room={rooms}
+        handleEditRoom={handleEditRoom}
+      />
     </div>
   );
 }
 
-function BookingOption({ popup, popupRef }) {
+function BookingOption({ popup, popupRef, room, handleEditRoom }) {
   return (
     <div
       ref={popupRef}
@@ -271,7 +293,11 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <IconDetail icon={PencilIcon} detail={"Edit"} />
+      <IconDetail
+        icon={PencilIcon}
+        detail={"Edit"}
+        onClick={() => handleEditRoom(room)}
+      />
       <IconDetail icon={TrashIcon} detail={"Delete"} />
     </div>
   );
@@ -280,8 +306,11 @@ function BookingOption({ popup, popupRef }) {
 // eslint-disable-next-line
 function IconDetail({ icon: Icon, detail, onClick }) {
   return (
-    <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">
-      <Icon className="w-4" onClick={onClick} />
+    <div
+      className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2"
+      onClick={onClick}
+    >
+      <Icon className="w-4" />
       <span className="font-body text-xs">{detail}</span>
     </div>
   );

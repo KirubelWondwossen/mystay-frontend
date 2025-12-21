@@ -5,6 +5,7 @@ import { Loader } from "../ui/Loader";
 import toast from "react-hot-toast";
 import { postRooms } from "../../services/postAPI";
 import { useAuth } from "../../context/AuthContext";
+import { updateRooms } from "../../services/patchAPI";
 
 const formEl = [
   {
@@ -122,7 +123,7 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
         price_per_night: initialData.price_per_night,
         bed_type: initialData.bed_type,
         description: initialData.description,
-        image: null, // important
+        image: null,
         image_url: initialData.image_url,
       });
     }
@@ -148,8 +149,10 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
         description: formData.description,
         image: formData.image,
       };
-
-      const res = await postRooms(id, token, payload);
+      const res =
+        mode === "create"
+          ? await postRooms(id, token, payload)
+          : await updateRooms(id, initialData.id, token, payload);
       toast.success(res.msg || "Room created successfully!");
       resetForm();
     } catch (err) {
@@ -189,6 +192,7 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
               options={item.options}
               onChange={handleChange}
               error={errors[item.name]}
+              mode={mode}
             />
           ))}
 
@@ -200,11 +204,12 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
             >
               Cancel
             </Button>
+
             <Button
               className="text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
               type="submit"
             >
-              Create new room
+              {(mode === "create" && "Create new room") || "Update Room"}
             </Button>
           </div>
         </>
@@ -236,18 +241,23 @@ function LabelInput({
   onChange,
   options = [],
   error,
+  mode,
 }) {
   return (
     <div className="flex flex-col gap-1 p-3 border-b border-[#f3f4f6] w-full">
       <div className="flex items-center justify-between">
-        <label
-          htmlFor={name}
-          className="font-heading font-medium text-tSecondary"
-        >
-          {label}
-        </label>
+        {/* Label: show always except file in edit mode */}
+        {!(type === "file" && mode === "edit") && (
+          <label
+            htmlFor={name}
+            className="font-heading font-medium text-tSecondary"
+          >
+            {label}
+          </label>
+        )}
 
-        {formElement === "input" && type === "file" && (
+        {/* File input: only show in create mode */}
+        {formElement === "input" && type === "file" && mode === "create" && (
           <input
             type="file"
             name={name}
@@ -257,6 +267,7 @@ function LabelInput({
           />
         )}
 
+        {/* Select */}
         {formElement === "select" && (
           <select
             name={name}
@@ -273,6 +284,7 @@ function LabelInput({
           </select>
         )}
 
+        {/* Textarea */}
         {formElement === "textarea" && (
           <textarea
             name={name}
@@ -283,6 +295,7 @@ function LabelInput({
           />
         )}
 
+        {/* Regular input (text, number, etc.) */}
         {formElement === "input" && type !== "file" && (
           <input
             type={type}
@@ -295,6 +308,7 @@ function LabelInput({
         )}
       </div>
 
+      {/* Error message */}
       {error && (
         <span className="text-xs text-red-500 font-body mt-1">{error}</span>
       )}
