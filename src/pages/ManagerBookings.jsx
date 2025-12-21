@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -135,6 +135,7 @@ function ManagerBookings() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const ref = useRef();
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
@@ -145,7 +146,8 @@ function ManagerBookings() {
       try {
         setLoading(true);
         const manager = await getManagerInfo(token);
-        const bookingData = await getManagerBookings(manager.hotel.id, token);
+        ref.current = manager.hotel.id;
+        const bookingData = await getManagerBookings(ref.current, token);
 
         // setBookings(bookingData);
       } catch (e) {
@@ -181,7 +183,12 @@ function ManagerBookings() {
   }
 
   return (
-    <ManagerLayout loading={loading} error={error} getData={getBookings}>
+    <ManagerLayout
+      loading={loading}
+      error={error}
+      getData={getBookings}
+      id={ref.current}
+    >
       {!hasData && !error && (
         <EmptyState
           title={"No Bookings yet"}

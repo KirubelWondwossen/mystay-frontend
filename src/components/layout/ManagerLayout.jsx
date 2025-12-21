@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Loader } from "../../components/ui/Loader";
 import { RetryError } from "../../components/ui/RetryError";
 
-function ManagerLayout({ children, loading, error, getData }) {
+function ManagerLayout({ children, loading, error, getData, id }) {
   const [isDark, setIsDark] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
@@ -27,7 +27,9 @@ function ManagerLayout({ children, loading, error, getData }) {
         />
         <main className="flex-1 overflow-scroll min-h-full pt-8 px-12 pb-28">
           {loading && <Loader loading />}
-          {!loading && error && <RetryError getData={getData} error={error} />}
+          {!loading && error && (
+            <RetryError getData={getData} error={error} id={id} />
+          )}
           {children}
         </main>
       </div>
