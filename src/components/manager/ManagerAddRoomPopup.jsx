@@ -1,11 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import Button from "../ui/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader } from "../ui/Loader";
 import toast from "react-hot-toast";
 import { postRooms } from "../../services/postAPI";
 import { useAuth } from "../../context/AuthContext";
-import { SuccessMessage } from "../ui/SuccessMessage";
 
 const formEl = [
   {
@@ -73,9 +72,10 @@ const initialFormData = {
   bed_type: "",
   description: "",
   image: null,
+  image_url: "",
 };
 
-function Popup({ handleOpenModal, id }) {
+function Popup({ handleOpenModal, mode, initialData, id }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState(initialFormData);
@@ -113,6 +113,20 @@ function Popup({ handleOpenModal, id }) {
     setFormData(initialFormData);
     setErrors({});
   };
+
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      setFormData({
+        room_number: initialData.room_number,
+        room_type: initialData.room_type,
+        price_per_night: initialData.price_per_night,
+        bed_type: initialData.bed_type,
+        description: initialData.description,
+        image: null, // important
+        image_url: initialData.image_url,
+      });
+    }
+  }, [mode, initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

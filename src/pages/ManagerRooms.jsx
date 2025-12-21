@@ -21,72 +21,20 @@ import Backdrop from "../components/ui/Backdrop";
 import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
 import { getManagerInfo, getRooms } from "../services/getAPi";
 
-const roomsTemp = [
-  {
-    id: "001",
-    fits: "Fits up to 2",
-    price: 250.0,
-    type: "Queen",
-    img: "/images/img-1.jpg",
-  },
-  {
-    id: "002",
-    fits: "Fits up to 2",
-    price: 350.0,
-    type: "King",
-    img: "/images/img-2.jpg",
-  },
-  {
-    id: "003",
-    fits: "Fits up to 4",
-    price: 300.0,
-    type: "Twin",
-    img: "/images/img-3.jpg",
-  },
-  {
-    id: "004",
-    fits: "Fits up to 4",
-    price: 500.0,
-    type: "Queen",
-    img: "/images/img-1.jpg",
-  },
-  {
-    id: "005",
-    fits: "Fits up to 6",
-    price: 350.0,
-    type: "Twin",
-    img: "/images/img-2.jpg",
-  },
-  {
-    id: "006",
-    fits: "Fits up to 6",
-    price: 800.0,
-    type: "King",
-    img: "/images/img-3.jpg",
-  },
-  {
-    id: "007",
-    fits: "Fits up to 8",
-    price: 600.0,
-    type: "Queen",
-    img: "/images/img-1.jpg",
-  },
-  {
-    id: "008",
-    fits: "Fits up to 10",
-    price: 1400.0,
-    type: "King",
-    img: "/images/img-2.jpg",
-  },
-];
-
 const filterOptions = [
   { value: 1, type: "All" },
   { value: 2, type: "Queen" },
   { value: 3, type: "King" },
   { value: 4, type: "Twin" },
 ];
-
+// const filterOptions = [
+//   { type: "All" },
+//   { type: "Standard" },
+//   { type: "Single" },
+//   { type: "Double" },
+//   { type: "Suite" },
+//   { type: "Deluxe" },
+// ];
 const sortOptions = [
   { value: "name-asc", text: "Sort by name (A-Z)" },
   { value: "name-desc", text: "Sort by name (Z-A)" },
@@ -94,11 +42,11 @@ const sortOptions = [
   { value: "regularPrice-desc", text: "Sort by price (high first)" },
 ];
 
-const fields = ["Room", "Type", "Capacity", "Price"];
+const fields = ["Room", "Bed Type", "Room Type", "Price"];
 
 function ManagerRooms() {
   const [rooms, setRooms] = useState([]);
-  const [filteredRooms, setFilteredRooms] = useState(rooms);
+  const [filteredRooms, setFilteredRooms] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -117,9 +65,9 @@ function ManagerRooms() {
         setLoading(true);
         const manager = await getManagerInfo(token);
         ref.current = manager.hotel.id;
-
         const roomData = await getRooms(ref.current, token);
         setRooms(roomData);
+        setFilteredRooms(rooms);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);
@@ -136,21 +84,25 @@ function ManagerRooms() {
   //   setRooms(roomsTemp);
   // }, []);
 
+  console.log(rooms);
+
   useEffect(() => {
     let updatedRooms = [...rooms];
 
     if (filter !== "All") {
-      updatedRooms = updatedRooms.filter((room) => room.type === filter);
+      updatedRooms = updatedRooms.filter(
+        (room) => room.bed_type === filter.toLowerCase()
+      );
     }
 
     if (sortBy === "name-asc")
-      updatedRooms.sort((a, b) => a.type.localeCompare(b.type));
+      updatedRooms.sort((a, b) => a.room_number.localeCompare(b.room_number));
     if (sortBy === "name-desc")
-      updatedRooms.sort((a, b) => b.type.localeCompare(a.type));
+      updatedRooms.sort((a, b) => b.room_number.localeCompare(a.room_number));
     if (sortBy === "regularPrice-asc")
-      updatedRooms.sort((a, b) => a.price - b.price);
+      updatedRooms.sort((a, b) => a.price_per_night - b.price_per_night);
     if (sortBy === "regularPrice-desc")
-      updatedRooms.sort((a, b) => b.price - a.price);
+      updatedRooms.sort((a, b) => b.price_per_night - a.price_per_night);
 
     setFilteredRooms(updatedRooms);
   }, [sortBy, filter, rooms]);
@@ -160,7 +112,9 @@ function ManagerRooms() {
   }
 
   function handleFilter(selectedFilter) {
-    if (selectedFilter === "All") searchParams.delete("filter");
+    console.log(selectedFilter);
+
+    if (selectedFilter === "all") searchParams.delete("filter");
     else searchParams.set("filter", selectedFilter);
 
     setSearchParams(searchParams);
@@ -242,7 +196,7 @@ function ManagerRooms() {
 
 function Fields({ fields }) {
   return (
-    <div className="grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] gap-2 border border-[#e5e7eb] rounded-t-sm">
+    <div className="grid  grid-cols-[0.6fr_1.2fr_1fr_1fr_1fr_1fr] gap-2 border border-[#e5e7eb] rounded-t-sm">
       <div></div>
       {fields.map((el, i) => (
         <div
@@ -282,20 +236,23 @@ function Rooms({ rooms }) {
   }, [popup]);
 
   return (
-    <div className="relative grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
+    <div className="relative grid grid-cols-[0.6fr_1.2fr_1fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
       <img
-        src={rooms.img}
+        src={`http://127.0.0.1:8000${rooms.image_url}`}
         alt="room"
         className="aspect-[3/2] object-cover object-center"
       />
-      <span className="justify-self-start py-4">{rooms.id}</span>
+      <span className="justify-self-start py-4">{rooms.room_number}</span>
+
       <span className="justify-self-start py-4 text-sm">
-        {rooms.type.toUpperCase()}
+        {rooms.room_type.toUpperCase()}
       </span>
-      <span className="justify-self-start py-4 text-sm font-body">
-        {rooms.fits}
+      <span className="justify-self-start py-4 text-sm ">
+        {rooms.bed_type.toUpperCase()}
       </span>
-      <span className="justify-self-start py-4 ml-2">${rooms.price}</span>
+      <span className="justify-self-start py-4 ml-2">
+        ${rooms.price_per_night}
+      </span>
       <EllipsisVerticalIcon
         ref={iconRef}
         className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
@@ -321,10 +278,10 @@ function BookingOption({ popup, popupRef }) {
 }
 
 // eslint-disable-next-line
-function IconDetail({ icon: Icon, detail }) {
+function IconDetail({ icon: Icon, detail, onClick }) {
   return (
     <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">
-      <Icon className="w-4" />
+      <Icon className="w-4" onClick={onClick} />
       <span className="font-body text-xs">{detail}</span>
     </div>
   );
