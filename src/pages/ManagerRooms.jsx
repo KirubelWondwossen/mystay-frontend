@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import {
   EllipsisVerticalIcon,
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+
+import toast, { Toaster } from "react-hot-toast";
+import { EmptyState } from "../components/ui/EmptyState";
+import { useAuth } from "../context/AuthContext";
 
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
@@ -14,6 +19,7 @@ import SortBy from "../components/ui/SortBy";
 import Button from "../components/ui/Button";
 import Backdrop from "../components/ui/Backdrop";
 import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
+import { getManagerInfo, getRooms } from "../services/getAPi";
 
 const roomsTemp = [
   {
@@ -95,14 +101,40 @@ function ManagerRooms() {
   const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [openModal, setOpenModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
+  const { token } = useAuth();
+  const hasData = rooms.length > 0;
+  const ref = useRef();
+
+  useEffect(() => {
+    if (!token) return;
+
+    const load = async () => {
+      try {
+        setLoading(true);
+        const manager = await getManagerInfo(token);
+        ref.current = manager.hotel.id;
+
+        const roomData = await getRooms(ref.current, token);
+        setRooms(roomData);
+      } catch (e) {
+        setError(e.message);
+        toast.error(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [token]);
 
   // For API call
-  useEffect(() => {
-    setRooms(roomsTemp);
-  }, []);
+  // useEffect(() => {
+  //   setRooms(roomsTemp);
+  // }, []);
 
   useEffect(() => {
     let updatedRooms = [...rooms];
@@ -140,42 +172,60 @@ function ManagerRooms() {
   }
 
   return (
-    <ManagerLayout>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
-        <ManagerTopComponents header={"All Bookings"}>
-          <div className="flex gap-3">
-            <ManagerFilter>
-              {filterOptions.map((item, index) => (
-                <ManagerFilterBy
-                  key={index}
-                  filters={item.type}
-                  handleFilter={handleFilter}
-                />
-              ))}
-            </ManagerFilter>
-            <SortBy
-              sortOptions={sortOptions}
-              sortBy={sortBy}
-              onChange={handleSort}
-            />
-          </div>
-        </ManagerTopComponents>
-        <div>
-          <Fields fields={fields} />
-          {filteredRooms.map((el, i) => (
-            <Rooms rooms={el} key={i} />
-          ))}
-        </div>
+    <ManagerLayout
+      loading={loading}
+      error={error}
+      getData={getRooms}
+      id={ref.current}
+    >
+      {!hasData && !error && !loading && (
+        <EmptyState title={"No rooms yet"} description={"Add rooms"} />
+      )}
+      {!loading && !error && (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
+          {hasData && (
+            <>
+              <ManagerTopComponents header={"All Bookings"}>
+                <div className="flex gap-3">
+                  <ManagerFilter>
+                    {filterOptions.map((item, index) => (
+                      <ManagerFilterBy
+                        key={index}
+                        filters={item.type}
+                        handleFilter={handleFilter}
+                      />
+                    ))}
+                  </ManagerFilter>
+                  <SortBy
+                    sortOptions={sortOptions}
+                    sortBy={sortBy}
+                    onChange={handleSort}
+                  />
+                </div>
+              </ManagerTopComponents>
+              <div>
+                <Fields fields={fields} />
+                {filteredRooms.map((el, i) => (
+                  <Rooms rooms={el} key={i} />
+                ))}
+              </div>
+            </>
+          )}
 
-        <Button
-          className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-          onClick={handleOpenModal}
-        >
-          Add new room
-        </Button>
-        {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
-        {openModal && <ManagerAddRoomPopup handleOpenModal={handleOpenModal} />}
-      </div>
+          <Button
+            className={`bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca] ${
+              !hasData && "self-center"
+            }`}
+            onClick={handleOpenModal}
+          >
+            Add new room
+          </Button>
+          {openModal && <Backdrop handleOpenModal={handleOpenModal} />}
+          {openModal && (
+            <ManagerAddRoomPopup handleOpenModal={handleOpenModal} />
+          )}
+        </div>
+      )}
     </ManagerLayout>
   );
 }

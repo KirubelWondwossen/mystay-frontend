@@ -189,14 +189,14 @@ function ManagerBookings() {
       getData={getBookings}
       id={ref.current}
     >
-      {!hasData && !error && (
+      {!hasData && !error && !loading && (
         <EmptyState
           title={"No Bookings yet"}
           description={"Wait for bookings"}
         />
       )}
 
-      {hasData && (
+      {hasData && !error && !loading && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-[3.2rem]">
           <ManagerTopComponents header={"All Bookings"}>
             <div className="flex gap-3">
