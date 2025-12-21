@@ -4,16 +4,16 @@ import toast, { Toaster } from "react-hot-toast";
 import { EmptyState } from "../components/ui/EmptyState";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminManagerListTable from "../components/admin/AdminManagerListTable";
-import { getManagers } from "../services/adminAPi";
+import { getManagers } from "../services/getAPi";
+import { useAuth } from "../context/AuthContext";
 const fields = ["Manager Name", "Hotel Name", "Phone"];
 
 function AdminManagerList() {
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const token = localStorage.getItem("token");
   const hasData = managers.length > 0;
-
+  const { token } = useAuth();
   useEffect(() => {
     const load = async () => {
       try {

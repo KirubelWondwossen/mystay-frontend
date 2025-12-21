@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 import { ManagerFilter } from "../components/manager/ManagerFilter";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -10,6 +11,13 @@ import { ManagerFilterBy } from "../components/manager/ManagerFilterBy";
 import ManagerBookingsTable from "../components/manager/ManagerBookingsTable";
 import SortBy from "../components/ui/SortBy";
 import ManagerTableCols from "../components/manager/ManagerTableCols";
+import { useAuth } from "../context/AuthContext";
+import {
+  getBookings,
+  getManagerBookings,
+  getManagerInfo,
+} from "../services/getAPi";
+import { EmptyState } from "../components/ui/EmptyState";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -118,18 +126,38 @@ const bookingsTemp = [
   },
 ];
 
-const fields = ["Room", "Guest", "Dates", "Type", "Amount"];
+const fields = ["Room", "Guest", "Dates", "Status", "Amount"];
 
 function ManagerBookings() {
   const [active, setActive] = useState(1);
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
+  const { token } = useAuth();
+  const hasData = bookings.length > 0;
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const manager = await getManagerInfo(token);
+        const bookingData = await getManagerBookings(manager.hotel.id, token);
 
-  // For API call
+        // setBookings(bookingData);
+      } catch (e) {
+        setError(e.message);
+        toast.error(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [token]);
   useEffect(() => {
     setBookings(bookingsTemp);
   }, []);
@@ -153,33 +181,42 @@ function ManagerBookings() {
   }
 
   return (
-    <ManagerLayout>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-[3.2rem]">
-        <ManagerTopComponents header={"All Bookings"}>
-          <div className="flex gap-3">
-            <ManagerFilter>
-              {filterOptions.map((item, index) => (
-                <ManagerFilterBy
-                  key={index}
-                  value={item.value}
-                  active={active}
-                  setActive={setActive}
-                  filters={item.type}
-                  handleFilter={handleFilter}
-                />
-              ))}
-            </ManagerFilter>
-            <SortBy sortOptions={sortOptions} />
+    <ManagerLayout loading={loading} error={error} getData={getBookings}>
+      {!hasData && !error && (
+        <EmptyState
+          title={"No Bookings yet"}
+          description={"Wait for bookings"}
+        />
+      )}
+
+      {hasData && (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-[3.2rem]">
+          <ManagerTopComponents header={"All Bookings"}>
+            <div className="flex gap-3">
+              <ManagerFilter>
+                {filterOptions.map((item, index) => (
+                  <ManagerFilterBy
+                    key={index}
+                    value={item.value}
+                    active={active}
+                    setActive={setActive}
+                    filters={item.type}
+                    handleFilter={handleFilter}
+                  />
+                ))}
+              </ManagerFilter>
+              <SortBy sortOptions={sortOptions} />
+            </div>
+          </ManagerTopComponents>
+          <div>
+            <ManagerTableCols fields={fields} />
+            {filteredBookings.map((el, i) => (
+              <ManagerBookingsTable data={el} key={i} />
+            ))}
+            <PrevNext />
           </div>
-        </ManagerTopComponents>
-        <div>
-          <ManagerTableCols fields={fields} />
-          {filteredBookings.map((el, i) => (
-            <ManagerBookingsTable data={el} key={i} />
-          ))}
-          <PrevNext />
         </div>
-      </div>
+      )}
     </ManagerLayout>
   );
 }

@@ -95,7 +95,7 @@ function AdminApplication() {
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const filter = searchParams.get("filter") || "All";
-  const token = localStorage.getItem("token");
+  const { token } = useAuth();
   const hasData = applications.length > 0;
 
   async function getData(token) {
@@ -204,13 +204,22 @@ function AdminApplication() {
             </div>
           </ManagerTopComponents>
           <div>
-            <Fields fields={fields} />
-            {filteredApps.map((items, index) => (
-              <AdminAppTable
-                data={items}
-                key={items.id ?? `${items.manager_email}-${index}`}
+            {filteredApps.length === 0 ? (
+              <EmptyState
+                title={"No Applications"}
+                description={"Change your filter options"}
               />
-            ))}
+            ) : (
+              <>
+                <Fields fields={fields} />
+                {filteredApps.map((items, index) => (
+                  <AdminAppTable
+                    data={items}
+                    key={items.id ?? `${items.manager_email}-${index}`}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </div>
       )}

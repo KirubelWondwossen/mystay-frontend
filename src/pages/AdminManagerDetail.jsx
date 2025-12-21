@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
-import { getHotel, getManager } from "../services/adminAPi";
+import { getHotel, getManager } from "../services/getAPi";
 import { AdminManagerListDetails } from "../components/admin/AdminManagerListDetails";
 
 function AdminManagerDetail() {
