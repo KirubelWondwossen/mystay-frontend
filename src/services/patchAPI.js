@@ -1,22 +1,14 @@
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function apiPatchFormData(url, token, data) {
-  const formData = new FormData();
-
-  Object.keys(data).forEach((key) => {
-    // 🔑 Important: skip null/undefined fields (especially image)
-    if (data[key] !== null && data[key] !== undefined) {
-      formData.append(key, data[key]);
-    }
-  });
-
+export async function apiPatchJson(url, token, data) {
   const res = await fetch(`${API_URL}${url}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    body: formData,
+    body: JSON.stringify(data),
   });
 
   if (!res.ok) {
@@ -24,7 +16,7 @@ export async function apiPatchFormData(url, token, data) {
       const errData = await res.json();
       const error = new Error("Validation error");
       error.type = "validation";
-      error.errors = errData.detail || errData.errors || {};
+      error.errors = errData.errors || errData.detail || {};
       throw error;
     }
     if (res.status === 401) throw new Error("Unauthorized");
@@ -36,4 +28,4 @@ export async function apiPatchFormData(url, token, data) {
 
 // Manager
 export const updateRooms = (hotelID, roomID, token, data) =>
-  apiPatchFormData(`/hotels/${hotelID}/rooms/${roomID}`, token, data);
+  apiPatchJson(`/hotels/${hotelID}/rooms/${roomID}`, token, data);

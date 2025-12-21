@@ -57,14 +57,27 @@ const formEl = [
   },
 ];
 
-const requiredFields = [
-  "room_number",
-  "room_type",
-  "price_per_night",
-  "bed_type",
-  "description",
-  "image",
-];
+const requiredFields = (mode) => {
+  // In edit mode, remove "image" from required fields
+  if (mode === "edit") {
+    return [
+      "room_number",
+      "room_type",
+      "price_per_night",
+      "bed_type",
+      "description",
+    ];
+  }
+  // In create mode, all fields are required
+  return [
+    "room_number",
+    "room_type",
+    "price_per_night",
+    "bed_type",
+    "description",
+    "image",
+  ];
+};
 
 const initialFormData = {
   room_number: "",
@@ -93,7 +106,9 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
 
   const validateForm = () => {
     const newErrors = {};
-    requiredFields.forEach((field) => {
+    const fieldsToCheck = requiredFields(mode); // pass current mode
+
+    fieldsToCheck.forEach((field) => {
       if (
         !formData[field] ||
         (typeof formData[field] === "string" && !formData[field].trim())
@@ -149,11 +164,18 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
         description: formData.description,
         image: formData.image,
       };
+
       const res =
         mode === "create"
           ? await postRooms(id, token, payload)
           : await updateRooms(id, initialData.id, token, payload);
-      toast.success(res.msg || "Room created successfully!");
+
+      toast.success(
+        res.msg ||
+          (mode === "create"
+            ? "Room created successfully!"
+            : "Room updated successfully!")
+      );
       resetForm();
     } catch (err) {
       if (err.type === "validation" && err.errors) {
@@ -164,7 +186,7 @@ function Popup({ handleOpenModal, mode, initialData, id }) {
         setErrors(backendErrors);
         toast.error("Please fix the highlighted fields");
       } else {
-        toast.error(err.message || "Failed to create room");
+        toast.error(err.message || "Failed to save room");
       }
     } finally {
       setLoading(false);
@@ -246,7 +268,6 @@ function LabelInput({
   return (
     <div className="flex flex-col gap-1 p-3 border-b border-[#f3f4f6] w-full">
       <div className="flex items-center justify-between">
-        {/* Label: show always except file in edit mode */}
         {!(type === "file" && mode === "edit") && (
           <label
             htmlFor={name}
@@ -256,7 +277,6 @@ function LabelInput({
           </label>
         )}
 
-        {/* File input: only show in create mode */}
         {formElement === "input" && type === "file" && mode === "create" && (
           <input
             type="file"
@@ -267,7 +287,6 @@ function LabelInput({
           />
         )}
 
-        {/* Select */}
         {formElement === "select" && (
           <select
             name={name}
