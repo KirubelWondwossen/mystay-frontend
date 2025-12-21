@@ -224,6 +224,17 @@ function ManagerBookings() {
           </div>
         </div>
       )}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            minWidth: "250px",
+            maxWidth: "600px",
+          },
+        }}
+      />
     </ManagerLayout>
   );
 }

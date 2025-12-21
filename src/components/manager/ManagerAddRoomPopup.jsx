@@ -2,11 +2,12 @@ import { XMarkIcon } from "@heroicons/react/16/solid";
 import Button from "../ui/Button";
 import { useState } from "react";
 import { Loader } from "../ui/Loader";
+import toast from "react-hot-toast";
 
 const formEl = [
   {
     label: "Room number",
-    type: "text",
+    type: "number",
     name: "room_number",
     formElement: "input",
   },
@@ -52,6 +53,14 @@ const formEl = [
     formElement: "input",
   },
 ];
+const requiredFields = [
+  "room_number",
+  "room_type",
+  "price_per_night",
+  "bed_type",
+  "description",
+  "image",
+];
 
 function Popup({ handleOpenModal }) {
   const [loading, setLoading] = useState(false);
@@ -74,10 +83,33 @@ function Popup({ handleOpenModal }) {
     }));
   }
 
+  function validateForm() {
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
+      if (
+        !formData[field] ||
+        (typeof formData[field] === "string" && formData[field].trim() === "")
+      ) {
+        newErrors[field] = "This field is required";
+      }
+    });
+
+    if (formData.price_per_night && Number(formData.price_per_night) <= 0) {
+      newErrors.price_per_night = "Price must be greater than 0";
+    }
+
+    setError(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
+    if (!validateForm()) return toast.error("Invalid data, please try again");
+
     console.log(formData);
   }
+
   return (
     <>
       <form
@@ -86,7 +118,7 @@ function Popup({ handleOpenModal }) {
         onSubmit={handleSubmit}
       >
         {loading && <Loader loading={loading} className={"self-center"} />}
-        {!loading && !error && (
+        {!loading && (
           <>
             <PopupHeader handleOpenModal={handleOpenModal} />
             {formEl.map((item, i) => (
@@ -99,6 +131,7 @@ function Popup({ handleOpenModal }) {
                 value={formData[item.name]}
                 options={item.options}
                 onChange={handleChange}
+                error={error?.[item.name]}
               />
             ))}
 
@@ -148,61 +181,68 @@ function LabelInput({
   value,
   onChange,
   options = [],
+  error,
 }) {
   return (
-    <div className="flex items-center justify-between p-3 border-b border-[#f3f4f6] w-full">
-      <label
-        htmlFor={name}
-        className="font-heading font-medium text-tSecondary"
-      >
-        {label}
-      </label>
-
-      {formElement === "input" && type === "file" && (
-        <input
-          type="file"
-          name={name}
-          id={name}
-          onChange={onChange}
-          className="font-heading font-medium text-tSecondary text-sm custom-file px-2 py-1"
-        />
-      )}
-
-      {formElement === "select" && (
-        <select
-          name={name}
-          id={name}
-          value={value}
-          onChange={onChange}
-          className="border-[#d1d5db] px-4 py-1 rounded-sm shadow-sm font-body text-sm focus:outline-primary focus:ring-2 focus:ring-primary"
+    <div className="flex flex-col gap-1 p-3 border-b border-[#f3f4f6] w-full">
+      <div className="flex items-center justify-between">
+        <label
+          htmlFor={name}
+          className="font-heading font-medium text-tSecondary"
         >
-          {options.map((opt, i) => (
-            <option key={i} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      )}
+          {label}
+        </label>
 
-      {formElement === "textarea" && (
-        <textarea
-          name={name}
-          id={name}
-          value={value}
-          onChange={onChange}
-          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-4 py-1"
-        />
-      )}
+        {formElement === "input" && type === "file" && (
+          <input
+            type="file"
+            name={name}
+            id={name}
+            onChange={onChange}
+            className="font-heading font-medium text-tSecondary text-sm custom-file px-2 py-1"
+          />
+        )}
 
-      {formElement === "input" && type !== "file" && (
-        <input
-          type={type}
-          name={name}
-          id={name}
-          value={value}
-          onChange={onChange}
-          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-2 py-1"
-        />
+        {formElement === "select" && (
+          <select
+            name={name}
+            id={name}
+            value={value}
+            onChange={onChange}
+            className="border-[#d1d5db] px-4 py-1 rounded-sm shadow-sm font-body text-sm focus:outline-primary focus:ring-2 focus:ring-primary"
+          >
+            {options.map((opt, i) => (
+              <option key={i} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {formElement === "textarea" && (
+          <textarea
+            name={name}
+            id={name}
+            value={value}
+            onChange={onChange}
+            className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-4 py-1"
+          />
+        )}
+
+        {formElement === "input" && type !== "file" && (
+          <input
+            type={type}
+            name={name}
+            id={name}
+            value={value}
+            onChange={onChange}
+            className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-2 py-1"
+          />
+        )}
+      </div>
+
+      {error && (
+        <span className="text-xs text-red-500 font-body ml-64">{error}</span>
       )}
     </div>
   );
