@@ -68,9 +68,11 @@ function ManagerRooms() {
         setLoading(true);
         const manager = await getManagerInfo(token);
         ref.current = manager.hotel.id;
+
         const roomData = await getRooms(ref.current, token);
+
         setRooms(roomData);
-        setFilteredRooms(rooms);
+        setFilteredRooms(roomData);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);
