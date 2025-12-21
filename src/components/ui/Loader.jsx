@@ -1,12 +1,12 @@
 import ClipLoader from "react-spinners/ClipLoader";
 
-export function Loader({ loading, page }) {
+export function Loader({ loading, page, className }) {
   return (
     <div
       className={
         page
           ? "fixed inset-0 flex items-center justify-center bg-white/50"
-          : "flex flex-col justify-center items-center gap-2 py-6"
+          : `flex flex-col justify-center items-center ${className} gap-2 py-6`
       }
     >
       <ClipLoader color="#4F46E5" loading={loading} size={40} />

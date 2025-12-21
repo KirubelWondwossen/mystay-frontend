@@ -1,28 +1,47 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import Button from "../ui/Button";
+import { useState } from "react";
+import { Loader } from "../ui/Loader";
 
 const formEl = [
   {
-    label: "Room name",
+    label: "Room number",
     type: "text",
-    name: "roomName",
+    name: "room_number",
     formElement: "input",
   },
   {
-    label: "Maximum capacity",
+    label: "Room type",
+    name: "room_type",
+    formElement: "select",
+    options: [
+      { value: "", label: "Select room type" },
+      { value: "standard", label: "Standard" },
+      { value: "single", label: "Single" },
+      { value: "double", label: "Double" },
+      { value: "suite", label: "Suite" },
+      { value: "deluxe", label: "Deluxe" },
+    ],
+  },
+  {
+    label: "Price per night",
     type: "number",
-    name: "maxCapacity",
+    name: "price_per_night",
     formElement: "input",
   },
   {
-    label: "Price",
-    type: "number",
-    name: "price",
-    formElement: "input",
+    label: "Bed type",
+    name: "bed_type",
+    formElement: "select",
+    options: [
+      { value: "", label: "Select bed type" },
+      { value: "king", label: "King" },
+      { value: "queen", label: "Queen" },
+      { value: "twin", label: "Twin" },
+    ],
   },
   {
     label: "Description for website",
-    type: "text",
     name: "description",
     formElement: "textarea",
   },
@@ -35,39 +54,75 @@ const formEl = [
 ];
 
 function Popup({ handleOpenModal }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    room_number: "",
+    room_type: "",
+    price_per_night: "",
+    bed_type: "",
+    description: "",
+    image: null,
+  });
+
+  function handleChange(e) {
+    const { name, value, files, type } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "file" ? files[0] : value,
+    }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(formData);
+  }
   return (
-    <form
-      className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+    <>
+      <form
+        className="fixed bg-white z-[1001] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
     rounded-xl shadow-lg w-[35rem] mx-auto flex flex-col items-start gap-4 py-3 px-2"
-    >
-      <PopupHeader handleOpenModal={handleOpenModal} />
-      {formEl.map((item, i) => (
-        <LabelInput
-          key={i}
-          label={item.label}
-          name={item.name}
-          type={item.type}
-          formElement={item.formElement}
-        />
-      ))}
-      <div className="flex items-start self-end p-3 gap-3">
-        <Button
-          type={"button"}
-          className={"add-room-btn"}
-          onClick={handleOpenModal}
-        >
-          Cancel
-        </Button>
-        <Button
-          className={
-            "text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
-          }
-          type={"button"}
-        >
-          Create new room
-        </Button>
-      </div>
-    </form>
+        onSubmit={handleSubmit}
+      >
+        {loading && <Loader loading={loading} className={"self-center"} />}
+        {!loading && !error && (
+          <>
+            <PopupHeader handleOpenModal={handleOpenModal} />
+            {formEl.map((item, i) => (
+              <LabelInput
+                key={i}
+                label={item.label}
+                name={item.name}
+                type={item.type}
+                formElement={item.formElement}
+                value={formData[item.name]}
+                options={item.options}
+                onChange={handleChange}
+              />
+            ))}
+
+            <div className="flex items-start self-end p-3 gap-3">
+              <Button
+                type={"button"}
+                className={"add-room-btn"}
+                onClick={handleOpenModal}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={
+                  "text-white p-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca]"
+                }
+                type={"submit"}
+              >
+                Create new room
+              </Button>
+            </div>
+          </>
+        )}
+      </form>
+    </>
   );
 }
 
@@ -85,7 +140,15 @@ function PopupHeader({ handleOpenModal }) {
   );
 }
 
-function LabelInput({ label, name, type, formElement: Element }) {
+function LabelInput({
+  label,
+  name,
+  type = "text",
+  formElement,
+  value,
+  onChange,
+  options = [],
+}) {
   return (
     <div className="flex items-center justify-between p-3 border-b border-[#f3f4f6] w-full">
       <label
@@ -94,20 +157,51 @@ function LabelInput({ label, name, type, formElement: Element }) {
       >
         {label}
       </label>
-      {type === "file" ? (
+
+      {formElement === "input" && type === "file" && (
+        <input
+          type="file"
+          name={name}
+          id={name}
+          onChange={onChange}
+          className="font-heading font-medium text-tSecondary text-sm custom-file px-2 py-1"
+        />
+      )}
+
+      {formElement === "select" && (
+        <select
+          name={name}
+          id={name}
+          value={value}
+          onChange={onChange}
+          className="border-[#d1d5db] px-4 py-1 rounded-sm shadow-sm font-body text-sm focus:outline-primary focus:ring-2 focus:ring-primary"
+        >
+          {options.map((opt, i) => (
+            <option key={i} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      )}
+
+      {formElement === "textarea" && (
+        <textarea
+          name={name}
+          id={name}
+          value={value}
+          onChange={onChange}
+          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-4 py-1"
+        />
+      )}
+
+      {formElement === "input" && type !== "file" && (
         <input
           type={type}
           name={name}
           id={name}
-          className="font-heading font-medium text-tSecondary text-sm custom-file px-2 py-1"
-        />
-      ) : (
-        <Element
-          className={`border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary 
-           ${Element === "textarea" ? "px-4 py-1" : "px-2 py-1"}`}
-          type={type}
-          name={name}
-          id={name}
+          value={value}
+          onChange={onChange}
+          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary px-2 py-1"
         />
       )}
     </div>
