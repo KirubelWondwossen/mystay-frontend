@@ -19,6 +19,7 @@ import AdminLogin from "./pages/AdminLogin";
 import ManagerLogin from "./pages/ManagerLogin";
 import AdminManagerList from "./pages/AdminManagersList";
 import AdminManagerDetail from "./pages/AdminManagerDetail";
+import GuestRoomDetail from "./pages/GuestRoomDetail";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
           />
           <Route path="/profileinfo" element={<ProfileInfo />} />
           <Route path="/wishlist" element={<WishList />} />
+          <Route
+            path="/hotel/:hotelId/room/:roomId"
+            element={<GuestRoomDetail />}
+          />
 
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route

@@ -65,7 +65,8 @@ function NavBtns({
         </Link>
       )}
       <DarkLightModeBtns />
-      <BecomeHostBtn />
+
+      {location.pathname === "/" && <BecomeHostBtn />}
     </ul>
   );
 }

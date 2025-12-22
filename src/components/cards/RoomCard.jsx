@@ -42,7 +42,7 @@ function RoomCard({ room }) {
             ${room.price_per_night}
             <span className="text-sm font-normal text-tTertiary"> / Night</span>
           </p>
-          <Link to={`/roomdetailpage`}>
+          <Link to={`/hotel/${room.hotel.id}/room/${room.id}`}>
             <button className="px-4 py-2 text-sm rounded-lg bg-primary text-white hover:bg-primary/90 transition">
               Book Now
             </button>

@@ -39,3 +39,5 @@ export const getRoomsManager = (id, token) =>
 
 //Guest dashboard
 export const getRooms = () => apiFetch("/hotels/rooms");
+export const getRoomDetail = (roomId, hotelId) =>
+  apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
