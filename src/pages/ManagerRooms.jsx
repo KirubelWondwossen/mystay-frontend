@@ -19,7 +19,7 @@ import SortBy from "../components/ui/SortBy";
 import Button from "../components/ui/Button";
 import Backdrop from "../components/ui/Backdrop";
 import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
-import { getManagerInfo, getRooms } from "../services/getAPi";
+import { getManagerInfo, getRoomsManager } from "../services/getAPi";
 import { deleteRoom } from "../services/deleteAPI";
 
 const filterOptions = [
@@ -45,7 +45,7 @@ function ManagerRooms() {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [roomToDelete, setRoomToDelete] = useState(null); // FIXED
+  const [roomToDelete, setRoomToDelete] = useState(null);
   const [refresh, setRefresh] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,7 +65,7 @@ function ManagerRooms() {
         const manager = await getManagerInfo(token);
         ref.current = manager.hotel.id;
 
-        const roomData = await getRooms(ref.current, token);
+        const roomData = await getRoomsManager(ref.current, token);
 
         setRooms(roomData);
         setFilteredRooms(roomData);
@@ -158,7 +158,7 @@ function ManagerRooms() {
     <ManagerLayout
       loading={loading}
       error={error}
-      getData={getRooms}
+      getData={getRoomsManager}
       id={ref.current}
     >
       {!hasData && !error && !loading && (

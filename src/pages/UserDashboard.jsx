@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/ui/Navbar";
@@ -12,84 +13,33 @@ import Backdrop from "../components/ui/Backdrop";
 import Filter from "../components/search/Filter";
 import Page from "../components/layout/Page";
 import Main from "../components/layout/Main";
-
-const hotelRooms = [
-  {
-    id: 1,
-    img: "/images/img-1.jpg",
-    title: "Deluxe King Room",
-    type: "King",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    img: "/images/img-2.jpg",
-    title: "Ocean View Suite",
-    type: "King",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 3,
-    img: "/images/img-3.jpg",
-    title: "Executive Twin Room",
-    type: "Twin",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 4,
-    img: "/images/img-1.jpg",
-    title: "Cozy Family Room",
-    type: "Queen",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 5,
-    img: "/images/img-2.jpg",
-    title: "Luxury Penthouse Suite",
-    type: "King",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 6,
-    img: "/images/img-3.jpg",
-    title: "Standard Queen Room",
-    type: "Queen",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 7,
-    img: "/images/img-2.jpg",
-    title: "City View Twin Room",
-    type: "Twin",
-    price: "$100",
-    rating: 4.5,
-  },
-  {
-    id: 8,
-    img: "/images/img-3.jpg",
-    title: "Classic Queen Room",
-    type: "Queen",
-    price: "$100",
-    rating: 4.5,
-  },
-];
+import { Loader } from "../components/ui/Loader";
+import { getRooms } from "../services/getAPi";
 
 function UserDasboard() {
   const [openModal, setOpenModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const filterType = searchParams.get("filter") || "All";
 
-  // API call
   useEffect(() => {
-    setRooms(hotelRooms);
+    const load = async () => {
+      try {
+        setLoading(true);
+        const roomData = await getRooms();
+        setRooms(roomData);
+      } catch (e) {
+        setError(e.message);
+        toast.error(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, []);
 
   useEffect(() => {
@@ -125,18 +75,26 @@ function UserDasboard() {
       <Sticky pos={"top"}>
         <Navbar handleOpenModal={handleOpenModal} />
       </Sticky>
-      <Main>
-        <Search />
-        <RoomCardContainer>
-          {filteredRooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
-          ))}
-        </RoomCardContainer>
-        <Footer />
-      </Main>
-      <Sticky pos={"bottom"}>
-        <BottomNav />
-      </Sticky>
+      {loading && !error && <Loader loading />}
+
+      <>
+        <Main>
+          {!loading && !error && (
+            <>
+              <Search />
+              <RoomCardContainer>
+                {filteredRooms.map((room) => (
+                  <RoomCard key={room.id} room={room} />
+                ))}
+              </RoomCardContainer>
+              <Footer />
+            </>
+          )}
+        </Main>
+        <Sticky pos={"bottom"}>
+          <BottomNav />
+        </Sticky>
+      </>
     </Page>
   );
 }

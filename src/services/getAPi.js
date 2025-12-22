@@ -1,12 +1,18 @@
 const API_URL = "http://127.0.0.1:8000/api";
 
 export async function apiFetch(url, token) {
-  const res = await fetch(`${API_URL}${url}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    },
-  });
+  const res = token
+    ? await fetch(`${API_URL}${url}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      })
+    : await fetch(`${API_URL}${url}`, {
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
   if (!res.ok) {
     if (res.status === 401) throw new Error("Unauthorized");
@@ -28,4 +34,8 @@ export const getBookings = (token) => apiFetch("/bookings/", token);
 export const getManagerBookings = (id, token) =>
   apiFetch(`/bookings/hotels/${id}`, token);
 export const getManagerInfo = (token) => apiFetch(`/hotelmanager/me`, token);
-export const getRooms = (id, token) => apiFetch(`/hotels/${id}/rooms`, token);
+export const getRoomsManager = (id, token) =>
+  apiFetch(`/hotels/${id}/rooms`, token);
+
+//Guest dashboard
+export const getRooms = () => apiFetch("/hotels/rooms");
