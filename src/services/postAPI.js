@@ -25,6 +25,9 @@ export async function apiFetchFormData(url, token, data) {
       throw error;
     }
     if (res.status === 401) throw new Error("Unauthorized");
+
+    if (res.status === 409) throw new Error("Room number already exist");
+
     throw new Error("Request failed");
   }
 

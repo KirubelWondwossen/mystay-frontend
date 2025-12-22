@@ -174,9 +174,11 @@ function Popup({ handleOpenModal, mode, initialData, id, setRefresh }) {
             ? "Room created successfully!"
             : "Room updated successfully!")
       );
+
       resetForm();
       setRefresh((prev) => !prev);
     } catch (err) {
+      console.log(err);
       if (err.type === "validation" && err.errors) {
         const backendErrors = {};
         Object.keys(err.errors).forEach((key) => {
