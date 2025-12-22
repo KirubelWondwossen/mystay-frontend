@@ -9,26 +9,31 @@ const formEL = [
     label: "Manager Name",
     type: "text",
     name: "manager_name",
+    placeholder: "Enter manager full name",
   },
   {
     label: "Email",
     type: "email",
     name: "manager_email",
+    placeholder: "manager@example.com",
   },
   {
     label: "Phone Number",
     type: "tel",
     name: "manager_phone",
+    placeholder: "+251 9XX XXX XXX",
   },
   {
     label: "Hotel Name",
     type: "text",
     name: "hotel_name",
+    placeholder: "Enter hotel name",
   },
   {
     label: "Hotel Address",
     type: "text",
     name: "hotel_address",
+    placeholder: "Addis Ababa, Ethiopia",
   },
   {
     label: "Hotel Star Rating",
@@ -36,11 +41,13 @@ const formEL = [
     name: "hotel_star_rating",
     min: 1,
     max: 5,
+    placeholder: "1 - 5",
   },
   {
     label: "Hotel Description",
     type: "textarea",
     name: "hotel_description",
+    placeholder: "Briefly describe the hotel and its services",
   },
 ];
 
@@ -192,6 +199,7 @@ function Form({ setFormData, handleSubmit }) {
           min={item.min}
           max={item.max}
           setFormData={setFormData}
+          placeholder={item.placeholder}
         />
       ))}
       <Button

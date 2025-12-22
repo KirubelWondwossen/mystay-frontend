@@ -5,6 +5,7 @@ export default function LabelInput({
   min,
   max,
   setFormData,
+  placeholder,
 }) {
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -33,10 +34,11 @@ export default function LabelInput({
         />
       ) : (
         <input
+          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1"
           type={type}
           name={name}
           id={name}
-          className="border border-[#d1d5db] rounded-sm shadow-sm focus:outline-primary w-72 px-2 py-1"
+          placeholder={placeholder}
           {...(min ? { min } : {})}
           {...(max ? { max } : {})}
           {...(type === "tel"
