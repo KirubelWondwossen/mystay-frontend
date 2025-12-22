@@ -15,6 +15,7 @@ import Page from "../components/layout/Page";
 import Main from "../components/layout/Main";
 import { Loader } from "../components/ui/Loader";
 import { getRooms } from "../services/getAPi";
+import { EmptyState } from "../components/ui/EmptyState";
 
 function UserDasboard() {
   const [openModal, setOpenModal] = useState(false);
@@ -23,7 +24,7 @@ function UserDasboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const filterType = searchParams.get("filter") || "All";
+  const filterType = searchParams.get("filter") || "all";
 
   useEffect(() => {
     const load = async () => {
@@ -45,16 +46,17 @@ function UserDasboard() {
   useEffect(() => {
     let updatedRooms = [...rooms];
 
-    if (filterType !== "All") {
-      updatedRooms = updatedRooms.filter((room) => room.type === filterType);
+    if (filterType.toLowerCase() !== "all") {
+      updatedRooms = updatedRooms.filter(
+        (room) => room.bed_type?.toLowerCase() === filterType.toLowerCase()
+      );
     }
     setFilteredRooms(updatedRooms);
   }, [rooms, filterType]);
 
   function handleFilter(selectedFilter) {
-    if (selectedFilter === "All") searchParams.delete("filter");
+    if (selectedFilter.toLowerCase() === "all") searchParams.delete("filter");
     else searchParams.set("filter", selectedFilter);
-
     setSearchParams(searchParams);
   }
 
@@ -73,7 +75,10 @@ function UserDasboard() {
         />
       )}
       <Sticky pos={"top"}>
-        <Navbar handleOpenModal={handleOpenModal} />
+        <Navbar
+          handleOpenModal={handleOpenModal}
+          filterTxt={filterType[0].toUpperCase() + filterType.slice(1)}
+        />
       </Sticky>
       {loading && !error && <Loader loading />}
 
@@ -82,11 +87,21 @@ function UserDasboard() {
           {!loading && !error && (
             <>
               <Search />
-              <RoomCardContainer>
-                {filteredRooms.map((room) => (
-                  <RoomCard key={room.id} room={room} />
-                ))}
-              </RoomCardContainer>
+              {filteredRooms.length === 0 && (
+                <EmptyState
+                  title={`There are no rooms by ${
+                    filterType[0].toUpperCase() + filterType.slice(1)
+                  } bed filter`}
+                  description={"Please try another filter"}
+                />
+              )}
+              {filteredRooms.length > 0 && (
+                <RoomCardContainer>
+                  {filteredRooms.map((room) => (
+                    <RoomCard key={room.id} room={room} />
+                  ))}
+                </RoomCardContainer>
+              )}
               <Footer />
             </>
           )}

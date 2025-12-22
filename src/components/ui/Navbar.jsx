@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
 
-function Navbar({ handleOpenModal }) {
+function Navbar({ handleOpenModal, filterTxt }) {
   return (
     <nav
       className={`flex justify-between w-full p-3 ${
@@ -15,12 +15,12 @@ function Navbar({ handleOpenModal }) {
       }`}
     >
       <Logo />
-      <NavBtns handleOpenModal={handleOpenModal} />
+      <NavBtns handleOpenModal={handleOpenModal} filterTxt={filterTxt} />
     </nav>
   );
 }
 
-function NavBtns({ isOpen, handleOpenModal }) {
+function NavBtns({ isOpen, handleOpenModal, filterTxt }) {
   return (
     <ul
       className={`${
@@ -28,10 +28,13 @@ function NavBtns({ isOpen, handleOpenModal }) {
       } relative md:visible flex-col flex md:justify-between md:gap-3 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
       {useLocation().pathname === "/" ? (
-        <FilterSearchBtn handleOpenModal={handleOpenModal} />
+        <FilterSearchBtn
+          handleOpenModal={handleOpenModal}
+          filterTxt={filterTxt}
+        />
       ) : (
         <Link to={"/"}>
-          <FilterSearchBtn />
+          <FilterSearchBtn filterTxt={filterTxt} />
         </Link>
       )}
       <DarkLightModeBtns />
@@ -40,7 +43,7 @@ function NavBtns({ isOpen, handleOpenModal }) {
   );
 }
 
-function FilterSearchBtn({ handleOpenModal }) {
+function FilterSearchBtn({ handleOpenModal, filterTxt }) {
   return (
     <div
       onClick={handleOpenModal}
@@ -52,7 +55,7 @@ function FilterSearchBtn({ handleOpenModal }) {
         <MagnifyingGlassIcon className="w-5" />
       )}
       <h3 className="font-heading font-semibold">
-        {useLocation().pathname === "/" ? "Filters" : "Search"}
+        {useLocation().pathname === "/" ? `Filter by ${filterTxt}` : "Search"}
       </h3>
     </div>
   );

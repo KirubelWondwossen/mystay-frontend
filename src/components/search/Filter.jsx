@@ -67,18 +67,16 @@ function Filters({ handleOpenModal, filterType, handleFilter }) {
   );
 }
 
-function FilterList({ children, filterType, handleFilter, ...props }) {
+function FilterList({ children, filterType, handleFilter, value }) {
   return (
     <span className="flex gap-2 items-center">
       <input
         className="h-4 w-4 text-logo cursor-pointer"
-        {...props}
         type="radio"
         name="roomType"
-        checked={filterType === props.value}
-        onChange={(e) => {
-          handleFilter(e.target.value);
-        }}
+        value={value}
+        checked={(filterType.toLowerCase() || "all") === value.toLowerCase()}
+        onChange={(e) => handleFilter(e.target.value)}
       />
       <span className="text-lg font-body font-medium">{children}</span>
     </span>
