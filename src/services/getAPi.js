@@ -26,6 +26,6 @@ export const getBookings = (token) => apiFetch("/bookings/", token);
 
 // For manager
 export const getManagerBookings = (id, token) =>
-  apiFetch(`/bookingshotels/${id}`, token);
+  apiFetch(`/bookings/hotels/${id}`, token);
 export const getManagerInfo = (token) => apiFetch(`/hotelmanager/me`, token);
 export const getRooms = (id, token) => apiFetch(`/hotels/${id}/rooms`, token);
