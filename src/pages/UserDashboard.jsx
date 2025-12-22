@@ -17,6 +17,13 @@ import { Loader } from "../components/ui/Loader";
 import { getRooms } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
 
+const sortOptions = [
+  { value: "name-asc", text: "A–Z" },
+  { value: "name-desc", text: "Z–A" },
+  { value: "regularPrice-asc", text: "Price ↑" },
+  { value: "regularPrice-desc", text: "Price ↓" },
+];
+
 function UserDasboard() {
   const [openModal, setOpenModal] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -25,6 +32,7 @@ function UserDasboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const filterType = searchParams.get("filter") || "all";
+  const sortBy = searchParams.get("sortBy") || "name-asc";
 
   useEffect(() => {
     const load = async () => {
@@ -51,12 +59,26 @@ function UserDasboard() {
         (room) => room.bed_type?.toLowerCase() === filterType.toLowerCase()
       );
     }
+
+    if (sortBy === "name-asc")
+      updatedRooms.sort((a, b) => a.hotel.name.localeCompare(b.hotel.name));
+    if (sortBy === "name-desc")
+      updatedRooms.sort((a, b) => b.hotel.name.localeCompare(a.hotel.name));
+    if (sortBy === "regularPrice-asc")
+      updatedRooms.sort((a, b) => a.price_per_night - b.price_per_night);
+    if (sortBy === "regularPrice-desc")
+      updatedRooms.sort((a, b) => b.price_per_night - a.price_per_night);
     setFilteredRooms(updatedRooms);
-  }, [rooms, filterType]);
+  }, [rooms, filterType, sortBy]);
 
   function handleFilter(selectedFilter) {
     if (selectedFilter.toLowerCase() === "all") searchParams.delete("filter");
     else searchParams.set("filter", selectedFilter);
+    setSearchParams(searchParams);
+  }
+
+  function handleSort(option) {
+    searchParams.set("sortBy", option);
     setSearchParams(searchParams);
   }
 
@@ -78,6 +100,9 @@ function UserDasboard() {
         <Navbar
           handleOpenModal={handleOpenModal}
           filterTxt={filterType[0].toUpperCase() + filterType.slice(1)}
+          sortBy={sortBy}
+          sortOptions={sortOptions}
+          handleSort={handleSort}
         />
       </Sticky>
       {loading && !error && <Loader loading />}

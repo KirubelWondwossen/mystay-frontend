@@ -6,8 +6,15 @@ import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
+import SortBy from "./UserSortBy";
 
-function Navbar({ handleOpenModal, filterTxt }) {
+function Navbar({
+  handleOpenModal,
+  filterTxt,
+  sortOptions,
+  sortBy,
+  handleSort,
+}) {
   return (
     <nav
       className={`flex justify-between w-full p-3 ${
@@ -15,12 +22,25 @@ function Navbar({ handleOpenModal, filterTxt }) {
       }`}
     >
       <Logo />
-      <NavBtns handleOpenModal={handleOpenModal} filterTxt={filterTxt} />
+      <NavBtns
+        handleOpenModal={handleOpenModal}
+        filterTxt={filterTxt}
+        sortBy={sortBy}
+        sortOptions={sortOptions}
+        handleSort={handleSort}
+      />
     </nav>
   );
 }
 
-function NavBtns({ isOpen, handleOpenModal, filterTxt }) {
+function NavBtns({
+  isOpen,
+  handleOpenModal,
+  filterTxt,
+  sortOptions,
+  sortBy,
+  handleSort,
+}) {
   return (
     <ul
       className={`${
@@ -28,10 +48,17 @@ function NavBtns({ isOpen, handleOpenModal, filterTxt }) {
       } relative md:visible flex-col flex md:justify-between md:gap-3 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
     >
       {useLocation().pathname === "/" ? (
-        <FilterSearchBtn
-          handleOpenModal={handleOpenModal}
-          filterTxt={filterTxt}
-        />
+        <>
+          <FilterSearchBtn
+            handleOpenModal={handleOpenModal}
+            filterTxt={filterTxt}
+          />
+          <SortBy
+            sortOptions={sortOptions}
+            sortBy={sortBy}
+            onChange={handleSort}
+          />
+        </>
       ) : (
         <Link to={"/"}>
           <FilterSearchBtn filterTxt={filterTxt} />
