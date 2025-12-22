@@ -35,7 +35,7 @@ const sortOptions = [
   { value: "regularPrice-desc", text: "Sort by price (high first)" },
 ];
 
-const fields = ["Room", "Bed Type", "Room Type", "Price"];
+const fields = ["Room", "Room Type", "Bed Type", "Price"];
 
 function ManagerRooms() {
   const [rooms, setRooms] = useState([]);
@@ -104,8 +104,8 @@ function ManagerRooms() {
   function handleOpenModal() {
     setOpenModal((prev) => !prev);
   }
-  const handleOpenDelete = (room) => setRoomToDelete(room); // FIXED
-  const handleCloseDelete = () => setRoomToDelete(null); // FIXED
+  const handleOpenDelete = (room) => setRoomToDelete(room);
+  const handleCloseDelete = () => setRoomToDelete(null);
 
   const handleCreateRoom = () => {
     setMode("create");
@@ -188,16 +188,26 @@ function ManagerRooms() {
               </ManagerTopComponents>
               <div>
                 <Fields fields={fields} />
-                {filteredRooms.map((el) => (
-                  <Rooms
-                    room={el} // rename prop to singular
-                    key={el.id} // use id instead of index
-                    handleEditRoom={handleEditRoom}
-                    handleOpenDelete={handleOpenDelete}
-                    handleDelete={handleDelete}
-                    handleCloseDelete={handleCloseDelete}
+                {filteredRooms.length > 0 && (
+                  <>
+                    {filteredRooms.map((el) => (
+                      <Rooms
+                        room={el}
+                        key={el.id}
+                        handleEditRoom={handleEditRoom}
+                        handleOpenDelete={handleOpenDelete}
+                        handleDelete={handleDelete}
+                        handleCloseDelete={handleCloseDelete}
+                      />
+                    ))}
+                  </>
+                )}
+                {filteredRooms.length === 0 && (
+                  <EmptyState
+                    title={`There are no rooms by ${filter}`}
+                    description={"Please try another filter"}
                   />
-                ))}
+                )}
               </div>
             </>
           )}
@@ -261,11 +271,7 @@ function Fields({ fields }) {
   );
 }
 
-function Rooms({
-  room, // renamed from rooms
-  handleEditRoom,
-  handleOpenDelete,
-}) {
+function Rooms({ room, handleEditRoom, handleOpenDelete }) {
   const [popup, setPopup] = useState(false);
   const popupRef = useRef(null);
   const iconRef = useRef(null);
