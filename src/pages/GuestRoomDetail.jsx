@@ -81,12 +81,14 @@ function GuestRoomDetail() {
   }, [hotelId, roomId, accessToken]);
 
   useEffect(() => {
-    if (!payment && !totalPrice && !range) return;
+    if (!range?.from || !range?.to || !payment || totalPrice <= 0) return;
+
     setPayload({
       check_in: formatDateToYMD(range.from),
       check_out: formatDateToYMD(range.to),
       room_id: roomId,
       payment_method: payment,
+      total_price: totalPrice,
     });
   }, [payment, totalPrice, range, roomId]);
 
@@ -115,6 +117,7 @@ function GuestRoomDetail() {
               setTotalPrice={setTotalPrice}
               handleBook={handleBook}
               setPayment={setPayment}
+              payment={payment}
             />
           </>
         )}
@@ -219,6 +222,7 @@ function BookDatePrice({
   setTotalPrice,
   handleBook,
   setPayment,
+  payment,
 }) {
   return (
     <div className="grid grid-cols-[1.2fr_1fr] w-full">
@@ -235,6 +239,7 @@ function BookDatePrice({
         totalPrice={totalPrice}
         handleBook={handleBook}
         setPayment={setPayment}
+        payment={payment}
       />
     </div>
   );
@@ -325,6 +330,7 @@ function BookInfo({
   totalPrice,
   handleBook,
   setPayment,
+  payment,
 }) {
   const handleGoogleLogin = () => {
     window.location.href =
@@ -332,7 +338,7 @@ function BookInfo({
   };
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex flex-col items-start gap-4">
       {!authenticated && (
         <Button
           onClick={handleGoogleLogin}
@@ -352,7 +358,7 @@ function BookInfo({
               </span>
 
               <span className="bg-background2 p-2 rounded-lg shadow-sm font-heading text-sm">
-                {(range && range.from.toDateString()) || "No date"}
+                {range?.to ? range.from.toDateString() : "No date"}
               </span>
             </div>
             <div className="flex items-center gap-4">
@@ -361,7 +367,7 @@ function BookInfo({
               </span>
 
               <span className="bg-background2 p-2 rounded-lg shadow-sm font-heading text-sm">
-                {(range && range.to.toDateString()) || "No date"}
+                {range?.to ? range.to.toDateString() : "No date"}
               </span>
             </div>
           </div>
@@ -377,31 +383,43 @@ function BookInfo({
             </span>
           </div>
           <select
+            value={payment || ""}
             onChange={(e) => setPayment(e.target.value)}
             className="font-heading px-2 py-1 outline-none border border-tSecondary rounded-lg"
           >
-            <option value="">Select payment method</option>
+            <option value="" disabled>
+              Select payment method
+            </option>
             <option value="cash">Cash</option>
             <option value="card">Card</option>
             <option value="mobile">Mobile</option>
           </select>
 
-          <CheckInOut handleBook={handleBook} />
+          <CheckInOut
+            handleBook={handleBook}
+            disabled={!range?.to || totalPrice <= 0 || !payment}
+          />
         </>
       )}
     </div>
   );
 }
 
-function CheckInOut({ handleBook }) {
+function CheckInOut({ handleBook, disabled }) {
   return (
     <div className="flex gap-2">
       <Button
-        className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+        disabled={disabled}
+        className={`rounded-lg p-2 text-white ${
+          disabled
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-primary hover:bg-[#4338ca]"
+        }`}
         onClick={handleBook}
       >
         Check-in
       </Button>
+
       <Button
         className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
       >

@@ -22,6 +22,20 @@ export async function apiFetch(url, token) {
   return res.json();
 }
 
+export async function apiFetchGoogle(url) {
+  const res = await fetch(`${API_URL}${url}`, {
+    headers: { Accept: "application/json" },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Unauthorized");
+    throw new Error("Request failed");
+  }
+
+  return res.json();
+}
+
 // For Admins
 export const getManager = (id, token) => apiFetch(`/hotelmanager/${id}`, token);
 export const getHotel = (id, token) => apiFetch(`/hotels/${id}`, token);
@@ -43,4 +57,5 @@ export const getRoomDetail = (roomId, hotelId) =>
   apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
 export const getUnavailableDates = (roomId) =>
   apiFetch(`/hotels/rooms/${roomId}/unavailable-dates`);
+
 export const getGuestProfile = (token) => apiFetch(`/guest/profile`, token);
