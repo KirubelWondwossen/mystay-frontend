@@ -16,7 +16,7 @@ import Navbar from "../components/ui/Navbar";
 import Sticky from "../components/layout/Sticky";
 import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
-import { getRoomDetail } from "../services/getAPi";
+import { getRoomDetail, getUnavailableDates } from "../services/getAPi";
 import RatingStars from "../components/ui/RatingStars";
 import { Loader } from "../components/ui/Loader";
 import { getDaysFromRange } from "../utils/getDaysFromRange";
@@ -27,6 +27,10 @@ function GuestRoomDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [range, setRange] = useState();
+  const [unavDates, setUnavDates] = useState({
+    unavailable_dates: [],
+  });
+
   // const [totalPrice, setTotalPrice] = useState();
   const { roomId, hotelId } = useParams();
 
@@ -35,7 +39,9 @@ function GuestRoomDetail() {
       try {
         setLoading(true);
         const roomData = await getRoomDetail(roomId, hotelId);
+        const dates = await getUnavailableDates(roomId);
         setRoom(roomData);
+        setUnavDates(dates);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);
@@ -46,6 +52,8 @@ function GuestRoomDetail() {
 
     load();
   }, [hotelId, roomId]);
+
+  console.log(unavDates);
 
   return (
     <Page>
@@ -60,6 +68,7 @@ function GuestRoomDetail() {
             range={range}
             setRange={setRange}
             price={room.price_per_night}
+            unavDates={unavDates}
           />
         </Main>
       )}
@@ -146,19 +155,33 @@ function Tag({ value, icon: Icon }) {
   );
 }
 
-function BookDatePrice({ range, setRange, price }) {
+function BookDatePrice({ range, setRange, price, unavDates }) {
   return (
     <div className="grid grid-cols-[1.8fr_0.6fr] w-full">
-      <DateSelector range={range} setRange={setRange} price={price} />
+      <DateSelector
+        range={range}
+        setRange={setRange}
+        price={price}
+        unavDates={unavDates}
+      />
       <BookInfo />
     </div>
   );
 }
 
-function DateSelector({ range, setRange, price }) {
+function DateSelector({ range, setRange, price, unavDates }) {
   function handleClear() {
     setRange("");
   }
+
+  const unavailableDates = unavDates.unavailable_dates.map((date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
+
+  const disabledDays = [{ before: new Date() }, ...unavailableDates];
+
   return (
     <div className="flex flex-col w-fit">
       <DayPicker
@@ -166,7 +189,7 @@ function DateSelector({ range, setRange, price }) {
         selected={range}
         onSelect={setRange}
         numberOfMonths={2}
-        disabled={{ before: new Date() }}
+        disabled={disabledDays}
         className="font-heading"
         classNames={{
           today: "",
