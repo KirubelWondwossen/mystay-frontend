@@ -31,7 +31,6 @@ export default {
         border: "#F3F4F6",
         "color-blue-100": "#E0F2FE", // for bg of circled icons
         "color-green-100": "#DCFCE7", // for bg of money circled icons
-
         // ✅ State colors
         success: "#15803D",
         warning: "#A16207",

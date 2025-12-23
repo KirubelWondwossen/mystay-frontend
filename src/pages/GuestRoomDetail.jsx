@@ -1,4 +1,4 @@
-import { Children, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { useParams } from "react-router-dom";
 import "react-day-picker/dist/style.css";
@@ -8,21 +8,26 @@ import {
   MapPinIcon,
   RectangleStackIcon,
   HomeModernIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 
 import Page from "../components/layout/Page";
 import Navbar from "../components/ui/Navbar";
 import Sticky from "../components/layout/Sticky";
-import Main from "../components/layout/Main";
+import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
 import { getRoomDetail } from "../services/getAPi";
 import RatingStars from "../components/ui/RatingStars";
 import { Loader } from "../components/ui/Loader";
+import { getDaysFromRange } from "../utils/getDaysFromRange";
+import Button from "../components/ui/Button";
 
 function GuestRoomDetail() {
   const [room, setRoom] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [range, setRange] = useState();
+  // const [totalPrice, setTotalPrice] = useState();
   const { roomId, hotelId } = useParams();
 
   useEffect(() => {
@@ -49,8 +54,13 @@ function GuestRoomDetail() {
       </Sticky>
       {loading && !error && <Loader loading={loading} />}
       {!loading && !error && (
-        <Main>
+        <Main style={"mb-6"}>
           <ImageDetail room={room} />
+          <BookDatePrice
+            range={range}
+            setRange={setRange}
+            price={room.price_per_night}
+          />
         </Main>
       )}
       <Sticky pos={"bottom"}>
@@ -62,7 +72,7 @@ function GuestRoomDetail() {
 
 function ImageDetail({ room }) {
   return (
-    <div className=" grid grid-cols-[3fr_4fr] gap-20 border border-primary-800 py-3 px-10 mt-7 mb-24 relative">
+    <div className=" grid grid-cols-[3fr_4fr] gap-20 border border-primary-800 py-3 px-10 mt-7 mb-8 relative">
       <img
         className="object-cover object-center aspect-[3/2]"
         src={
@@ -93,6 +103,12 @@ function Detail({ room }) {
       <TextIcon icon={MapPinIcon}>
         <p className="text-lg text-tSecondary line-clamp-2">
           {room.hotel?.address}
+        </p>
+      </TextIcon>
+
+      <TextIcon icon={CurrencyDollarIcon}>
+        <p className="text-lg text-tSecondary ">
+          ${room.price_per_night}/ Night
         </p>
       </TextIcon>
       <div className="flex gap-2">
@@ -129,20 +145,65 @@ function Tag({ value, icon: Icon }) {
     </div>
   );
 }
-function DateSelector() {
-  const [range, setRange] = useState();
 
+function BookDatePrice({ range, setRange, price }) {
   return (
-    <div>
+    <div className="grid grid-cols-[1.8fr_0.6fr] w-full">
+      <DateSelector range={range} setRange={setRange} price={price} />
+      <BookInfo />
+    </div>
+  );
+}
+
+function DateSelector({ range, setRange, price }) {
+  function handleClear() {
+    setRange("");
+  }
+  return (
+    <div className="flex flex-col w-fit">
       <DayPicker
         mode="range"
         selected={range}
         onSelect={setRange}
         numberOfMonths={2}
         disabled={{ before: new Date() }}
+        className="font-heading"
+        classNames={{
+          today: "",
+          selected: "bg-primary text-white hover:bg-primary ",
+          range_start: "bg-primary text-white rounded-l-full",
+          range_middle: "bg-primary text-white",
+          range_end: "bg-primary text-white rounded-r-full",
+        }}
       />
+
+      <div className="bg-background2 p-6 flex gap-2 items-center">
+        <span className="text-xl text-tSecondary font-heading">
+          ${price} <span className="text-sm"> /night</span>
+        </span>
+        {range && (
+          <>
+            <span className="p-2 text-xl font-heading text-tSecondary">
+              {getDaysFromRange(range)} days
+            </span>
+            <span className="p-2 text-xl font-heading text-tSecondary">
+              Total ${+price * getDaysFromRange(range)}
+            </span>
+            <Button
+              onClick={handleClear}
+              className="py-1 px-2 ml-52 text-lg font-heading text-tSecondary border border-tSecondary rounded-lg"
+            >
+              Clear
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
+}
+
+function BookInfo() {
+  return <div className="w-full">Hello</div>;
 }
 
 // eslint-disable-next-line

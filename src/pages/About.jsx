@@ -2,7 +2,7 @@ import Page from "../components/layout/Page";
 import Navbar from "../components/ui/Navbar";
 import Sticky from "../components/layout/Sticky";
 import BottomNav from "../components/ui/BottomNav";
-import Main from "../components/layout/Main";
+import Main from "../components/layout/MainLayout";
 import SectionHeader from "../components/ui/SectionHeader";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";

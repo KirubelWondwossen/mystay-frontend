@@ -12,7 +12,7 @@ import Sticky from "../components/layout/Sticky";
 import Backdrop from "../components/ui/Backdrop";
 import Filter from "../components/search/Filter";
 import Page from "../components/layout/Page";
-import Main from "../components/layout/Main";
+import Main from "../components/layout/MainLayout";
 import { Loader } from "../components/ui/Loader";
 import { getRooms } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";

@@ -2,7 +2,7 @@ import BottomNav from "../components/ui/BottomNav";
 import Navbar from "../components/ui/Navbar";
 import Page from "../components/layout/Page";
 import Sticky from "../components/layout/Sticky";
-import Main from "../components/layout/Main";
+import Main from "../components/layout/MainLayout";
 import RoomCardContainer from "../components/cards/RoomCardContainer";
 import RoomCard from "../components/cards/RoomCard";
 import SectionHeader from "../components/ui/SectionHeader";
