@@ -27,12 +27,14 @@ import { Loader } from "../components/ui/Loader";
 import { getDaysFromRange } from "../utils/getDaysFromRange";
 import Button from "../components/ui/Button";
 import { getCookie } from "../utils/getCookie";
+import { formatDateToYMD } from "../utils/formatDateToYMD";
 
 function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
   const [totalPrice, setTotalPrice] = useState();
   const [payment, setPayment] = useState();
+  const [payload, setPayload] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [range, setRange] = useState();
@@ -78,9 +80,20 @@ function GuestRoomDetail() {
     load();
   }, [hotelId, roomId, accessToken]);
 
+  useEffect(() => {
+    if (!payment && !totalPrice && !range) return;
+    setPayload({
+      check_in: formatDateToYMD(range.from),
+      check_out: formatDateToYMD(range.to),
+      room_id: roomId,
+      payment_method: payment,
+    });
+  }, [payment, totalPrice, range, roomId]);
+
   function handleBook(e) {
     e.preventDefault();
     toast.success("Booked successfully");
+    console.log(payload);
   }
   return (
     <Page>
