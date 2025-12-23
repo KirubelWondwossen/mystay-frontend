@@ -32,6 +32,7 @@ function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
   const [totalPrice, setTotalPrice] = useState();
+  const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [range, setRange] = useState();
@@ -77,6 +78,10 @@ function GuestRoomDetail() {
     load();
   }, [hotelId, roomId, accessToken]);
 
+  function handleBook(e) {
+    e.preventDefault();
+    toast.success("Booked successfully");
+  }
   return (
     <Page>
       <Sticky pos={"top"}>
@@ -95,6 +100,8 @@ function GuestRoomDetail() {
               authenticated={authenticated}
               totalPrice={totalPrice}
               setTotalPrice={setTotalPrice}
+              handleBook={handleBook}
+              setPayment={setPayment}
             />
           </>
         )}
@@ -102,6 +109,13 @@ function GuestRoomDetail() {
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+        }}
+      />
     </Page>
   );
 }
@@ -190,6 +204,8 @@ function BookDatePrice({
   authenticated,
   totalPrice,
   setTotalPrice,
+  handleBook,
+  setPayment,
 }) {
   return (
     <div className="grid grid-cols-[1.2fr_1fr] w-full">
@@ -204,6 +220,8 @@ function BookDatePrice({
         authenticated={authenticated}
         range={range}
         totalPrice={totalPrice}
+        handleBook={handleBook}
+        setPayment={setPayment}
       />
     </div>
   );
@@ -288,7 +306,13 @@ function DateSelector({ range, setRange, price, unavDates, setTotalPrice }) {
   );
 }
 
-function BookInfo({ authenticated, range, totalPrice }) {
+function BookInfo({
+  authenticated,
+  range,
+  totalPrice,
+  handleBook,
+  setPayment,
+}) {
   const handleGoogleLogin = () => {
     window.location.href =
       "http://127.0.0.1:8000/api/auth/google/login?redirect=http://localhost:5173/";
@@ -305,6 +329,71 @@ function BookInfo({ authenticated, range, totalPrice }) {
           Continue with Google
         </Button>
       )}
+
+      {authenticated && (
+        <>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
+              <span className="text-lg font-heading font-semibold justify-self-start text-tSecondary">
+                Check in
+              </span>
+
+              <span className="bg-background2 p-2 rounded-lg shadow-sm font-heading text-sm">
+                {(range && range.from.toDateString()) || "No date"}
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-lg font-heading font-semibold justify-self-start text-tSecondary">
+                Check out
+              </span>
+
+              <span className="bg-background2 p-2 rounded-lg shadow-sm font-heading text-sm">
+                {(range && range.to.toDateString()) || "No date"}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-lg font-heading font-semibold justify-self-start text-tSecondary">
+              Total Price
+            </span>
+
+            <span className="bg-background2 p-2 rounded-lg shadow-sm font-heading text-sm">
+              {range && totalPrice > 0
+                ? "$" + totalPrice
+                : "Select check in/out dates"}
+            </span>
+          </div>
+          <select
+            onChange={(e) => setPayment(e.target.value)}
+            className="font-heading px-2 py-1 outline-none border border-tSecondary rounded-lg"
+          >
+            <option value="">Select payment method</option>
+            <option value="cash">Cash</option>
+            <option value="card">Card</option>
+            <option value="mobile">Mobile</option>
+          </select>
+
+          <CheckInOut handleBook={handleBook} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function CheckInOut({ handleBook }) {
+  return (
+    <div className="flex gap-2">
+      <Button
+        className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+        onClick={handleBook}
+      >
+        Check-in
+      </Button>
+      <Button
+        className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+      >
+        Cancel
+      </Button>
     </div>
   );
 }

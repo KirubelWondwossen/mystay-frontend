@@ -37,3 +37,7 @@ export async function apiFetchFormData(url, token, data) {
 // For managers
 export const postRooms = (id, token, data) =>
   apiFetchFormData(`/hotels/${id}/rooms`, token, data);
+
+// Guest
+export const Book = (token, data) =>
+  apiFetchFormData(`/bookings/`, token, data);
