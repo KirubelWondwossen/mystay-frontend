@@ -14,6 +14,8 @@ function Navbar({
   sortOptions,
   sortBy,
   handleSort,
+  authenticated,
+  guest,
 }) {
   return (
     <nav
@@ -28,6 +30,8 @@ function Navbar({
         sortBy={sortBy}
         sortOptions={sortOptions}
         handleSort={handleSort}
+        authenticated={authenticated}
+        guest={guest}
       />
     </nav>
   );
@@ -40,6 +44,8 @@ function NavBtns({
   sortOptions,
   sortBy,
   handleSort,
+  authenticated,
+  guest,
 }) {
   return (
     <ul
@@ -65,7 +71,7 @@ function NavBtns({
         </Link>
       )}
       <DarkLightModeBtns />
-
+      {authenticated && <ManagerProfile guest={guest} />}
       {location.pathname === "/" && <BecomeHostBtn />}
     </ul>
   );
@@ -148,6 +154,18 @@ function IconHolder({ children, active, onClick }) {
     >
       {children}
     </button>
+  );
+}
+
+function ManagerProfile({ guest }) {
+  return (
+    <div className={`gap-2 flex items-center`}>
+      <img
+        src={guest.avater_url}
+        alt="profile picture"
+        className="w-8 rounded-full"
+      />
+    </div>
   );
 }
 export default Navbar;

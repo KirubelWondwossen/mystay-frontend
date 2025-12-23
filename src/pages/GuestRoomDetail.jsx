@@ -29,7 +29,7 @@ import Button from "../components/ui/Button";
 import { getCookie } from "../utils/getCookie";
 
 function GuestRoomDetail() {
-  const [guest, setGuest] = useState({});
+  const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,7 +38,8 @@ function GuestRoomDetail() {
     unavailable_dates: [],
   });
 
-  // const [totalPrice, setTotalPrice] = useState();
+  const authenticated = Boolean(guest);
+
   const { roomId, hotelId } = useParams();
   const accessToken = getCookie("access_token");
   useEffect(() => {
@@ -66,7 +67,6 @@ function GuestRoomDetail() {
         setGuest(guestData);
       } catch (e) {
         setGuest(null);
-        setError(e.message);
         console.log("User not authenticated, booking disabled");
       }
 
@@ -79,7 +79,7 @@ function GuestRoomDetail() {
   return (
     <Page>
       <Sticky pos={"top"}>
-        <Navbar />
+        <Navbar guest={guest} authenticated={authenticated} />
       </Sticky>
       {loading && !error && <Loader loading={loading} />}
       <Main style={"mb-6"}>
