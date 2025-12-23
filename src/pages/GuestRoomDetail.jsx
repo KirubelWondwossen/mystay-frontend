@@ -31,6 +31,7 @@ import { getCookie } from "../utils/getCookie";
 function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
+  const [totalPrice, setTotalPrice] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [range, setRange] = useState();
@@ -91,6 +92,9 @@ function GuestRoomDetail() {
               setRange={setRange}
               price={room.price_per_night}
               unavDates={unavDates}
+              authenticated={authenticated}
+              totalPrice={totalPrice}
+              setTotalPrice={setTotalPrice}
             />
           </>
         )}
@@ -178,24 +182,47 @@ function Tag({ value, icon: Icon }) {
   );
 }
 
-function BookDatePrice({ range, setRange, price, unavDates }) {
+function BookDatePrice({
+  range,
+  setRange,
+  price,
+  unavDates,
+  authenticated,
+  totalPrice,
+  setTotalPrice,
+}) {
   return (
-    <div className="grid grid-cols-[1.8fr_0.6fr] w-full">
+    <div className="grid grid-cols-[1.2fr_1fr] w-full">
       <DateSelector
         range={range}
         setRange={setRange}
         price={price}
         unavDates={unavDates}
+        setTotalPrice={setTotalPrice}
       />
-      <BookInfo />
+      <BookInfo
+        authenticated={authenticated}
+        range={range}
+        totalPrice={totalPrice}
+      />
     </div>
   );
 }
 
-function DateSelector({ range, setRange, price, unavDates }) {
+function DateSelector({ range, setRange, price, unavDates, setTotalPrice }) {
   function handleClear() {
-    setRange("");
+    setRange(undefined);
+    setTotalPrice(0);
   }
+  const days = range?.from && range?.to ? getDaysFromRange(range) : 0;
+
+  useEffect(() => {
+    if (days >= 1) {
+      setTotalPrice(price * days);
+    } else {
+      setTotalPrice(0);
+    }
+  }, [days, price, setTotalPrice]);
 
   const unavailableDates = unavDates.unavailable_dates.map((date) => {
     const d = new Date(date);
@@ -216,31 +243,44 @@ function DateSelector({ range, setRange, price, unavDates }) {
         className="font-heading"
         classNames={{
           today: "",
-          selected: "bg-primary text-white hover:bg-primary ",
+          selected: "bg-primary text-white hover:bg-primary",
           range_start: "bg-primary text-white rounded-l-full",
           range_middle: "bg-primary text-white",
           range_end: "bg-primary text-white rounded-r-full",
         }}
       />
 
-      <div className="bg-background2 p-6 flex gap-2 items-center">
+      <div className="bg-background2 p-6 flex gap-4 items-center">
         <span className="text-xl text-tSecondary font-heading">
-          ${price} <span className="text-sm"> /night</span>
+          ${price} <span className="text-sm">/night</span>
         </span>
+
         {range && (
           <>
-            <span className="p-2 text-xl font-heading text-tSecondary">
-              {getDaysFromRange(range)} days
-            </span>
-            <span className="p-2 text-xl font-heading text-tSecondary">
-              Total ${+price * getDaysFromRange(range)}
-            </span>
-            <Button
-              onClick={handleClear}
-              className="py-1 px-2 ml-52 text-lg font-heading text-tSecondary border border-tSecondary rounded-lg"
-            >
-              Clear
-            </Button>
+            {days === 0 && (
+              <span className="p-2 text-xl font-heading text-tSecondary">
+                Add checkout day
+              </span>
+            )}
+
+            {days >= 1 && (
+              <>
+                <span className="text-xl font-heading text-tSecondary">
+                  {days} night{days > 1 ? "s" : ""}
+                </span>
+
+                <span className="text-xl font-heading text-tSecondary">
+                  Total ${price * days}
+                </span>
+
+                <Button
+                  onClick={handleClear}
+                  className="py-1 px-2 ml-10 text-lg font-heading text-tSecondary border border-tSecondary rounded-lg"
+                >
+                  Clear
+                </Button>
+              </>
+            )}
           </>
         )}
       </div>
@@ -248,21 +288,23 @@ function DateSelector({ range, setRange, price, unavDates }) {
   );
 }
 
-function BookInfo() {
+function BookInfo({ authenticated, range, totalPrice }) {
   const handleGoogleLogin = () => {
     window.location.href =
       "http://127.0.0.1:8000/api/auth/google/login?redirect=http://localhost:5173/";
   };
 
   return (
-    <div className="flex flex-col items-start justify-center w-full">
-      <Button
-        onClick={handleGoogleLogin}
-        className="flex items-center gap-2 border px-4 py-2 rounded"
-      >
-        <FaGoogle className="w-8" />
-        Continue with Google
-      </Button>
+    <div className="flex flex-col items-start gap-2">
+      {!authenticated && (
+        <Button
+          onClick={handleGoogleLogin}
+          className="flex items-center gap-2 border px-4 py-2 rounded"
+        >
+          <FaGoogle className="w-8" />
+          Continue with Google
+        </Button>
+      )}
     </div>
   );
 }
