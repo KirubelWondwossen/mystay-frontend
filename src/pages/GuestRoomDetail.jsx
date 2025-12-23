@@ -10,19 +10,26 @@ import {
   HomeModernIcon,
   CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
+import { FaGoogle } from "react-icons/fa";
 
 import Page from "../components/layout/Page";
 import Navbar from "../components/ui/Navbar";
 import Sticky from "../components/layout/Sticky";
 import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
-import { getRoomDetail, getUnavailableDates } from "../services/getAPi";
+import {
+  getGuestProfile,
+  getRoomDetail,
+  getUnavailableDates,
+} from "../services/getAPi";
 import RatingStars from "../components/ui/RatingStars";
 import { Loader } from "../components/ui/Loader";
 import { getDaysFromRange } from "../utils/getDaysFromRange";
 import Button from "../components/ui/Button";
+import { getCookie } from "../utils/getCookie";
 
 function GuestRoomDetail() {
+  const [guest, setGuest] = useState({});
   const [room, setRoom] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -33,27 +40,41 @@ function GuestRoomDetail() {
 
   // const [totalPrice, setTotalPrice] = useState();
   const { roomId, hotelId } = useParams();
-
+  const accessToken = getCookie("access_token");
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
+
       try {
-        setLoading(true);
         const roomData = await getRoomDetail(roomId, hotelId);
-        const dates = await getUnavailableDates(roomId);
         setRoom(roomData);
+      } catch (e) {
+        setError(e.message);
+        toast.error("Failed to load room details");
+      }
+
+      try {
+        const dates = await getUnavailableDates(roomId);
         setUnavDates(dates);
       } catch (e) {
         setError(e.message);
-        toast.error(e.message);
-      } finally {
-        setLoading(false);
+        toast.error("Failed to load unavailable dates");
       }
+
+      try {
+        const guestData = await getGuestProfile(accessToken);
+        setGuest(guestData);
+      } catch (e) {
+        setGuest(null);
+        setError(e.message);
+        console.log("User not authenticated, booking disabled");
+      }
+
+      setLoading(false);
     };
 
     load();
-  }, [hotelId, roomId]);
-
-  console.log(unavDates);
+  }, [hotelId, roomId, accessToken]);
 
   return (
     <Page>
@@ -61,17 +82,19 @@ function GuestRoomDetail() {
         <Navbar />
       </Sticky>
       {loading && !error && <Loader loading={loading} />}
-      {!loading && !error && (
-        <Main style={"mb-6"}>
-          <ImageDetail room={room} />
-          <BookDatePrice
-            range={range}
-            setRange={setRange}
-            price={room.price_per_night}
-            unavDates={unavDates}
-          />
-        </Main>
-      )}
+      <Main style={"mb-6"}>
+        {!loading && !error && (
+          <>
+            <ImageDetail room={room} />
+            <BookDatePrice
+              range={range}
+              setRange={setRange}
+              price={room.price_per_night}
+              unavDates={unavDates}
+            />
+          </>
+        )}
+      </Main>
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
@@ -116,7 +139,7 @@ function Detail({ room }) {
       </TextIcon>
 
       <TextIcon icon={CurrencyDollarIcon}>
-        <p className="text-lg text-tSecondary ">
+        <p className="text-lg text-tSecondary  font-heading">
           ${room.price_per_night}/ Night
         </p>
       </TextIcon>
@@ -226,7 +249,22 @@ function DateSelector({ range, setRange, price, unavDates }) {
 }
 
 function BookInfo() {
-  return <div className="w-full">Hello</div>;
+  const handleGoogleLogin = () => {
+    window.location.href =
+      "http://127.0.0.1:8000/api/auth/google/login?redirect=http://localhost:5173/";
+  };
+
+  return (
+    <div className="flex flex-col items-start justify-center w-full">
+      <Button
+        onClick={handleGoogleLogin}
+        className="flex items-center gap-2 border px-4 py-2 rounded"
+      >
+        <FaGoogle className="w-8" />
+        Continue with Google
+      </Button>
+    </div>
+  );
 }
 
 // eslint-disable-next-line

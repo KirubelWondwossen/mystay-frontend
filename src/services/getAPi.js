@@ -43,3 +43,4 @@ export const getRoomDetail = (roomId, hotelId) =>
   apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
 export const getUnavailableDates = (roomId) =>
   apiFetch(`/hotels/rooms/${roomId}/unavailable-dates`);
+export const getGuestProfile = (token) => apiFetch(`/guest/profile`, token);
