@@ -7,19 +7,20 @@ import {
   EyeIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { formatDateToReadable } from "../../utils/formatDateToReadable";
 
 const statusColors = {
-  UNCONFIRMED: "#e0f2fe",
-  "CHECKED IN": "#dcfce7",
-  "CHECKED OUT": "#e5e7eb",
+  check_in: "#dcfce7",
+  pending: "#FEF9C3",
+  checked_out: "#e5e7eb",
 };
 const statusTxtColors = {
-  UNCONFIRMED: "#0369a1",
-  "CHECKED IN": "#15803d",
-  "CHECKED OUT": "#374151",
+  pending: "#D97706",
+  check_in: "#15803d",
+  checked_out: "#374151",
 };
 
-function ManagerBookingsTable({ data }) {
+function ManagerBookingsTable({ data, room }) {
   const [popup, setPopup] = useState(false);
 
   const popupRef = useRef(null);
@@ -46,11 +47,16 @@ function ManagerBookingsTable({ data }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [popup]);
 
+  const currentRoom = room.find((r) => r.id === data.room_id);
+
   return (
     <div className="relative grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
-      <span className="justify-self-start">{data.room}</span>
+      <span className="justify-self-start">{currentRoom.room_number}</span>
       <NameDate main={data.guest.full_name} sub={data.guest.email} />
-      <NameDate main={data.stay} sub={data.dates} />
+      <NameDate
+        main={"From " + formatDateToReadable(data.check_in)}
+        sub={"To " + formatDateToReadable(data.check_out)}
+      />
 
       <span
         className="py-1 px-3 justify-self-start text-xs w-fit rounded-full"
@@ -59,11 +65,11 @@ function ManagerBookingsTable({ data }) {
           color: statusTxtColors[data.status],
         }}
       >
-        {data.status}
+        {data.status.toUpperCase()}
       </span>
 
       <div className="flex justify-between w-full ml-4">
-        <span className="text-sm ">${data.amount}</span>
+        <span className="text-sm ">${data.total_price}</span>
 
         <EllipsisVerticalIcon
           ref={iconRef}

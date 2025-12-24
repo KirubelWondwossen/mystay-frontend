@@ -16,6 +16,8 @@ import {
   getBookings,
   getManagerBookings,
   getManagerInfo,
+  getRoomDetail,
+  getRooms,
 } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
 
@@ -131,6 +133,7 @@ const fields = ["Room", "Guest", "Dates", "Status", "Amount"];
 function ManagerBookings() {
   const [active, setActive] = useState(1);
   const [bookings, setBookings] = useState([]);
+  const [rooms, setRooms] = useState({});
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -148,8 +151,9 @@ function ManagerBookings() {
         const manager = await getManagerInfo(token);
         ref.current = manager.hotel.id;
         const bookingData = await getManagerBookings(ref.current, token);
-
         setBookings(bookingData);
+        const room = await getRooms();
+        setRooms(room);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);
@@ -163,7 +167,6 @@ function ManagerBookings() {
   useEffect(() => {
     setBookings(bookingsTemp);
   }, []);
-  // console.log(bookings);
 
   useEffect(() => {
     let updatedBookings = [...bookings];
@@ -219,7 +222,7 @@ function ManagerBookings() {
           <div>
             <ManagerTableCols fields={fields} />
             {filteredBookings.map((el, i) => (
-              <ManagerBookingsTable data={el} key={i} />
+              <ManagerBookingsTable data={el} key={i} room={rooms} />
             ))}
             <PrevNext />
           </div>
