@@ -41,6 +41,7 @@ function GuestRoomDetail() {
   const authenticated = Boolean(guest);
   const { roomId, hotelId } = useParams();
   const accessToken = getCookie("access_token");
+  console.log(accessToken);
 
   const navigate = useNavigate();
   useEffect(() => {

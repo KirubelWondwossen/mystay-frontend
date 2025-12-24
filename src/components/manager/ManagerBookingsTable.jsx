@@ -10,16 +10,15 @@ import {
 import { formatDateToReadable } from "../../utils/formatDateToReadable";
 
 const statusColors = {
-  check_in: "#dcfce7",
+  confirmed: "#dcfce7",
   pending: "#FEF9C3",
-  checked_out: "#e5e7eb",
+  cancelled: "#FECACA",
 };
 const statusTxtColors = {
   pending: "#D97706",
-  check_in: "#15803d",
-  checked_out: "#374151",
+  confirmed: "#15803d",
+  cancelled: "#B91C1C",
 };
-
 function ManagerBookingsTable({ data, room }) {
   const [popup, setPopup] = useState(false);
 

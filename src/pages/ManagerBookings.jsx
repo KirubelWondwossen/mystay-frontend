@@ -22,8 +22,8 @@ import { EmptyState } from "../components/ui/EmptyState";
 
 const filterOptions = [
   { value: 1, type: "All" },
-  { value: 2, type: "Checked in" },
-  { value: 3, type: "Checked out" },
+  { value: 2, type: "Confirmed" },
+  { value: 3, type: "Cancelled" },
   { value: 4, type: "Pending" },
 ];
 

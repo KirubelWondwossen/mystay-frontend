@@ -13,16 +13,18 @@ import { Loader } from "../components/ui/Loader";
 import { formatBookingDates } from "../utils/formatBookingDates";
 import { formatTimestamp } from "../utils/formatTimeStamp";
 import ErrorMessage from "../components/ui/ErrorMessage";
+import { cancelBooking, checkIn } from "../services/patchAPI";
+import { useNavigate } from "react-router-dom";
 
 const statusColors = {
-  check_in: "#dcfce7",
+  confirmed: "#dcfce7",
   pending: "#FEF9C3",
-  checked_out: "#e5e7eb",
+  cancelled: "#FECACA",
 };
 const statusTxtColors = {
   pending: "#D97706",
-  check_in: "#15803d",
-  checked_out: "#374151",
+  confirmed: "#15803d",
+  cancelled: "#B91C1C",
 };
 
 function ManagerBookingDetails() {
@@ -33,6 +35,7 @@ function ManagerBookingDetails() {
   const { token } = useAuth();
   const ref = useRef(null);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const load = async () => {
@@ -62,7 +65,34 @@ function ManagerBookingDetails() {
     setCurrentBook(filtered[0]);
   }, [bookings, id]);
 
-  console.log(currentBook);
+  async function handleCheckin() {
+    try {
+      const res = await checkIn(id, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Check-in failed");
+      }
+
+      toast.success("Guest checked in successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to check in");
+    }
+  }
+  async function handleCancelBooking() {
+    try {
+      const res = await cancelBooking(id, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Booking cancel failed");
+      }
+
+      toast.success("Booking cancelled successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to cancel booking");
+    }
+  }
 
   return (
     <ManagerLayout>
@@ -76,8 +106,23 @@ function ManagerBookingDetails() {
         {loading && <Loader loading={loading} />}
         {!loading && error && <ErrorMessage message={error} />}
         {!loading && !error && <BookingDetails currentBook={currentBook} />}
-        <DetailButtons />
+        <DetailButtons
+          handleCheckin={handleCheckin}
+          currentBook={currentBook}
+          handleCancelBooking={handleCancelBooking}
+        />
       </div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            minWidth: "250px",
+            maxWidth: "600px",
+          },
+        }}
+      />
     </ManagerLayout>
   );
 }
@@ -134,19 +179,28 @@ function BookingDetails({ currentBook }) {
   );
 }
 
-function DetailButtons() {
+function DetailButtons({ handleCheckin, currentBook, handleCancelBooking }) {
   return (
     <div className="flex gap-2 self-end">
-      <Button
-        className={"bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-      >
-        Check-in
-      </Button>
-      <Button
-        className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
-      >
-        Delete
-      </Button>
+      {currentBook?.status === "pending" && (
+        <>
+          <Button
+            onClick={handleCheckin}
+            className={
+              "bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
+            }
+          >
+            Check-in
+          </Button>
+
+          <Button
+            className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
+            onClick={handleCancelBooking}
+          >
+            Cancel
+          </Button>
+        </>
+      )}
       <Link to={"/managerbookings"} className="font-heading text-primary">
         <Button
           className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}

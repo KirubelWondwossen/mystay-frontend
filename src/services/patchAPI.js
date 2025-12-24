@@ -29,3 +29,9 @@ export async function apiPatchJson(url, token, data) {
 // Manager
 export const updateRooms = (hotelID, roomID, token, data) =>
   apiPatchJson(`/hotels/${hotelID}/rooms/${roomID}`, token, data);
+
+export const checkIn = (id, token) =>
+  apiPatchJson(`/bookings/${id}/confirm`, token);
+
+export const cancelBooking = (id, token) =>
+  apiPatchJson(`/bookings/${id}/cancel`, token);
