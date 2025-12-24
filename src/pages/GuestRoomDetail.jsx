@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-day-picker/dist/style.css";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -21,7 +22,6 @@ import { ImageDetail } from "../components/guest/ImageDetail";
 import { BookDatePrice } from "../components/guest/BookDatePrice";
 import { CardPaymentPopup } from "../components/guest/CardPaymentPopup";
 import { MobilePaymentPopup } from "../components/guest/MobilePaymentPopup";
-import { Book } from "../services/postAPI";
 function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
@@ -39,9 +39,10 @@ function GuestRoomDetail() {
   const [openCard, setOpenCard] = useState(false);
 
   const authenticated = Boolean(guest);
-
   const { roomId, hotelId } = useParams();
   const accessToken = getCookie("access_token");
+
+  const navigate = useNavigate();
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -146,8 +147,15 @@ function GuestRoomDetail() {
       });
 
       const data = await res.json();
+      if (res.status === 409) {
+        throw new Error(
+          data?.message ||
+            data?.error ||
+            "Selected days are booked. Please select unbooked days"
+        );
+      }
 
-      if (!res.ok) {
+      if (!res.ok && res.status !== 409) {
         throw new Error(
           data?.message ||
             data?.error ||
@@ -164,6 +172,7 @@ function GuestRoomDetail() {
       setRange(undefined);
       setPayment("");
       setSuccessPayment(false);
+      navigate(0);
     } catch (err) {
       toast.error(err.message || "Something went wrong. Please try again.");
     }

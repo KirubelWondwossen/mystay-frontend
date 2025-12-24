@@ -163,6 +163,7 @@ function ManagerBookings() {
   useEffect(() => {
     setBookings(bookingsTemp);
   }, []);
+  // console.log(bookings);
 
   useEffect(() => {
     let updatedBookings = [...bookings];
