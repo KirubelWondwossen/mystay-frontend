@@ -4,6 +4,7 @@ import Button from "../components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../context/AuthContext";
 
 // const applicationsTemp = {
 //   manager_name: "John Doe",
@@ -21,9 +22,8 @@ function ManagerProfile() {
   const [manager, setManager] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const token = localStorage.getItem("token");
   const { id } = useParams();
-
+  const { token } = useAuth();
   async function getData(token) {
     setLoading(true);
     setError(null);

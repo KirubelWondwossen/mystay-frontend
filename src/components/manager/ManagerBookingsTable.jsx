@@ -49,8 +49,7 @@ function ManagerBookingsTable({ data }) {
   return (
     <div className="relative grid-cols-[0.6fr_2fr_2.4fr_1.4fr_1fr_3.2rem] gap-2 text-tSecondary font-heading grid p-2 items-center border border-t-0 border-[#e5e7eb] bg-white">
       <span className="justify-self-start">{data.room}</span>
-
-      <NameDate main={data.guest} sub={data.email} />
+      <NameDate main={data.guest.full_name} sub={data.guest.email} />
       <NameDate main={data.stay} sub={data.dates} />
 
       <span

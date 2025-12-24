@@ -2,6 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext(null);
 
+// Storage keys per role
+const TOKEN_KEYS = {
+  admin: "admin_token",
+  manager: "manager_token",
+};
+
+const USER_KEYS = {
+  admin: "admin_user",
+  manager: "manager_user",
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -9,18 +20,27 @@ export function AuthProvider({ children }) {
 
   // Restore auth on page refresh
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
+    const adminToken = localStorage.getItem(TOKEN_KEYS.admin);
+    const managerToken = localStorage.getItem(TOKEN_KEYS.manager);
 
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    if (adminToken) {
+      setToken(adminToken);
+      setUser(JSON.parse(localStorage.getItem(USER_KEYS.admin)));
       setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
+      return;
     }
+
+    if (managerToken) {
+      setToken(managerToken);
+      setUser(JSON.parse(localStorage.getItem(USER_KEYS.manager)));
+      setIsAuthenticated(true);
+      return;
+    }
+
+    setIsAuthenticated(false);
   }, []);
 
+  // LOGIN
   const login = (data, role) => {
     let userData = null;
 
@@ -42,18 +62,20 @@ export function AuthProvider({ children }) {
       };
     }
 
-    localStorage.setItem("token", data.access_token);
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem(TOKEN_KEYS[role], data.access_token);
+    localStorage.setItem(USER_KEYS[role], JSON.stringify(userData));
 
     setToken(data.access_token);
     setUser(userData);
     setIsAuthenticated(true);
   };
 
-  // LOGOUT
+  // LOGOUT (role-aware)
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    if (user?.role) {
+      localStorage.removeItem(TOKEN_KEYS[user.role]);
+      localStorage.removeItem(USER_KEYS[user.role]);
+    }
 
     setToken(null);
     setUser(null);
@@ -62,12 +84,18 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, login, logout }}
+      value={{
+        user,
+        token,
+        isAuthenticated,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
 
-// eslint-disable-next-line
+// Hook
 export const useAuth = () => useContext(AuthContext);
