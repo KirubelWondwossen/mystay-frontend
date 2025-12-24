@@ -212,6 +212,7 @@ function CheckInOut({ handleBook, disabled }) {
     <div className="flex gap-2">
       <Button
         disabled={disabled}
+        button="submit"
         className={`rounded-lg p-2 text-white ${
           disabled
             ? "bg-gray-400 cursor-not-allowed"
@@ -219,11 +220,11 @@ function CheckInOut({ handleBook, disabled }) {
         }`}
         onClick={handleBook}
       >
-        Check-in
+        Book
       </Button>
 
       <Button
-        className={"bg-error rounded-lg p-2 text-white hover:bg-[#4338ca]"}
+        className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
       >
         Cancel
       </Button>

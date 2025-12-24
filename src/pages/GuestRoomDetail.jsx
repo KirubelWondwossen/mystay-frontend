@@ -21,11 +21,12 @@ import { ImageDetail } from "../components/guest/ImageDetail";
 import { BookDatePrice } from "../components/guest/BookDatePrice";
 import { CardPaymentPopup } from "../components/guest/CardPaymentPopup";
 import { MobilePaymentPopup } from "../components/guest/MobilePaymentPopup";
+import { Book } from "../services/postAPI";
 function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [payload, setPayload] = useState({});
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -80,19 +81,21 @@ function GuestRoomDetail() {
       setPayment((prev) => prev);
     }
   }, [successPayment]);
+
   useEffect(() => {
     if (!range?.from || !range?.to || !payment || totalPrice <= 0) return;
 
-    const payload = {
+    setPayload({
       check_in: formatDateToYMD(range.from),
       check_out: formatDateToYMD(range.to),
-      room_id: roomId,
+      room_id: +roomId,
       payment_method: payment,
-      total_price: totalPrice,
-    };
+    });
   }, [payment, totalPrice, range, roomId]);
 
   useEffect(() => {
+    if (!payment || successPayment) return;
+
     if (payment === "mobile") {
       setOpenMobile(true);
       setOpenCard(false);
@@ -108,33 +111,62 @@ function GuestRoomDetail() {
       setOpenCard(false);
       toast.success("Cash payment selected. Pay at check-in.");
     }
-  }, [payment]);
-
-  useEffect(() => {
-    if (successPayment) {
-      setOpenMobile(false);
-      setOpenCard(false);
-    }
-  }, [successPayment]);
+  }, [payment, successPayment]);
 
   // Fix this
   const handleClose = () => setOpenMobile(false);
   const handleCardClose = () => setOpenCard(false);
 
-  function handleBook(e) {
+  async function handleBook(e) {
     e.preventDefault();
 
-    if (payment === "cash") {
-      toast.success("Booking confirmed! Pay at check-in.");
+    if (!payload?.check_in || !payload?.check_out) {
+      toast.error("Please select check-in and check-out dates");
       return;
     }
 
-    if (!successPayment) {
+    if (!payment) {
+      toast.error("Please select a payment method");
+      return;
+    }
+
+    if (payment !== "cash" && !successPayment) {
       toast.error("Please complete payment first");
       return;
     }
 
-    toast.success("Booking confirmed!");
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(
+          data?.message ||
+            data?.error ||
+            "Booking request failed. Please try again."
+        );
+      }
+
+      toast.success(
+        payment === "cash"
+          ? "Booking confirmed! Pay at check-in."
+          : "Booking confirmed! Payment successful."
+      );
+
+      setRange(undefined);
+      setPayment("");
+      setSuccessPayment(false);
+    } catch (err) {
+      toast.error(err.message || "Something went wrong. Please try again.");
+    }
   }
 
   return (
@@ -142,26 +174,29 @@ function GuestRoomDetail() {
       <Sticky pos={"top"}>
         <Navbar guest={guest} authenticated={authenticated} />
       </Sticky>
-      {loading && !error && <Loader loading={loading} />}
-      <Main style={"mb-6"}>
-        {!loading && !error && (
-          <>
-            <ImageDetail room={room} />
-            <BookDatePrice
-              range={range}
-              setRange={setRange}
-              price={room.price_per_night}
-              unavDates={unavDates}
-              authenticated={authenticated}
-              totalPrice={totalPrice}
-              setTotalPrice={setTotalPrice}
-              handleBook={handleBook}
-              setPayment={setPayment}
-              payment={payment}
-            />
-          </>
-        )}
-      </Main>
+      {loading && <Loader loading={loading} />}
+      {!loading && error && <p className="text-center text-red-500">{error}</p>}
+      {!loading && !error && (
+        <Main style={"mb-6"}>
+          {!loading && !error && (
+            <>
+              <ImageDetail room={room} />
+              <BookDatePrice
+                range={range}
+                setRange={setRange}
+                price={room.price_per_night}
+                unavDates={unavDates}
+                authenticated={authenticated}
+                totalPrice={totalPrice}
+                setTotalPrice={setTotalPrice}
+                handleBook={handleBook}
+                setPayment={setPayment}
+                payment={payment}
+              />
+            </>
+          )}
+        </Main>
+      )}
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
