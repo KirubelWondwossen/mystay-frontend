@@ -59,7 +59,7 @@ function App() {
           />
 
           <Route
-            path="/managerbookingsdetail"
+            path="/booking/:id"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerBookingsDetail />

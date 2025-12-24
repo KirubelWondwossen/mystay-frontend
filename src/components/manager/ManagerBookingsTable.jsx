@@ -57,7 +57,6 @@ function ManagerBookingsTable({ data, room }) {
         main={"From " + formatDateToReadable(data.check_in)}
         sub={"To " + formatDateToReadable(data.check_out)}
       />
-
       <span
         className="py-1 px-3 justify-self-start text-xs w-fit rounded-full"
         style={{
@@ -67,7 +66,6 @@ function ManagerBookingsTable({ data, room }) {
       >
         {data.status.toUpperCase()}
       </span>
-
       <div className="flex justify-between w-full ml-4">
         <span className="text-sm ">${data.total_price}</span>
 
@@ -77,8 +75,7 @@ function ManagerBookingsTable({ data, room }) {
           onClick={handlePopup}
         />
       </div>
-
-      <BookingOption popup={popup} popupRef={popupRef} />
+      <BookingOption popup={popup} popupRef={popupRef} id={data.id} />
     </div>
   );
 }
@@ -92,7 +89,7 @@ function NameDate({ main, sub }) {
   );
 }
 
-function BookingOption({ popup, popupRef }) {
+function BookingOption({ popup, popupRef, id }) {
   return (
     <div
       ref={popupRef}
@@ -100,7 +97,7 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
-      <Link to={"/managerbookingsdetail"}>
+      <Link to={`/booking/${id}`}>
         <IconDetail icon={EyeIcon} detail={"Details"} />
       </Link>
       <IconDetail icon={ArrowDownOnSquareIcon} detail={"Check-in"} />

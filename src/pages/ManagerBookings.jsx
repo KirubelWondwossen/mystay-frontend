@@ -48,12 +48,10 @@ function ManagerBookings() {
 
   const { token } = useAuth();
 
-  // 🔑 READ FILTER DIRECTLY (already normalized)
   const filterBy = searchParams.get("filter") || "All";
 
   const hasData = bookings.length > 0;
 
-  // ---------------- LOAD DATA ----------------
   useEffect(() => {
     const load = async () => {
       try {
@@ -78,7 +76,6 @@ function ManagerBookings() {
     if (token) load();
   }, [token]);
 
-  // ---------------- FILTER BOOKINGS ----------------
   useEffect(() => {
     let updated = [...bookings];
 
@@ -89,7 +86,6 @@ function ManagerBookings() {
     setFilteredBookings(updated);
   }, [bookings, filterBy]);
 
-  // ---------------- HANDLE FILTER CLICK ----------------
   function handleFilter(selectedFilter) {
     if (selectedFilter === "All") {
       searchParams.delete("filter");
