@@ -58,6 +58,27 @@ function GuestRoomDetail() {
   const accessToken = getCookie("access_token");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadGuest = async () => {
+      if (!accessToken) return;
+
+      setLoading(true);
+      try {
+        const guestData = await getGuestProfile(accessToken);
+        setGuest(guestData);
+      } catch (e) {
+        setGuest(null);
+        setError("User not authenticated, booking disabled");
+        console.log("User not authenticated", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGuest();
+  }, [accessToken]);
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -76,17 +97,6 @@ function GuestRoomDetail() {
       } catch (e) {
         setError(e.message);
         toast.error("Failed to load unavailable dates");
-      }
-
-      try {
-        const guestData = await getGuestProfile(accessToken);
-        setGuest(guestData);
-      } catch (e) {
-        setError(e.message);
-        setGuest(null);
-        console.log("User not authenticated, booking disabled");
-      } finally {
-        setLoading(false);
       }
 
       try {
@@ -207,7 +217,7 @@ function GuestRoomDetail() {
   return (
     <Page>
       <Sticky pos={"top"}>
-        <Navbar guest={guest} authenticated={authenticated} />
+        <Navbar guest={guest} />
       </Sticky>
       {loading && <Loader loading={loading} />}
       {!loading && error && <p className="text-center text-red-500">{error}</p>}

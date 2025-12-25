@@ -42,6 +42,7 @@ function HotelInfo() {
     const load = async () => {
       setLoading(true);
 
+      if (!authenticated) return;
       try {
         const guestData = await getGuestProfile(accessToken);
         setGuest(guestData);
@@ -52,6 +53,13 @@ function HotelInfo() {
       } finally {
         setLoading(false);
       }
+    };
+    load();
+  }, [accessToken, authenticated]);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
 
       try {
         const hotelData = await getHotel(id);
@@ -66,7 +74,7 @@ function HotelInfo() {
     };
 
     load();
-  }, [accessToken, id]);
+  }, [id]);
 
   useEffect(() => {
     const load = async () => {

@@ -6,62 +6,92 @@ import Main from "../components/layout/MainLayout";
 import SectionHeader from "../components/ui/SectionHeader";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
+import { useEffect, useState } from "react";
+import { getCookie } from "../utils/getCookie";
+import { getGuestProfile } from "../services/getAPi";
+import { Loader } from "../components/ui/Loader";
 
 function About() {
+  const [guest, setGuest] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const accessToken = getCookie("access_token");
+  useEffect(() => {
+    const loadGuest = async () => {
+      if (!accessToken) return;
+
+      setLoading(true);
+      try {
+        const guestData = await getGuestProfile(accessToken);
+        setGuest(guestData);
+      } catch (e) {
+        setGuest(null);
+        setError("User not authenticated, booking disabled");
+        console.log("User not authenticated", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGuest();
+  }, [accessToken]);
   return (
     <Page>
       <Sticky pos={"top"}>
-        <Navbar />
+        <Navbar guest={guest} />
       </Sticky>
-      <Main style={"mb-4 mt-8"}>
-        <ParagraphImg>
-          <ParagraphHolder>
-            <SectionHeader style={"text-start text-primary mb-5"}>
-              Welcome to MyStay
-            </SectionHeader>
-            <Paragraph>
-              Where comfort, convenience, and unforgettable stays come together.
-              MyStay makes finding your perfect place to stay effortless whether
-              you’re planning a weekend getaway, a business trip, or a family
-              vacation.
-            </Paragraph>
+      {loading && <Loader loading={loading} />}
+      {!loading && (
+        <Main style={"mb-4 mt-8"}>
+          <ParagraphImg>
+            <ParagraphHolder>
+              <SectionHeader style={"text-start text-primary mb-5"}>
+                Welcome to MyStay
+              </SectionHeader>
+              <Paragraph>
+                Where comfort, convenience, and unforgettable stays come
+                together. MyStay makes finding your perfect place to stay
+                effortless whether you’re planning a weekend getaway, a business
+                trip, or a family vacation.
+              </Paragraph>
 
-            <Paragraph>
-              We bring together the best stays from trusted hotels and
-              guesthouses, allowing you to compare prices, explore amenities,
-              and choose what fits your style and budget. From modern city
-              hotels to peaceful countryside retreats, MyStay connects you to
-              places that feel like home wherever you go.
-            </Paragraph>
+              <Paragraph>
+                We bring together the best stays from trusted hotels and
+                guesthouses, allowing you to compare prices, explore amenities,
+                and choose what fits your style and budget. From modern city
+                hotels to peaceful countryside retreats, MyStay connects you to
+                places that feel like home wherever you go.
+              </Paragraph>
 
-            <Paragraph>
-              It’s more than just booking a room it’s about creating memorable
-              experiences. Discover hidden gems, enjoy seamless booking, and
-              travel with confidence knowing that MyStay helps you find the
-              right stay, every time.
-            </Paragraph>
-          </ParagraphHolder>
+              <Paragraph>
+                It’s more than just booking a room it’s about creating memorable
+                experiences. Discover hidden gems, enjoy seamless booking, and
+                travel with confidence knowing that MyStay helps you find the
+                right stay, every time.
+              </Paragraph>
+            </ParagraphHolder>
 
-          <img src="/about/abt-1.jpg" />
-          <img src="/about/abt-2.jpg" />
-          <ParagraphHolder>
-            <SectionHeader style={"text-start text-primary mb-5"}>
-              Trusted Journeys
-            </SectionHeader>
-            <Paragraph>
-              Since our humble beginnings, MyStay has been more than just a
-              booking platform it’s a vision born from a love for exploration
-              and genuine hospitality.
-            </Paragraph>
-            <Paragraph>
-              Every feature of MyStay reflects our dedication to quality and
-              care. We’ve combined modern technology with a human touch,
-              ensuring that every user feels guided and valued.
-            </Paragraph>
-            <ButtonLink />
-          </ParagraphHolder>
-        </ParagraphImg>
-      </Main>
+            <img src="/about/abt-1.jpg" />
+            <img src="/about/abt-2.jpg" />
+            <ParagraphHolder>
+              <SectionHeader style={"text-start text-primary mb-5"}>
+                Trusted Journeys
+              </SectionHeader>
+              <Paragraph>
+                Since our humble beginnings, MyStay has been more than just a
+                booking platform it’s a vision born from a love for exploration
+                and genuine hospitality.
+              </Paragraph>
+              <Paragraph>
+                Every feature of MyStay reflects our dedication to quality and
+                care. We’ve combined modern technology with a human touch,
+                ensuring that every user feels guided and valued.
+              </Paragraph>
+              <ButtonLink />
+            </ParagraphHolder>
+          </ParagraphImg>
+        </Main>
+      )}
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>

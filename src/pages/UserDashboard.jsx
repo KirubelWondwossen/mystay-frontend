@@ -14,8 +14,9 @@ import Filter from "../components/search/Filter";
 import Page from "../components/layout/Page";
 import Main from "../components/layout/MainLayout";
 import { Loader } from "../components/ui/Loader";
-import { getRooms } from "../services/getAPi";
+import { getGuestProfile, getRooms } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
+import { getCookie } from "../utils/getCookie";
 
 const sortOptions = [
   { value: "name-asc", text: "A–Z" },
@@ -31,8 +32,29 @@ function UserDasboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [guest, setGuest] = useState();
   const filterType = searchParams.get("filter") || "all";
   const sortBy = searchParams.get("sortBy") || "name-asc";
+  const accessToken = getCookie("access_token");
+  useEffect(() => {
+    const loadGuest = async () => {
+      if (!accessToken) return;
+
+      setLoading(true);
+      try {
+        const guestData = await getGuestProfile(accessToken);
+        setGuest(guestData);
+      } catch (e) {
+        setGuest(null);
+        setError("User not authenticated, booking disabled");
+        console.log("User not authenticated", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGuest();
+  }, [accessToken]);
 
   useEffect(() => {
     const load = async () => {
@@ -103,6 +125,7 @@ function UserDasboard() {
           sortBy={sortBy}
           sortOptions={sortOptions}
           handleSort={handleSort}
+          guest={guest}
         />
       </Sticky>
       {loading && !error && <Loader loading />}

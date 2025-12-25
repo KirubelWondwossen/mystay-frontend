@@ -1,54 +1,59 @@
 import { useEffect, useState } from "react";
 import ProfileLayout from "../components/layout/ProfileLayout";
 import Subheader from "../components/ui/Subheader";
-import Button from "../components/ui/Button";
+import ErrorMessage from "../components/ui/ErrorMessage";
+import { getCookie } from "../utils/getCookie";
+import { getGuestProfile } from "../services/getAPi";
+import { Loader } from "../components/ui/Loader";
 
 function ProfileInfo() {
-  const [country, setCountry] = useState([]);
-
+  const [guest, setGuest] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const accessToken = getCookie("access_token");
   useEffect(() => {
-    async function fetchCountry() {
-      const res = await fetch("https://restcountries.com/v3.1/all?fields=name");
-      const data = await res.json();
-      const countryData = data.sort((a, b) =>
-        a.name.common.localeCompare(b.name.common)
-      );
+    const loadGuest = async () => {
+      if (!accessToken) return;
 
-      setCountry(countryData);
-    }
+      setLoading(true);
+      try {
+        const guestData = await getGuestProfile(accessToken);
+        setGuest(guestData);
+      } catch (e) {
+        setGuest(null);
+        setError("User not authenticated, booking disabled");
+        console.log("User not authenticated", e);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    fetchCountry();
-  }, []);
-
+    loadGuest();
+  }, [accessToken]);
   return (
     <ProfileLayout>
-      <div>
-        <Subheader>Update your profile</Subheader>
-        <p className="font-body text-lg mt-4">
-          Providing the following information will make your check-in process
-          faster and smoother. See you soon!
-        </p>
-      </div>
-      <Form country={country} />
-      <Button
-        className={
-          "self-end mb-11 bg-primary p-4 text-xl hover:bg-[#4338ca] text-white"
-        }
-      >
-        Update Profile
-      </Button>
+      {loading && <Loader loading={loading} />}
+      {error && <ErrorMessage message={error} />}
+      {!loading && !error && (
+        <div>
+          <Subheader>Update your profile</Subheader>
+          <p className="font-body text-lg mt-4">
+            Providing the following information will make your check-in process
+            faster and smoother. See you soon!
+          </p>
+        </div>
+      )}
+      <Form guest={guest} />
     </ProfileLayout>
   );
 }
 
-function Form({ country }) {
+function Form({ guest }) {
+  if (!guest) return null;
   return (
     <form className="bg-gray-200 p-2 flex flex-col gap-4 w-full">
-      <LabelInput label={"Full Name"} input={"Abel Alebachew"} />
-      <LabelInput label={"Email"} input={"abel@gmail.com"} />
-      <LabelInput label={"Where are you from"} input={""}>
-        <Select country={country} />
-      </LabelInput>
+      <LabelInput label={"Full Name"} input={guest.full_name} />
+      <LabelInput label={"Email"} input={guest.email} />
     </form>
   );
 }

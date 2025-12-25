@@ -7,6 +7,8 @@ import { Link, useLocation } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
 import SortBy from "./UserSortBy";
+import Button from "./Button";
+import { getCookie } from "../../utils/getCookie";
 
 function Navbar({
   handleOpenModal,
@@ -14,17 +16,24 @@ function Navbar({
   sortOptions,
   sortBy,
   handleSort,
-  authenticated,
   guest,
 }) {
+  const location = useLocation();
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setAuthenticated(!!getCookie("access_token"));
+  }, [location.pathname]);
+
   return (
     <nav
       className={`flex justify-between w-full p-3 ${
-        useLocation().pathname !== "/" ? "border-b" : ""
+        location.pathname !== "/" ? "border-b" : ""
       }`}
     >
       <Logo />
       <NavBtns
+        location={location}
         handleOpenModal={handleOpenModal}
         filterTxt={filterTxt}
         sortBy={sortBy}
@@ -38,7 +47,7 @@ function Navbar({
 }
 
 function NavBtns({
-  isOpen,
+  location,
   handleOpenModal,
   filterTxt,
   sortOptions,
@@ -48,12 +57,8 @@ function NavBtns({
   guest,
 }) {
   return (
-    <ul
-      className={`${
-        !isOpen && "invisible absolute"
-      } relative md:visible flex-col flex md:justify-between md:gap-3 md:flex-row right-4 sm:right-0 top-0 gap-2 items-start md:static`}
-    >
-      {useLocation().pathname === "/" ? (
+    <ul className="flex gap-2 items-center">
+      {location.pathname === "/" ? (
         <>
           <FilterSearchBtn
             handleOpenModal={handleOpenModal}
@@ -66,13 +71,15 @@ function NavBtns({
           />
         </>
       ) : (
-        <Link to={"/"}>
+        <Link to="/">
           <FilterSearchBtn filterTxt={filterTxt} />
         </Link>
       )}
-      <DarkLightModeBtns />
-      {authenticated && <ManagerProfile guest={guest} />}
+
       {location.pathname === "/" && <BecomeHostBtn />}
+
+      {authenticated && <ManagerProfile guest={guest} />}
+      {!authenticated && <LoginBtn location={location} />}
     </ul>
   );
 }
@@ -156,16 +163,31 @@ function IconHolder({ children, active, onClick }) {
     </button>
   );
 }
+function LoginBtn({ location }) {
+  const handleGoogleLogin = () => {
+    window.location.href =
+      `http://127.0.0.1:8000/api/auth/google/login` +
+      `?redirect=http://127.0.0.1:5173${location.pathname}`;
+  };
+
+  return (
+    <Button className="border p-2 rounded-xl" onClick={handleGoogleLogin}>
+      Login
+    </Button>
+  );
+}
 
 function ManagerProfile({ guest }) {
+  if (!guest) {
+    return <div className="w-8 h-8 rounded-full bg-gray-300 animate-pulse" />;
+  }
+
   return (
-    <div className={`gap-2 flex items-center`}>
-      <img
-        src={guest.avater_url}
-        alt="profile picture"
-        className="w-8 rounded-full"
-      />
+    <div className="flex gap-2 items-center cursor-pointer">
+      <img src={guest.avater_url} alt="profile" className="w-8 rounded-full" />
+      <span className="font-heading">{guest.full_name.split(" ")[0]}</span>
     </div>
   );
 }
+
 export default Navbar;

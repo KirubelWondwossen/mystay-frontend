@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { getDaysFromRange } from "../../utils/getDaysFromRange";
 import { DayPicker } from "react-day-picker";
-import { FaGoogle } from "react-icons/fa";
 import Button from "../ui/Button";
 
 export function BookDatePrice({
@@ -138,16 +137,6 @@ export function BookInfo({
 
   return (
     <div className="flex flex-col items-start gap-4">
-      {!authenticated && (
-        <Button
-          onClick={handleGoogleLogin}
-          className="flex items-center gap-2 border px-4 py-2 rounded"
-        >
-          <FaGoogle className="w-8" />
-          Continue with Google
-        </Button>
-      )}
-
       {authenticated && (
         <>
           <div className="flex items-center gap-4">

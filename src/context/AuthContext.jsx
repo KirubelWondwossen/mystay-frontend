@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext(null);
 
-// Storage keys per role
 const TOKEN_KEYS = {
   admin: "admin_token",
   manager: "manager_token",
@@ -18,7 +17,6 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
-  // Restore auth on page refresh
   useEffect(() => {
     const adminToken = localStorage.getItem(TOKEN_KEYS.admin);
     const managerToken = localStorage.getItem(TOKEN_KEYS.manager);
@@ -40,7 +38,6 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   }, []);
 
-  // LOGIN
   const login = (data, role) => {
     let userData = null;
 
@@ -70,7 +67,6 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(true);
   };
 
-  // LOGOUT (role-aware)
   const logout = () => {
     if (user?.role) {
       localStorage.removeItem(TOKEN_KEYS[user.role]);
