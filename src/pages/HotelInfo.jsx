@@ -18,6 +18,7 @@ import { Map } from "../components/ui/Map";
 import { HotelDetail } from "../components/hotel/HotelDetail";
 import RoomCardContainer from "../components/cards/RoomCardContainer";
 import RoomCard from "../components/cards/RoomCard";
+
 import { EmptyState } from "../components/ui/EmptyState";
 
 delete L.Icon.Default.prototype._getIconUrl;

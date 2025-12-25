@@ -28,7 +28,7 @@ function RoomCard({ room }) {
 
       <div className="p-4 flex flex-col gap-2 text-left">
         <div className="flex items-center gap-1">
-          <Link to={`hotel/${room.hotel_id}`}>
+          <Link to={`/hotel/${room.hotel_id}`}>
             <h3 className="text-lg font-heading font-semibold text-tSecondary">
               {room.hotel.name} ·{" "}
             </h3>

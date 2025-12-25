@@ -11,6 +11,7 @@ import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
 import {
   getGuestProfile,
+  getHotel,
   getRoomDetail,
   getUnavailableDates,
 } from "../services/getAPi";
@@ -22,6 +23,19 @@ import { ImageDetail } from "../components/guest/ImageDetail";
 import { BookDatePrice } from "../components/guest/BookDatePrice";
 import { CardPaymentPopup } from "../components/guest/CardPaymentPopup";
 import { MobilePaymentPopup } from "../components/guest/MobilePaymentPopup";
+
+// Leaflet
+import { Map } from "../components/ui/Map";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
+
 function GuestRoomDetail() {
   const [guest, setGuest] = useState(null);
   const [room, setRoom] = useState({});
@@ -37,6 +51,7 @@ function GuestRoomDetail() {
   const [openMobile, setOpenMobile] = useState(false);
   const [successPayment, setSuccessPayment] = useState(false);
   const [openCard, setOpenCard] = useState(false);
+  const [hotel, setHotel] = useState(null);
 
   const authenticated = Boolean(guest);
   const { roomId, hotelId } = useParams();
@@ -67,11 +82,23 @@ function GuestRoomDetail() {
         const guestData = await getGuestProfile(accessToken);
         setGuest(guestData);
       } catch (e) {
+        setError(e.message);
         setGuest(null);
         console.log("User not authenticated, booking disabled");
+      } finally {
+        setLoading(false);
       }
 
-      setLoading(false);
+      try {
+        const hotelData = await getHotel(hotelId);
+        setHotel(hotelData);
+      } catch (e) {
+        setHotel(null);
+        setError(e);
+        console.log("Hotel not found");
+      } finally {
+        setLoading(false);
+      }
     };
 
     load();
@@ -114,7 +141,6 @@ function GuestRoomDetail() {
     }
   }, [payment, successPayment]);
 
-  // Fix this
   const handleClose = () => setOpenMobile(false);
   const handleCardClose = () => setOpenCard(false);
 
@@ -190,6 +216,15 @@ function GuestRoomDetail() {
           {!loading && !error && (
             <>
               <ImageDetail room={room} />
+              {hotel && (
+                <div className="w-full h-[400px] mt-10 mb-10">
+                  <Map
+                    latitude={Number(hotel.exact_location.latitude)}
+                    longitude={Number(hotel.exact_location.longitude)}
+                    location={hotel.address}
+                  />
+                </div>
+              )}
               <BookDatePrice
                 range={range}
                 setRange={setRange}

@@ -16,7 +16,7 @@ export function RoomDetail({ room }) {
       </h4>
       <TextIcon icon={BuildingOffice2Icon}>
         <div className="flex items-center gap-4">
-          <Link to={`hotel/${room.hotel_id}`}>
+          <Link to={`/hotel/${room.hotel_id}`}>
             <h3 className="text-2xl font-heading font-semibold text-tSecondary">
               {room.hotel?.name} ·{" "}
             </h3>
