@@ -25,7 +25,7 @@ function AdminManagerDetail() {
         setLoading(true);
         const manager = await getManager(id, token);
         setManager(manager);
-        const hotel = await getHotel(manager.hotel.id, token);
+        const hotel = await getHotel(manager.hotel.id);
         setHotel(hotel);
       } catch (e) {
         setError(e.message);

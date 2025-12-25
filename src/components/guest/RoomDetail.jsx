@@ -6,7 +6,7 @@ import {
   CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 import RatingStars from "../ui/RatingStars";
-// import { TextIcon, Tag, Description } from "./GuestRoomDetail";
+import { Link } from "react-router-dom";
 
 export function RoomDetail({ room }) {
   return (
@@ -16,9 +16,11 @@ export function RoomDetail({ room }) {
       </h4>
       <TextIcon icon={BuildingOffice2Icon}>
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-heading font-semibold text-tSecondary">
-            {room.hotel?.name} ·{" "}
-          </h3>
+          <Link to={`hotel/${room.hotel_id}`}>
+            <h3 className="text-2xl font-heading font-semibold text-tSecondary">
+              {room.hotel?.name} ·{" "}
+            </h3>
+          </Link>
           <RatingStars star={room.hotel?.rating} w={"6"} />
         </div>
       </TextIcon>

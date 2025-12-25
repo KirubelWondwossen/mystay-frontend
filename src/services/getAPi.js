@@ -38,7 +38,6 @@ export async function apiFetchGoogle(url) {
 
 // For Admins
 export const getManager = (id, token) => apiFetch(`/hotelmanager/${id}`, token);
-export const getHotel = (id, token) => apiFetch(`/hotels/${id}`, token);
 export const getManagers = (token) => apiFetch("/hotelmanager/", token);
 
 // For guest
@@ -61,3 +60,6 @@ export const getUnavailableDates = (roomId) =>
   apiFetch(`/hotels/rooms/${roomId}/unavailable-dates`);
 
 export const getGuestProfile = (token) => apiFetch(`/guest/profile`, token);
+
+// Hotel
+export const getHotel = (id) => apiFetch(`/hotels/${id}`);

@@ -20,6 +20,7 @@ import ManagerLogin from "./pages/ManagerLogin";
 import AdminManagerList from "./pages/AdminManagersList";
 import AdminManagerDetail from "./pages/AdminManagerDetail";
 import GuestRoomDetail from "./pages/GuestRoomDetail";
+import HotelInfo from "./components/hotel/HotelInfo";
 
 function App() {
   return (
@@ -116,6 +117,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/hotel/:id" element={<HotelInfo />} />
         </Routes>
       </div>
     </Router>
