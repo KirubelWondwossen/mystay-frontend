@@ -20,7 +20,7 @@ import ManagerLogin from "./pages/ManagerLogin";
 import AdminManagerList from "./pages/AdminManagersList";
 import AdminManagerDetail from "./pages/AdminManagerDetail";
 import GuestRoomDetail from "./pages/GuestRoomDetail";
-import HotelInfo from "./components/hotel/HotelInfo";
+import HotelInfo from "./pages/HotelInfo";
 
 function App() {
   return (

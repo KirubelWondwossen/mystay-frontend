@@ -1,12 +1,12 @@
-import Page from "../layout/Page";
-import Navbar from "../ui/Navbar";
-import Sticky from "../layout/Sticky";
-import Main from "../layout/MainLayout";
-import BottomNav from "../ui/BottomNav";
+import Page from "../components/layout/Page";
+import Navbar from "../components/ui/Navbar";
+import Sticky from "../components/layout/Sticky";
+import Main from "../components/layout/MainLayout";
+import BottomNav from "../components/ui/BottomNav";
 import { useEffect, useState } from "react";
-import { getGuestProfile, getHotel } from "../../services/getAPi";
-import { getCookie } from "../../utils/getCookie";
-import { Loader } from "../ui/Loader";
+import { getGuestProfile, getHotel, getRooms } from "../services/getAPi";
+import { getCookie } from "../utils/getCookie";
+import { Loader } from "../components/ui/Loader";
 import { useParams } from "react-router-dom";
 
 // Leaflet
@@ -14,8 +14,11 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
-import { Map } from "../ui/Map";
-import { HotelDetail } from "./HotelDetail";
+import { Map } from "../components/ui/Map";
+import { HotelDetail } from "../components/hotel/HotelDetail";
+import RoomCardContainer from "../components/cards/RoomCardContainer";
+import RoomCard from "../components/cards/RoomCard";
+import { EmptyState } from "../components/ui/EmptyState";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -28,6 +31,8 @@ function HotelInfo() {
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [rooms, setRooms] = useState([]);
+
   const accessToken = getCookie("access_token");
   const authenticated = Boolean(guest);
   const { id } = useParams();
@@ -43,6 +48,8 @@ function HotelInfo() {
         setGuest(null);
         setError(e);
         console.log("User not authenticated, booking disabled");
+      } finally {
+        setLoading(false);
       }
 
       try {
@@ -52,13 +59,29 @@ function HotelInfo() {
         setHotel(null);
         setError(e);
         console.log("Hotel not found");
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     load();
   }, [accessToken, id]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const roomData = await getRooms();
+        setRooms(roomData);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
 
   return (
     <Page>
@@ -81,6 +104,20 @@ function HotelInfo() {
             )}
             <HotelDetail hotel={hotel} />
           </ImageDetail>
+          <h3 className="font-heading text-4xl self-start text-tSecondary font-bold mb-6">
+            Hotel Rooms
+          </h3>
+          {rooms.length ===
+          (
+            <EmptyState
+              title={"No rooms"}
+              description={"This hotel does not have rooms"}
+            />
+          )}
+          <RoomCardContainer>
+            {rooms.length > 0 &&
+              rooms.map((room) => <RoomCard key={room.id} room={room} />)}
+          </RoomCardContainer>
         </Main>
       )}
 
