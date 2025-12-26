@@ -44,9 +44,9 @@ function App() {
           />
 
           {/* Manager  */}
-          <Route path="/managerlogin" element={<ManagerLogin />} />
+          <Route path="/manager/login" element={<ManagerLogin />} />
           <Route
-            path="/managerhome"
+            path="/manager/home"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerHome />
@@ -54,7 +54,7 @@ function App() {
             }
           />
           <Route
-            path="/managerbookings"
+            path="/manager/bookings"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerBookings />
@@ -71,7 +71,7 @@ function App() {
             }
           />
           <Route
-            path="/managerrooms"
+            path="/manager/rooms"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerRooms />
@@ -79,7 +79,7 @@ function App() {
             }
           />
           <Route
-            path="/managerprofile/:id"
+            path="/manager/profile/:id"
             element={
               <ProtectedRoute allowedRoles={["manager"]}>
                 <ManagerProfile />
@@ -94,11 +94,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/manager/application" element={<ManagerApplication />} />
           {/* Admin */}
-          <Route path="/adminlogin" element={<AdminLogin />} />
-          <Route path="/managerapplication" element={<ManagerApplication />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route
-            path="/adminapplication"
+            path="/admin/application"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminApplication />
@@ -122,7 +122,7 @@ function App() {
             }
           />
           <Route
-            path="/adminmanagerslist"
+            path="/admin/managerslist"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminManagerList />

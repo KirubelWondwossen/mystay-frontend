@@ -19,45 +19,45 @@ function ManagerSidebar() {
     <aside className="w-42 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden bg-white">
       <Logo className={"p-3"} />
       <ManagerBtnList
-        path={"/managerhome"}
+        path={"/manager/home"}
         className={"w-full"}
-        loc={location.pathname === "/managerhome"}
+        loc={location.pathname === "/manager/home"}
       >
-        <Icon icon={HomeIcon} color={location.pathname === "/managerhome"} />
+        <Icon icon={HomeIcon} color={location.pathname === "/manager/home"} />
         <SideBtnName>Home</SideBtnName>
       </ManagerBtnList>
 
       <ManagerBtnList
-        path={"/managerbookings"}
+        path={"/manager/bookings"}
         className={"w-full"}
-        loc={location.pathname === "/managerbookings"}
+        loc={location.pathname === "/manager/bookings"}
       >
         <Icon
           icon={CalendarDateRangeIcon}
-          color={location.pathname === "/managerbookings"}
+          color={location.pathname === "/manager/bookings"}
         />
         <SideBtnName>Bookings</SideBtnName>
       </ManagerBtnList>
 
       <ManagerBtnList
-        path={"/managerrooms"}
+        path={"/manager/rooms"}
         className={"w-full"}
-        loc={location.pathname === "/managerrooms"}
+        loc={location.pathname === "/manager/rooms"}
       >
         <Icon
           icon={HomeModernIcon}
-          color={location.pathname === "/managerrooms"}
+          color={location.pathname === "/manager/rooms"}
         />
         <SideBtnName>Rooms</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
-        path={`/managerprofile/${id}`}
+        path={`/manager/profile/${id}`}
         className={"w-full"}
-        loc={location.pathname === `/managerprofile/${id}`}
+        loc={location.pathname === `/manager/profile/${id}`}
       >
         <Icon
           icon={UsersIcon}
-          color={location.pathname === `/managerprofile/${id}`}
+          color={location.pathname === `/manager/profile/${id}`}
         />
         <SideBtnName>Profile</SideBtnName>
       </ManagerBtnList>

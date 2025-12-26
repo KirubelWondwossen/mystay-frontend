@@ -10,17 +10,17 @@ function AdminSidebar() {
     <aside className="w-42 py-5 flex flex-col gap-2 border-r items-start sticky top-[5rem] h-screen overflow-hidden bg-white">
       <Logo className={"p-3"} />
       <ManagerBtnList
-        path={"/adminapplication"}
+        path={"/admin/application"}
         className={"w-full"}
-        loc={location.pathname === "/adminapplication"}
+        loc={location.pathname === "/admin/application"}
       >
         <Icon icon={HomeIcon} />
         <SideBtnName>Applications</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
-        path={"/adminmanagerslist"}
+        path={"/admin/managers/list"}
         className={"w-full"}
-        loc={location.pathname === "/adminmanagerslist"}
+        loc={location.pathname === "/admin/managers/list"}
       >
         <Icon icon={UsersIcon} />
         <SideBtnName>Managers</SideBtnName>
