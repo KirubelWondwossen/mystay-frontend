@@ -4,12 +4,7 @@ import Sticky from "../components/layout/Sticky";
 import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
 import { useEffect, useState } from "react";
-import {
-  getGuestProfile,
-  getHotel,
-  getHotelRooms,
-  getRooms,
-} from "../services/getAPi";
+import { getGuestProfile, getHotel, getHotelRooms } from "../services/getAPi";
 import { getCookie } from "../utils/getCookie";
 import { Loader } from "../components/ui/Loader";
 import { useParams } from "react-router-dom";
@@ -40,27 +35,27 @@ function HotelInfo() {
   const [rooms, setRooms] = useState([]);
 
   const accessToken = getCookie("access_token");
-  const authenticated = Boolean(guest);
   const { id } = useParams();
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
+    const loadGuest = async () => {
+      if (!accessToken) {
+        setLoading(false);
+        return;
+      }
 
-      if (!authenticated) return;
       try {
         const guestData = await getGuestProfile(accessToken);
         setGuest(guestData);
-      } catch (e) {
+      } catch {
         setGuest(null);
-        setError(e);
-        console.log("User not authenticated, booking disabled");
       } finally {
         setLoading(false);
       }
     };
-    load();
-  }, [accessToken, authenticated]);
+
+    loadGuest();
+  }, [accessToken]);
 
   useEffect(() => {
     const load = async () => {
@@ -100,7 +95,7 @@ function HotelInfo() {
   return (
     <Page>
       <Sticky pos={"top"}>
-        <Navbar guest={guest} authenticated={authenticated} />
+        <Navbar guest={guest} />
       </Sticky>
 
       {loading && <Loader loading={loading} />}

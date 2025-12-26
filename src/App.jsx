@@ -21,12 +21,14 @@ import AdminManagerList from "./pages/AdminManagersList";
 import AdminManagerDetail from "./pages/AdminManagerDetail";
 import GuestRoomDetail from "./pages/GuestRoomDetail";
 import HotelInfo from "./pages/HotelInfo";
+import ManagerHotelInfo from "./pages/ManagerHotelInfo";
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
         <Routes>
+          {/* Guest */}
           <Route path="/" element={<UserDasboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/profile/home" element={<ProfileHome />} />
@@ -41,6 +43,7 @@ function App() {
             element={<GuestRoomDetail />}
           />
 
+          {/* Manager  */}
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route
             path="/managerhome"
@@ -83,6 +86,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/manager/hotel/info"
+            element={
+              <ProtectedRoute allowedRoles={["manager"]}>
+                <ManagerHotelInfo />
+              </ProtectedRoute>
+            }
+          />
+          {/* Admin */}
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/managerapplication" element={<ManagerApplication />} />
           <Route

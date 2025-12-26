@@ -30,6 +30,9 @@ export async function apiPatchJson(url, token, data) {
 export const updateRooms = (hotelID, roomID, token, data) =>
   apiPatchJson(`/hotels/${hotelID}/rooms/${roomID}`, token, data);
 
+export const updateHotel = (hotelId, token, data) =>
+  apiPatchJson(`/hotels/${hotelId}`, token, data);
+
 export const checkIn = (id, token) =>
   apiPatchJson(`/bookings/${id}/confirm`, token);
 

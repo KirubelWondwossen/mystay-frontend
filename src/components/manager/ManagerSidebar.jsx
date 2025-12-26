@@ -6,6 +6,7 @@ import {
   CalendarDateRangeIcon,
   HomeIcon,
   UsersIcon,
+  BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../../context/AuthContext";
 
@@ -59,6 +60,17 @@ function ManagerSidebar() {
           color={location.pathname === `/managerprofile/${id}`}
         />
         <SideBtnName>Profile</SideBtnName>
+      </ManagerBtnList>
+      <ManagerBtnList
+        path={"/manager/hotel/info"}
+        className={"w-full"}
+        loc={location.pathname === "/manager/hotel/info"}
+      >
+        <Icon
+          icon={BuildingOffice2Icon}
+          color={location.pathname === "/manager/hotel/info"}
+        />
+        <SideBtnName>Hotel Info</SideBtnName>
       </ManagerBtnList>
     </aside>
   );
