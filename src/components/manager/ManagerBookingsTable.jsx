@@ -13,11 +13,13 @@ const statusColors = {
   confirmed: "#dcfce7",
   pending: "#FEF9C3",
   cancelled: "#FECACA",
+  completed: "#e0f2fe",
 };
 const statusTxtColors = {
   pending: "#D97706",
   confirmed: "#15803d",
   cancelled: "#B91C1C",
+  completed: "#0369a1",
 };
 function ManagerBookingsTable({ data, room }) {
   const [popup, setPopup] = useState(false);

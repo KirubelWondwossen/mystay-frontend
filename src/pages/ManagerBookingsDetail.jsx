@@ -13,18 +13,20 @@ import { Loader } from "../components/ui/Loader";
 import { formatBookingDates } from "../utils/formatBookingDates";
 import { formatTimestamp } from "../utils/formatTimeStamp";
 import ErrorMessage from "../components/ui/ErrorMessage";
-import { cancelBooking, checkIn } from "../services/patchAPI";
+import { cancelBooking, checkIn, completeBooking } from "../services/patchAPI";
 import { useNavigate } from "react-router-dom";
 
 const statusColors = {
   confirmed: "#dcfce7",
   pending: "#FEF9C3",
   cancelled: "#FECACA",
+  completed: "#e0f2fe",
 };
 const statusTxtColors = {
   pending: "#D97706",
   confirmed: "#15803d",
   cancelled: "#B91C1C",
+  completed: "#0369a1",
 };
 
 function ManagerBookingDetails() {
@@ -93,6 +95,20 @@ function ManagerBookingDetails() {
       toast.error(error.message || "Unable to cancel booking");
     }
   }
+  async function handleComplete() {
+    try {
+      const res = await completeBooking(id, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Booking complete failed");
+      }
+
+      toast.success("Booking completed successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to ccomplete booking");
+    }
+  }
 
   return (
     <ManagerLayout>
@@ -110,6 +126,7 @@ function ManagerBookingDetails() {
           handleCheckin={handleCheckin}
           currentBook={currentBook}
           handleCancelBooking={handleCancelBooking}
+          handleComplete={handleComplete}
         />
       </div>
       <Toaster
@@ -179,32 +196,53 @@ function BookingDetails({ currentBook }) {
   );
 }
 
-function DetailButtons({ handleCheckin, currentBook, handleCancelBooking }) {
+function DetailButtons({
+  handleCheckin,
+  currentBook,
+  handleCancelBooking,
+  handleComplete,
+}) {
   return (
     <div className="flex gap-2 self-end">
       {currentBook?.status === "pending" && (
         <>
           <Button
             onClick={handleCheckin}
-            className={
-              "bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
-            }
+            className="bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
           >
             Check-in
           </Button>
 
           <Button
-            className={"bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"}
             onClick={handleCancelBooking}
+            className="bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"
           >
             Cancel
           </Button>
         </>
       )}
-      <Link to={"/managerbookings"} className="font-heading text-primary">
-        <Button
-          className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}
-        >
+
+      {/* CONFIRMED */}
+      {currentBook?.status === "confirmed" && (
+        <>
+          <Button
+            onClick={handleComplete}
+            className="bg-primary rounded-lg p-2 text-white hover:bg-[#4338ca]"
+          >
+            Complete
+          </Button>
+
+          <Button
+            onClick={handleCancelBooking}
+            className="bg-error rounded-lg p-2 text-white hover:bg-[#a71919]"
+          >
+            Cancel
+          </Button>
+        </>
+      )}
+
+      <Link to="/managerbookings">
+        <Button className="border border-tSecondary rounded-lg p-2 text-tSecondary">
           Back
         </Button>
       </Link>

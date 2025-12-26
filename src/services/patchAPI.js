@@ -35,3 +35,6 @@ export const checkIn = (id, token) =>
 
 export const cancelBooking = (id, token) =>
   apiPatchJson(`/bookings/${id}/cancel`, token);
+
+export const completeBooking = (id, token) =>
+  apiPatchJson(`/bookings/${id}/complete`, token);

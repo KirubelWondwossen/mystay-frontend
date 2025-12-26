@@ -1,23 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 
-import {
-  ArrowDownOnSquareIcon,
-  EllipsisVerticalIcon,
-  EyeIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { formatDateToReadable } from "../../utils/formatDateToReadable";
 
 const statusColors = {
   confirmed: "#dcfce7",
   pending: "#FEF9C3",
   cancelled: "#FECACA",
+  completed: "#e0f2fe",
 };
 const statusTxtColors = {
   pending: "#D97706",
   confirmed: "#15803d",
   cancelled: "#B91C1C",
+  completed: "#0369a1",
 };
 function GuestReservationTable({ data }) {
   const [popup, setPopup] = useState(false);

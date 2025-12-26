@@ -7,6 +7,10 @@ import { getBookings } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import GuestReservationTable from "../components/guest/guestReservationTable";
+import { cancelBooking } from "../services/patchAPI";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
 const fields = ["Dates", "Status", "Amount"];
 
 function ProfileReservations() {
@@ -15,6 +19,8 @@ function ProfileReservations() {
   const [error, setError] = useState(null);
   const accessToken = getCookie("access_token");
   const { id } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const load = async () => {
       if (!accessToken) return;
@@ -35,7 +41,21 @@ function ProfileReservations() {
 
     load();
   }, [accessToken, id]);
-  console.log(bookings);
+
+  async function handleCancelBooking() {
+    try {
+      const res = await cancelBooking(id, accessToken);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Booking cancel failed");
+      }
+
+      toast.success("Booking cancelled successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to cancel booking");
+    }
+  }
 
   return (
     <ProfileLayout>
@@ -62,6 +82,17 @@ function ProfileReservations() {
           </div>
         </>
       )}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            minWidth: "250px",
+            maxWidth: "600px",
+          },
+        }}
+      />
     </ProfileLayout>
   );
 }
