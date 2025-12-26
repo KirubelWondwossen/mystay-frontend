@@ -17,6 +17,7 @@ import { Loader } from "../components/ui/Loader";
 import { getGuestProfile, getRooms } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
 import { getCookie } from "../utils/getCookie";
+import Button from "../components/ui/Button";
 
 const sortOptions = [
   { value: "name-asc", text: "A–Z" },
@@ -36,6 +37,9 @@ function UserDasboard() {
   const filterType = searchParams.get("filter") || "all";
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const accessToken = getCookie("access_token");
+  const VISIBLE_ROOMS = 8;
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_ROOMS);
+
   useEffect(() => {
     const loadGuest = async () => {
       if (!accessToken) return;
@@ -93,6 +97,10 @@ function UserDasboard() {
     setFilteredRooms(updatedRooms);
   }, [rooms, filterType, sortBy]);
 
+  useEffect(() => {
+    setVisibleCount(VISIBLE_ROOMS);
+  }, [filterType, sortBy]);
+
   function handleFilter(selectedFilter) {
     if (selectedFilter.toLowerCase() === "all") searchParams.delete("filter");
     else searchParams.set("filter", selectedFilter);
@@ -145,10 +153,30 @@ function UserDasboard() {
               )}
               {filteredRooms.length > 0 && (
                 <RoomCardContainer>
-                  {filteredRooms.map((room) => (
+                  {filteredRooms.slice(0, visibleCount).map((room) => (
                     <RoomCard key={room.id} room={room} />
                   ))}
                 </RoomCardContainer>
+              )}
+              {visibleCount < filteredRooms.length && (
+                <Button
+                  onClick={() => setVisibleCount((c) => c + VISIBLE_ROOMS)}
+                  className="px-6 py-3 bg-primary text-white rounded-xl  mt-8"
+                >
+                  Load more
+                </Button>
+              )}
+              {visibleCount > VISIBLE_ROOMS && (
+                <Button
+                  onClick={() =>
+                    setVisibleCount((c) =>
+                      Math.max(VISIBLE_ROOMS, c - VISIBLE_ROOMS)
+                    )
+                  }
+                  className="px-6 py-3 border border-primary text-primary rounded-xl mt-8"
+                >
+                  Load less
+                </Button>
               )}
               <Footer />
             </>
