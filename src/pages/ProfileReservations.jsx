@@ -42,9 +42,10 @@ function ProfileReservations() {
     load();
   }, [accessToken, id]);
 
-  async function handleCancelBooking() {
+  async function handleCancelBooking(roomId) {
     try {
-      const res = await cancelBooking(id, accessToken);
+      const res = await cancelBooking(roomId, accessToken);
+      console.log(res);
 
       if (!res || res.error) {
         throw new Error(res?.error || "Booking cancel failed");
@@ -56,7 +57,6 @@ function ProfileReservations() {
       toast.error(error.message || "Unable to cancel booking");
     }
   }
-
   return (
     <ProfileLayout>
       {loading && <Loader loading={loading} />}
@@ -77,7 +77,11 @@ function ProfileReservations() {
             {bookings &&
               bookings.length > 0 &&
               bookings.map((booking) => (
-                <GuestReservationTable data={booking} key={booking.id} />
+                <GuestReservationTable
+                  data={booking}
+                  key={booking.id}
+                  handleCancelBookings={handleCancelBooking}
+                />
               ))}
           </div>
         </>

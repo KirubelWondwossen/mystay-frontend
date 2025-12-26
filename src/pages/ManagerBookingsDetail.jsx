@@ -81,6 +81,7 @@ function ManagerBookingDetails() {
       toast.error(error.message || "Unable to check in");
     }
   }
+
   async function handleCancelBooking() {
     try {
       const res = await cancelBooking(id, token);

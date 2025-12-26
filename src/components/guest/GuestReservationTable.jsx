@@ -15,7 +15,7 @@ const statusTxtColors = {
   cancelled: "#B91C1C",
   completed: "#0369a1",
 };
-function GuestReservationTable({ data }) {
+function GuestReservationTable({ data, handleCancelBookings }) {
   const [popup, setPopup] = useState(false);
 
   const popupRef = useRef(null);
@@ -61,13 +61,28 @@ function GuestReservationTable({ data }) {
       <div className="flex justify-between w-full ml-4">
         <span className="text-sm ">${data.total_price}</span>
 
-        <EllipsisVerticalIcon
-          ref={iconRef}
-          className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
-          onClick={handlePopup}
-        />
+        {data && data.status === "pending" && (
+          <EllipsisVerticalIcon
+            ref={iconRef}
+            className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
+            onClick={handlePopup}
+          />
+        )}
+        {data && data.status === "confirmed" && (
+          <EllipsisVerticalIcon
+            ref={iconRef}
+            className="w-5 cursor-pointer hover:bg-[#f9fafb] rounded-sm"
+            onClick={handlePopup}
+          />
+        )}
       </div>
-      <BookingOption popup={popup} popupRef={popupRef} />
+
+      <BookingOption
+        popup={popup}
+        popupRef={popupRef}
+        handleCancelBookings={handleCancelBookings}
+        bookingId={data.id}
+      />
     </div>
   );
 }
@@ -81,7 +96,7 @@ function NameDate({ main, sub }) {
   );
 }
 
-function BookingOption({ popup, popupRef }) {
+function BookingOption({ popup, popupRef, handleCancelBookings, bookingId }) {
   return (
     <div
       ref={popupRef}
@@ -89,15 +104,23 @@ function BookingOption({ popup, popupRef }) {
         popup ? "visible" : "invisible"
       } bg-white w-fit  shadow-lg rounded-md flex flex-col z-50 absolute left-[72%] top-[20%]`}
     >
-      <IconDetail icon={TrashIcon} detail={"Cancel reservation"} />
+      <IconDetail
+        icon={TrashIcon}
+        detail={"Cancel reservation"}
+        handleCancelBookings={handleCancelBookings}
+        bookingId={bookingId}
+      />
     </div>
   );
 }
 
 // eslint-disable-next-line
-function IconDetail({ icon: Icon, detail }) {
+function IconDetail({ icon: Icon, detail, handleCancelBookings, bookingId }) {
   return (
-    <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">
+    <div
+      className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2"
+      onClick={() => handleCancelBookings(bookingId)}
+    >
       <Icon className="w-4" />
       <span className="font-heading text-sm">{detail}</span>
     </div>

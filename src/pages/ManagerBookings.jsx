@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { ManagerFilter } from "../components/manager/ManagerFilter";
@@ -19,6 +19,7 @@ import {
   getRooms,
 } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
+import { cancelBooking, checkIn, completeBooking } from "../services/patchAPI";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -47,10 +48,9 @@ function ManagerBookings() {
   const ref = useRef(null);
 
   const { token } = useAuth();
-
   const filterBy = searchParams.get("filter") || "All";
-
   const hasData = bookings.length > 0;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const load = async () => {
@@ -85,6 +85,51 @@ function ManagerBookings() {
 
     setFilteredBookings(updated);
   }, [bookings, filterBy]);
+
+  async function handleCheckin(bookingId) {
+    try {
+      const res = await checkIn(bookingId, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Check-in failed");
+      }
+
+      toast.success("Guest checked in successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to check in");
+    }
+  }
+
+  async function handleCancelBooking(bookingId) {
+    try {
+      const res = await cancelBooking(bookingId, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Booking cancel failed");
+      }
+
+      toast.success("Booking cancelled successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to cancel booking");
+    }
+  }
+
+  async function handleComplete(bookingId) {
+    try {
+      const res = await completeBooking(bookingId, token);
+
+      if (!res || res.error) {
+        throw new Error(res?.error || "Booking complete failed");
+      }
+
+      toast.success("Booking completed successfully");
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "Unable to ccomplete booking");
+    }
+  }
 
   function handleFilter(selectedFilter) {
     if (selectedFilter === "All") {
@@ -142,7 +187,14 @@ function ManagerBookings() {
               <>
                 <ManagerTableCols fields={fields} />
                 {filteredBookings.map((el) => (
-                  <ManagerBookingsTable key={el.id} data={el} room={rooms} />
+                  <ManagerBookingsTable
+                    key={el.id}
+                    data={el}
+                    room={rooms}
+                    handleCancelBooking={handleCancelBooking}
+                    handleCheckin={handleCheckin}
+                    handleComplete={handleComplete}
+                  />
                 ))}
               </>
             )}

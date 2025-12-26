@@ -6,6 +6,7 @@ import {
   EllipsisVerticalIcon,
   EyeIcon,
   TrashIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/outline";
 import { formatDateToReadable } from "../../utils/formatDateToReadable";
 
@@ -21,7 +22,13 @@ const statusTxtColors = {
   cancelled: "#B91C1C",
   completed: "#0369a1",
 };
-function ManagerBookingsTable({ data, room }) {
+function ManagerBookingsTable({
+  data,
+  room,
+  handleCheckin,
+  handleCancelBookings,
+  handleComplete,
+}) {
   const [popup, setPopup] = useState(false);
 
   const popupRef = useRef(null);
@@ -76,7 +83,15 @@ function ManagerBookingsTable({ data, room }) {
           onClick={handlePopup}
         />
       </div>
-      <BookingOption popup={popup} popupRef={popupRef} id={data.id} />
+      <BookingOption
+        popup={popup}
+        popupRef={popupRef}
+        id={data.id}
+        handleCancelBookings={handleCancelBookings}
+        handleCheckin={handleCheckin}
+        handleComplete={handleComplete}
+        status={data.status}
+      />
     </div>
   );
 }
@@ -90,7 +105,15 @@ function NameDate({ main, sub }) {
   );
 }
 
-function BookingOption({ popup, popupRef, id }) {
+function BookingOption({
+  popup,
+  popupRef,
+  id,
+  handleCancelBookings,
+  handleCheckin,
+  status,
+  handleComplete,
+}) {
   return (
     <div
       ref={popupRef}
@@ -99,18 +122,55 @@ function BookingOption({ popup, popupRef, id }) {
       } bg-white w-36 shadow-lg rounded-md flex flex-col z-50 absolute right-0 top-[75%]`}
     >
       <Link to={`/booking/${id}`}>
-        <IconDetail icon={EyeIcon} detail={"Details"} />
+        <IconDetail icon={EyeIcon} detail="Details" />
       </Link>
-      <IconDetail icon={ArrowDownOnSquareIcon} detail={"Check-in"} />
-      <IconDetail icon={TrashIcon} detail={"Delete"} />
+
+      {status === "pending" && (
+        <>
+          <IconDetail
+            icon={ArrowDownOnSquareIcon}
+            detail="Check-in"
+            onClick={handleCheckin}
+            id={id}
+          />
+
+          <IconDetail
+            icon={TrashIcon}
+            detail="Cancel"
+            onClick={handleCancelBookings}
+            id={id}
+          />
+        </>
+      )}
+
+      {status === "confirmed" && (
+        <>
+          <IconDetail
+            icon={CheckCircleIcon}
+            detail="Complete"
+            onClick={handleComplete}
+            id={id}
+          />
+
+          <IconDetail
+            icon={TrashIcon}
+            detail="Cancel"
+            onClick={handleCancelBookings}
+            id={id}
+          />
+        </>
+      )}
     </div>
   );
 }
 
 // eslint-disable-next-line
-function IconDetail({ icon: Icon, detail }) {
+function IconDetail({ icon: Icon, detail, onClick, id }) {
   return (
-    <div className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2">
+    <div
+      className="flex gap-2 hover:bg-[#f9fafb] cursor-pointer p-2"
+      onClick={() => onClick(id)}
+    >
       <Icon className="w-4" />
       <span className="font-body text-xs">{detail}</span>
     </div>
