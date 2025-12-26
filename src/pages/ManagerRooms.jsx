@@ -22,6 +22,7 @@ import ManagerAddRoomPopup from "../components/manager/ManagerAddRoomPopup";
 import { getManagerInfo, getRoomsManager } from "../services/getAPi";
 import { deleteRoom } from "../services/deleteAPI";
 import WarningPopup from "../components/ui/WarningPopup";
+import PrevNext from "../components/ui/PrevNext";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -37,6 +38,7 @@ const sortOptions = [
 ];
 
 const fields = ["Room", "Room Type", "Bed Type", "Price"];
+const PAGE_SIZE = 9;
 
 function ManagerRooms() {
   const [rooms, setRooms] = useState([]);
@@ -48,7 +50,7 @@ function ManagerRooms() {
   const [error, setError] = useState(null);
   const [roomToDelete, setRoomToDelete] = useState(null);
   const [refresh, setRefresh] = useState(false);
-
+  const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
@@ -56,6 +58,10 @@ function ManagerRooms() {
   const { token } = useAuth();
   const hasData = rooms.length > 0;
   const ref = useRef();
+
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedRooms = filteredRooms.slice(startIndex, endIndex);
 
   useEffect(() => {
     if (!token) return;
@@ -155,6 +161,9 @@ function ManagerRooms() {
     }
   };
 
+  useEffect(() => {
+    setPage(1);
+  }, [filter, sortBy]);
   return (
     <ManagerLayout
       loading={loading}
@@ -191,7 +200,7 @@ function ManagerRooms() {
                 <Fields fields={fields} />
                 {filteredRooms.length > 0 && (
                   <>
-                    {filteredRooms.map((el) => (
+                    {paginatedRooms.map((el) => (
                       <Rooms
                         room={el}
                         key={el.id}
@@ -209,6 +218,11 @@ function ManagerRooms() {
                     description={"Please try another filter"}
                   />
                 )}
+                <PrevNext
+                  page={page}
+                  setPage={setPage}
+                  total={filteredRooms.length}
+                />
               </div>
             </>
           )}

@@ -4,7 +4,12 @@ import Sticky from "../components/layout/Sticky";
 import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
 import { useEffect, useState } from "react";
-import { getGuestProfile, getHotel, getRooms } from "../services/getAPi";
+import {
+  getGuestProfile,
+  getHotel,
+  getHotelRooms,
+  getRooms,
+} from "../services/getAPi";
 import { getCookie } from "../utils/getCookie";
 import { Loader } from "../components/ui/Loader";
 import { useParams } from "react-router-dom";
@@ -80,7 +85,7 @@ function HotelInfo() {
     const load = async () => {
       try {
         setLoading(true);
-        const roomData = await getRooms();
+        const roomData = await getHotelRooms(id);
         setRooms(roomData);
       } catch (e) {
         setError(e.message);
@@ -90,7 +95,7 @@ function HotelInfo() {
     };
 
     load();
-  }, []);
+  }, [id]);
 
   return (
     <Page>

@@ -30,7 +30,8 @@ function AdminApplicationDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("token");
+  const { token } = useAuth();
+
   const { id } = useParams();
   const { isAuthenticated } = useAuth();
 

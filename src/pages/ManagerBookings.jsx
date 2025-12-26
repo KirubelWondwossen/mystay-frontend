@@ -20,10 +20,11 @@ import {
 } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
 import { cancelBooking, checkIn, completeBooking } from "../services/patchAPI";
+import PrevNext from "../components/ui/PrevNext";
 
 const filterOptions = [
   { value: 1, type: "All" },
-  { value: 2, type: "Confirmed" },
+  { value: 2, type: "Completed" },
   { value: 3, type: "Cancelled" },
   { value: 4, type: "Pending" },
 ];
@@ -36,6 +37,7 @@ const sortOptions = [
 ];
 
 const fields = ["Room", "Guest", "Dates", "Status", "Amount"];
+const PAGE_SIZE = 9;
 
 function ManagerBookings() {
   const [active, setActive] = useState(1);
@@ -46,11 +48,20 @@ function ManagerBookings() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const ref = useRef(null);
+  const [page, setPage] = useState(1);
 
   const { token } = useAuth();
   const filterBy = searchParams.get("filter") || "All";
   const hasData = bookings.length > 0;
   const navigate = useNavigate();
+
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedBookings = filteredBookings.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filterBy]);
 
   useEffect(() => {
     const load = async () => {
@@ -186,7 +197,7 @@ function ManagerBookings() {
             {filteredBookings.length > 0 && (
               <>
                 <ManagerTableCols fields={fields} />
-                {filteredBookings.map((el) => (
+                {paginatedBookings.map((el) => (
                   <ManagerBookingsTable
                     key={el.id}
                     data={el}
@@ -198,7 +209,11 @@ function ManagerBookings() {
                 ))}
               </>
             )}
-            <PrevNext />
+            <PrevNext
+              page={page}
+              setPage={setPage}
+              total={filteredBookings.length}
+            />
           </div>
         </div>
       )}
@@ -215,21 +230,6 @@ function ManagerBookings() {
         }}
       />
     </ManagerLayout>
-  );
-}
-
-function PrevNext() {
-  return (
-    <div className="p-2 border border-[#e5e7eb] rounded-b-sm flex gap-4 justify-end font-heading text-tSecondary text-sm">
-      <div className="flex items-center px-2 py-1 cursor-pointer rounded-sm hover:bg-primary hover:text-white transition duration-300">
-        <ChevronLeftIcon className="w-4" />
-        <span>Previous</span>
-      </div>
-      <div className="flex items-center px-2 py-1 cursor-pointer rounded-sm hover:bg-primary hover:text-white transition duration-300">
-        <span>Next</span>
-        <ChevronRightIcon className="w-4" />
-      </div>
-    </div>
   );
 }
 
