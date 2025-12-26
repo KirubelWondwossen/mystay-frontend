@@ -25,15 +25,15 @@
 }
 
 #root {
+  @apply bg-white dark:bg-black transition-colors duration-300;
+  padding: 0 !important;
   background-color: white;
   color: #111827 !important;
 }
-
 #root {
-  @apply bg-white dark:bg-black transition-colors duration-300;
-  padding: 0 !important;
+  width: 100% !important;
+  min-height: 100vh;
 }
-
 body {
   @apply bg-white dark:bg-black transition-colors;
 }

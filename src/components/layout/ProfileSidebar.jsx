@@ -8,33 +8,33 @@ import {
 } from "@heroicons/react/16/solid";
 import { useLocation } from "react-router-dom";
 
-function ProfileSidebar() {
+function ProfileSidebar({ guest }) {
   const location = useLocation();
 
   return (
     <aside className="flex flex-col gap-2 border-r items-start sticky top-[5rem] h-[calc(100vh-10rem)] overflow-hidden">
       <BtnList
-        path={"/profilehome"}
+        path={"/profile/home"}
         className={"w-full"}
-        loc={location.pathname === "/profilehome"}
+        loc={location.pathname === "/profile/home"}
       >
         <Icon icon={HomeIcon} />
         <NavBtnName>Home</NavBtnName>
       </BtnList>
 
       <BtnList
-        path={"/profilereservations"}
+        path={`/guest/reservations/${guest?.id || ""}`}
         className={"w-full"}
-        loc={location.pathname === "/profilereservations"}
+        loc={location.pathname === "/guest/reservations/:id"}
       >
         <Icon icon={CalendarDateRangeIcon} />
         <NavBtnName>Reservations</NavBtnName>
       </BtnList>
 
       <BtnList
-        path={"/profileinfo"}
+        path={"/profile/info"}
         className={"w-full"}
-        loc={location.pathname === "/profileinfo"}
+        loc={location.pathname === "/profile/info"}
       >
         <Icon icon={InformationCircleIcon} />
         <NavBtnName>User Info</NavBtnName>

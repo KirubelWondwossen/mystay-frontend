@@ -29,12 +29,12 @@ function App() {
         <Routes>
           <Route path="/" element={<UserDasboard />} />
           <Route path="/about" element={<About />} />
-          <Route path="/profilehome" element={<ProfileHome />} />
+          <Route path="/profile/home" element={<ProfileHome />} />
           <Route
-            path="/profilereservations"
+            path="/guest/reservations/:id"
             element={<ProfileReservations />}
           />
-          <Route path="/profileinfo" element={<ProfileInfo />} />
+          <Route path="/profile/info" element={<ProfileInfo />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route
             path="/hotel/:hotelId/room/:roomId"

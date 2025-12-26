@@ -1,6 +1,6 @@
 function Page({ children }) {
   return (
-    <div className="container mx-auto flex flex-col items-center dark:bg-backgroundDark h-screen">
+    <div className="container mx-auto flex flex-col items-center justify-center dark:bg-backgroundDark h-screen">
       {children}
     </div>
   );
