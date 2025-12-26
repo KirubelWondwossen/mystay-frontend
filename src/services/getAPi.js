@@ -64,3 +64,7 @@ export const getGuestBookings = (token, bookingId) =>
 
 // Hotel
 export const getHotel = (id) => apiFetch(`/hotels/${id}`);
+
+//Search
+export const searchHotel = (search) =>
+  apiFetch(`/hotels?search=${encodeURIComponent(search)}`);
