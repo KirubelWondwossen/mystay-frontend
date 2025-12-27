@@ -2,49 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 0.5rem;
+}
+
+#root {
+  @apply bg-white dark:bg-black transition-colors duration-300;
+  color: #111827;
+}
+
+body {
+  @apply bg-white dark:bg-black transition-colors;
+}
+
 .nav-btn {
-  @apply lg:text-lg
-  sm:p-3
-  sm:text-base
-  font-semibold 
-  cursor-pointer 
-  no-underline
-  font-heading;
+  @apply lg:text-lg sm:p-3 sm:text-base font-semibold cursor-pointer no-underline font-heading;
 }
 
 .nav-btn_hover {
-  @apply hover:bg-gray-200 md:hover:scale-110 md:hover:bg-white transition-transform  duration-300 ease-in-out;
+  @apply hover:bg-gray-200 md:hover:scale-110 md:hover:bg-white transition-transform duration-300 ease-in-out;
 }
 
 .navbar-btn {
-  @apply text-sm p-2 lg:text-lg lg:p-3  font-semibold cursor-pointer no-underline font-heading;
+  @apply text-sm p-2 lg:text-lg lg:p-3 font-semibold cursor-pointer no-underline font-heading;
 }
 
 .hover-fix:hover {
   color: #111827 !important;
 }
 
-#root {
-  @apply bg-white dark:bg-black transition-colors duration-300;
-  padding: 0 !important;
-  background-color: white;
-  color: #111827 !important;
-}
-#root {
-  width: 100% !important;
-  min-height: 100vh;
-}
-body {
-  @apply bg-white dark:bg-black transition-colors;
-}
-
-/* Hide scrollbar but keep scroll functionality */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .custom-file {
@@ -52,6 +50,7 @@ body {
     file:rounded-sm file:bg-primary file:text-white file:border-none
     file:px-2 file:py-1 file:hover:bg-[#4338ca] file:cursor-pointer;
 }
+
 .add-room-btn {
   @apply text-tSecondary border border-[#e5e7eb] hover:bg-[#f9fafb] p-2 rounded-lg text-sm;
 }

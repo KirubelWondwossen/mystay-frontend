@@ -22,6 +22,7 @@ import AdminManagerDetail from "./pages/AdminManagerDetail";
 import GuestRoomDetail from "./pages/GuestRoomDetail";
 import HotelInfo from "./pages/HotelInfo";
 import ManagerHotelInfo from "./pages/ManagerHotelInfo";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
   return (
@@ -130,6 +131,8 @@ function App() {
             }
           />
           <Route path="/hotel/:id" element={<HotelInfo />} />
+          {/* Other */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>
     </Router>

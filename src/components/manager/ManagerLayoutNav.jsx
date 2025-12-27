@@ -47,15 +47,15 @@ function ManagerProfile({ user }) {
 function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate, id }) {
   function handleLogout() {
     logout();
+    navigate("/manager/login");
     toast.success("You have logged out");
-    navigate("/managerlogin");
   }
   return (
     <ManagerNavContainer className="gap-1 py-3">
-      <Link to={`/managerprofile/${id}`}>
+      <Link to={`/manager/profile/${id}`}>
         <UserIcon className="w-5  text-primary" />
       </Link>
-      <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} />
+      {/* <LightDarkIcons isDark={isDark} handleDarkMode={handleDarkMode} /> */}
       <Icon onClick={handleLogout} icon={ArrowRightStartOnRectangleIcon} />
       <Toaster
         position="top-center"

@@ -51,17 +51,6 @@ function ManagerSidebar() {
         <SideBtnName>Rooms</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
-        path={`/manager/profile/${id}`}
-        className={"w-full"}
-        loc={location.pathname === `/manager/profile/${id}`}
-      >
-        <Icon
-          icon={UsersIcon}
-          color={location.pathname === `/manager/profile/${id}`}
-        />
-        <SideBtnName>Profile</SideBtnName>
-      </ManagerBtnList>
-      <ManagerBtnList
         path={"/manager/hotel/info"}
         className={"w-full"}
         loc={location.pathname === "/manager/hotel/info"}
@@ -71,6 +60,17 @@ function ManagerSidebar() {
           color={location.pathname === "/manager/hotel/info"}
         />
         <SideBtnName>Hotel Info</SideBtnName>
+      </ManagerBtnList>
+      <ManagerBtnList
+        path={`/manager/profile/${id}`}
+        className={"w-full"}
+        loc={location.pathname === `/manager/profile/${id}`}
+      >
+        <Icon
+          icon={UsersIcon}
+          color={location.pathname === `/manager/profile/${id}`}
+        />
+        <SideBtnName>Profile</SideBtnName>
       </ManagerBtnList>
     </aside>
   );

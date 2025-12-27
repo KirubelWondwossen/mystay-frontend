@@ -9,7 +9,7 @@ function ManagerLayout({ children, loading, error, getData, id }) {
   const [isDark, setIsDark] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) return <Navigate to="/managerlogin" replace />;
+  if (!isAuthenticated) return <Navigate to="/manager/login" replace />;
   function handleDarkMode() {
     setIsDark((dark) => !dark);
   }
