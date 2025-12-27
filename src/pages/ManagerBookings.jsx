@@ -3,7 +3,6 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { ManagerFilter } from "../components/manager/ManagerFilter";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import ManagerLayout from "../components/layout/ManagerLayout";
 import ManagerTopComponents from "../components/manager/ManagerTopComponents";
