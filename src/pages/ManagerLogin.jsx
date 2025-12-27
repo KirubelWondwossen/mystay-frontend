@@ -5,7 +5,7 @@ function ManagerLogin() {
     <LoginForm
       endpoint="http://127.0.0.1:8000/api/hotelmanager/login"
       role="manager"
-      redirectTo="/managerhome"
+      redirectTo="/manager/home"
     />
   );
 }

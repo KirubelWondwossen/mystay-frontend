@@ -5,7 +5,7 @@ function AdminLogin() {
     <LoginForm
       endpoint="http://127.0.0.1:8000/api/admin/login"
       role="admin"
-      redirectTo="/adminapplication"
+      redirectTo="/admin/application"
     />
   );
 }

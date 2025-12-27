@@ -9,8 +9,8 @@ function ProtectedRoute({ children, allowedRoles }) {
 
   if (!isAuthenticated) {
     const loginPath = location.pathname.startsWith("/admin")
-      ? "/adminlogin"
-      : "/managerlogin";
+      ? "/admin/login"
+      : "/manager/login";
 
     return <Navigate to={loginPath} replace />;
   }
