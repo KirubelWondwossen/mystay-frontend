@@ -1,20 +1,15 @@
 import { Line } from "react-chartjs-2";
+import { getSalesChartData } from "../../utils/getSalesChart";
 
-export default function LineChart() {
+export default function LineChart({ bookings }) {
+  const { labels, values } = getSalesChartData(bookings);
+
   const chartData = {
-    labels: [
-      "Nov 23",
-      "Nov 24",
-      "Nov 25",
-      "Nov 26",
-      "Nov 27",
-      "Nov 28",
-      "Nov 29",
-    ],
+    labels,
     datasets: [
       {
         label: "Total Sales",
-        data: [12000, 85000, 50000, 28000, 110000, 0, 0],
+        data: values,
         borderColor: "#4338ca",
         backgroundColor: "rgba(224, 231, 255,0.2)",
         fill: true,
@@ -23,7 +18,7 @@ export default function LineChart() {
       },
       {
         label: "Extra Sales",
-        data: [0, 2000, 3000, 8000, 15000, 0, 0],
+        data: values.map((val) => val * 0.1),
         borderColor: "#15803d",
         backgroundColor: "rgba(21, 128, 61,0.2)",
         fill: true,
@@ -50,20 +45,15 @@ export default function LineChart() {
         bodyFont: { size: 12 },
       },
     },
-    hover: {
-      mode: "nearest",
-      intersect: true,
-    },
+    hover: { mode: "nearest", intersect: true },
     scales: {
-      y: {
-        beginAtZero: true,
-      },
+      y: { beginAtZero: true },
     },
   };
 
   return (
     <div className="w-full">
-      <Line data={chartData} options={chartOptions} />;
+      <Line data={chartData} options={chartOptions} />
     </div>
   );
 }

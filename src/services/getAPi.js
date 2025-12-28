@@ -49,7 +49,8 @@ export const getManagerBookings = (id, token) =>
 export const getManagerInfo = (token) => apiFetch(`/hotelmanager/me`, token);
 export const getRoomsManager = (id, token) =>
   apiFetch(`/hotels/${id}/rooms`, token);
-
+export const getDashboard = (token) =>
+  apiFetch(`/hotelmanager/dashboard`, token);
 //Guest
 export const getRooms = () => apiFetch("/hotels/rooms");
 export const getRoomDetail = (roomId, hotelId) =>

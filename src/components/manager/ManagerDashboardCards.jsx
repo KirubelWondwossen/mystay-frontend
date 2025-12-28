@@ -2,11 +2,16 @@ import ManagerDashboardCard from "./ManagerDashboardCard";
 import { BriefcaseIcon } from "@heroicons/react/24/outline";
 import DoughnutChart from "../charts/DoughnutChart";
 import LineChart from "../charts/LineChart";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
-import { getManagerBookings, getManagerInfo } from "../../services/getAPi";
+import {
+  getDashboard,
+  getManagerBookings,
+  getManagerInfo,
+} from "../../services/getAPi";
 import { getStayNights } from "../../utils/getStayNights";
+import { EmptyState } from "../ui/EmptyState";
 
 const statusColors = {
   confirmed: "#dcfce7",
@@ -27,26 +32,42 @@ function getTodayActivity(bookings) {
   const isToday = (date) => new Date(date).toDateString() === today;
 
   return bookings.filter(
-    (b) => isToday(b.created_at) || isToday(b.check_in) || isToday(b.check_out)
+    (b) =>
+      b.status !== "cancelled" &&
+      (isToday(b.created_at) || isToday(b.check_in) || isToday(b.check_out))
   );
 }
 
-export default function ManagerDashboardCards() {
+export default function ManagerDashboardCards({ setLoading, setError }) {
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [dashboard, setDashboard] = useState();
   const { token } = useAuth();
   const ref = useRef(null);
+
+  const checkedInBookings = useMemo(
+    () => bookings.filter((el) => el.status === "completed").length,
+    [bookings]
+  );
+  const occupancyRate = useMemo(() => {
+    const occupied = dashboard?.stats?.occupied_rooms;
+    const totalRooms = dashboard?.stats?.total_rooms;
+
+    if (!totalRooms) return "0%";
+    return Math.round((occupied / totalRooms) * 100) + "%";
+  }, [dashboard]);
 
   useEffect(() => {
     const load = async () => {
       try {
+        setLoading(true);
         const manager = await getManagerInfo(token);
         ref.current = manager.hotel.id;
 
         const bookingData = await getManagerBookings(ref.current, token);
         setBookings(bookingData);
-        setLoading(true);
+
+        const dashboardData = await getDashboard(token);
+        setDashboard(dashboardData);
       } catch (e) {
         setError(e.message);
         toast.error(e.message);
@@ -56,54 +77,62 @@ export default function ManagerDashboardCards() {
     };
 
     if (token) load();
-  }, [token]);
+  }, [token, setLoading, setError]);
 
   return (
     <div className="grid grid-cols-4 gap-8">
-      {/* Bookings */}
-      <ManagerDashboardCard>
-        <ManagerHomeStats
-          icon={BriefcaseIcon}
-          stat="Bookings"
-          value={11}
-          iconColor="text-[#0369a1]"
-          iconBg="bg-[#e0f2fe]"
-        />
-      </ManagerDashboardCard>
+      {dashboard ? (
+        <>
+          {/* Bookings */}
+          <ManagerDashboardCard>
+            <ManagerHomeStats
+              icon={BriefcaseIcon}
+              stat="Bookings"
+              value={dashboard?.stats?.total_bookings}
+              iconColor="text-[#0369a1]"
+              iconBg="bg-[#e0f2fe]"
+            />
+          </ManagerDashboardCard>
 
-      {/* Sales */}
-      <ManagerDashboardCard>
-        <ManagerHomeStats
-          icon={BriefcaseIcon}
-          stat="Sales"
-          value="$32,465.00"
-          iconColor="text-[#15803d]"
-          iconBg="bg-[#dcfce7]"
-        />
-      </ManagerDashboardCard>
+          {/* Sales */}
+          <ManagerDashboardCard>
+            <ManagerHomeStats
+              icon={BriefcaseIcon}
+              stat="Sales"
+              value={`$${dashboard?.stats?.total_sales}`}
+              iconColor="text-[#15803d]"
+              iconBg="bg-[#dcfce7]"
+            />
+          </ManagerDashboardCard>
 
-      {/* Check-ins */}
-      <ManagerDashboardCard>
-        <ManagerHomeStats
-          icon={BriefcaseIcon}
-          stat="Check ins"
-          value={4}
-          iconColor="text-[#4338ca]"
-          iconBg="bg-[#e0e7ff]"
-        />
-      </ManagerDashboardCard>
+          {/* Check-ins */}
+          <ManagerDashboardCard>
+            <ManagerHomeStats
+              icon={BriefcaseIcon}
+              stat="Check ins"
+              value={checkedInBookings}
+              iconColor="text-[#4338ca]"
+              iconBg="bg-[#e0e7ff]"
+            />
+          </ManagerDashboardCard>
 
-      {/* Occupancy Rate */}
-      <ManagerDashboardCard>
-        <ManagerHomeStats
-          icon={BriefcaseIcon}
-          stat="Occupancy rate"
-          value="36%"
-          iconColor="text-[#a16207]"
-          iconBg="bg-[#fef9c3]"
+          {/* Occupancy Rate */}
+          <ManagerDashboardCard>
+            <ManagerHomeStats
+              icon={BriefcaseIcon}
+              stat="Occupancy rate"
+              value={occupancyRate}
+              iconColor="text-[#a16207]"
+              iconBg="bg-[#fef9c3]"
+            />
+          </ManagerDashboardCard>
+        </>
+      ) : (
+        <EmptyState
+          title="Loading Stats"
+          description="Dashboard data not available"
         />
-      </ManagerDashboardCard>
-
+      )}
       {/* Activity */}
       <ManagerDashboardCard className="col-span-2">
         <ManagerActivityCard bookings={bookings} />
@@ -111,12 +140,12 @@ export default function ManagerDashboardCards() {
 
       {/* Stay Duration */}
       <ManagerDashboardCard className="col-span-2">
-        <ManagerDurationChart />
+        <ManagerDurationChart bookings={bookings} />
       </ManagerDashboardCard>
 
       {/* Sales Chart */}
       <ManagerDashboardCard className="col-span-4">
-        <ManagerSalesChart />
+        <ManagerSalesChart bookings={bookings} />
       </ManagerDashboardCard>
     </div>
   );
@@ -137,10 +166,18 @@ function ManagerActivityCard({ bookings }) {
     <div className="flex flex-col gap-4 p-3 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
       <CardsHeader>Today</CardsHeader>
 
-      {todayBookings.length === 0 && (
-        <p className="font-body text-tSecondary font-medium">
-          No activity today...
-        </p>
+      {(!bookings || bookings.length === 0) && (
+        <EmptyState
+          title="No data"
+          description="No bookings are available yet."
+        />
+      )}
+
+      {todayBookings.length === 0 && bookings.length > 0 && (
+        <EmptyState
+          title="No Activity Today"
+          description="No check-ins or check-outs today."
+        />
       )}
 
       {todayBookings.map((booking, i) => (
@@ -184,6 +221,7 @@ function StatusTag({ data }) {
 
 // eslint-disable-next-line
 function ManagerHomeStats({ icon: Icon, stat, value, iconColor, iconBg }) {
+  if (!stat) return null;
   return (
     <div className="grid grid-cols-[4rem_1fr] grid-rows-2 gap-x-1 px-3 py-2 w-max">
       <div
@@ -201,20 +239,40 @@ function ManagerHomeStats({ icon: Icon, stat, value, iconColor, iconBg }) {
   );
 }
 
-function ManagerDurationChart() {
+function ManagerDurationChart({ bookings }) {
+  const hasData = bookings && bookings.length > 0;
+
   return (
     <div className="p-3 flex flex-col gap-4">
       <CardsHeader>Stay Duration Summary</CardsHeader>
-      <DoughnutChart />
+
+      {!hasData ? (
+        <EmptyState
+          title="No Stay Data"
+          description="Booking history is required to calculate stay duration."
+        />
+      ) : (
+        <DoughnutChart bookings={bookings} />
+      )}
     </div>
   );
 }
 
-function ManagerSalesChart() {
+function ManagerSalesChart({ bookings }) {
+  const hasSales = bookings && bookings.some((b) => b.total_price > 0);
+
   return (
     <div className="p-3 flex flex-col gap-4">
-      <CardsHeader>Sales from 11 23 2025 — Nov 29 2025</CardsHeader>
-      <LineChart />
+      <CardsHeader>Sales Overview</CardsHeader>
+
+      {!hasSales ? (
+        <EmptyState
+          title="No Sales Yet"
+          description="Sales data will appear once bookings start generating revenue."
+        />
+      ) : (
+        <LineChart bookings={bookings} />
+      )}
     </div>
   );
 }
