@@ -105,7 +105,7 @@ function FilterSearchBtn({ handleOpenModal, filterTxt }) {
 function BecomeHostBtn() {
   return (
     <Link
-      to="managerapplication"
+      to="manager/application"
       className="font-heading font-semibold border p-2 rounded-xl cursor-pointer duration-200 hover:bg-gray-200 hover:border-slate-950"
     >
       Become a Host

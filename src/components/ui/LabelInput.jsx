@@ -43,9 +43,10 @@ export default function LabelInput({
           {...(max ? { max } : {})}
           {...(type === "tel"
             ? {
-                pattern: "^09[0-9]{8}$",
-                placeholder: "0912345678",
-                maxLength: 10,
+                pattern: "^+?[1-9]d{1,14}$",
+                placeholder: "+251912345678",
+                maxLength: 15,
+                min: 2,
               }
             : {})}
           onChange={handleChange}

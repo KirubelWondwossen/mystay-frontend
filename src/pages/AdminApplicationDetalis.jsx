@@ -74,6 +74,7 @@ function AdminApplicationDetails() {
   );
 
   async function updateApplicationStatus({ token, id, action }) {
+    setLoading(true);
     try {
       const res = await fetch(
         `http://127.0.0.1:8000/api/admin/${id}/${action}`,
@@ -89,8 +90,6 @@ function AdminApplicationDetails() {
         if (res.status === 401) {
           throw new Error("Unauthorized. Please login again.");
         }
-        console.log(res);
-
         const errorText = await res.text();
         throw new Error(errorText || `Failed to ${action} application`);
       }
@@ -118,21 +117,26 @@ function AdminApplicationDetails() {
   if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
   return (
     <AdminDashboardLayout loading={loading} getData={getData} error={error}>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
-        <ManagerTopComponents header={`Application ${id}`}>
-          <Status data={application} />
-          <Link to={"/adminapplication"} className="font-heading text-primary">
-            ← Back
-          </Link>
-        </ManagerTopComponents>
-        <ApplicationDetails app={application} />
-        <DetailButtons
-          status={application.status}
-          updateApplicationStatus={updateApplicationStatus}
-          token={token}
-          id={id}
-        />
-      </div>
+      {!loading && (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
+          <ManagerTopComponents header={`Application ${id}`}>
+            <Status data={application} />
+            <Link
+              to={"/admin/application"}
+              className="font-heading text-primary"
+            >
+              ← Back
+            </Link>
+          </ManagerTopComponents>
+          <ApplicationDetails app={application} />
+          <DetailButtons
+            status={application.status}
+            updateApplicationStatus={updateApplicationStatus}
+            token={token}
+            id={id}
+          />
+        </div>
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}

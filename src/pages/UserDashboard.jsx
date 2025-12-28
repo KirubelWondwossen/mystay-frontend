@@ -39,7 +39,6 @@ function UserDasboard() {
   const accessToken = getCookie("access_token");
   const VISIBLE_ROOMS = 8;
   const [visibleCount, setVisibleCount] = useState(VISIBLE_ROOMS);
-  console.log(rooms);
 
   useEffect(() => {
     const loadGuest = async () => {
