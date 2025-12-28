@@ -6,18 +6,6 @@ import { useParams } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../context/AuthContext";
 
-// const applicationsTemp = {
-//   manager_name: "John Doe",
-//   manager_email: "john@example.com",
-//   hotel_name: "Sunrise Hotel",
-//   hotel_address: "123 Main St, City",
-//   manager_phone: "+251900000001",
-//   hotel_description: "A cozy hotel near the beach.",
-//   hotel_star_rating: 4,
-//   created_at: "2025-12-01T10:00:00Z",
-//   status: "approved",
-// };
-
 function ManagerProfile() {
   const [manager, setManager] = useState({});
   const [loading, setLoading] = useState(true);

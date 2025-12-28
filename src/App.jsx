@@ -23,6 +23,7 @@ import GuestRoomDetail from "./pages/GuestRoomDetail";
 import HotelInfo from "./pages/HotelInfo";
 import ManagerHotelInfo from "./pages/ManagerHotelInfo";
 import Unauthorized from "./pages/Unauthorized";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -95,6 +96,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/manager/application" element={<ManagerApplication />} />
           {/* Admin */}
           <Route path="/admin/login" element={<AdminLogin />} />
