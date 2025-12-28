@@ -39,6 +39,7 @@ function UserDasboard() {
   const accessToken = getCookie("access_token");
   const VISIBLE_ROOMS = 8;
   const [visibleCount, setVisibleCount] = useState(VISIBLE_ROOMS);
+  console.log(rooms);
 
   useEffect(() => {
     const loadGuest = async () => {
@@ -77,6 +78,13 @@ function UserDasboard() {
     load();
   }, []);
 
+  function shuffleArray(arr) {
+    return arr
+      .map((x) => ({ sort: Math.random(), value: x }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((x) => x.value);
+  }
+
   useEffect(() => {
     let updatedRooms = [...rooms];
 
@@ -94,6 +102,9 @@ function UserDasboard() {
       updatedRooms.sort((a, b) => a.price_per_night - b.price_per_night);
     if (sortBy === "regularPrice-desc")
       updatedRooms.sort((a, b) => b.price_per_night - a.price_per_night);
+
+    updatedRooms = shuffleArray(updatedRooms);
+
     setFilteredRooms(updatedRooms);
   }, [rooms, filterType, sortBy]);
 
