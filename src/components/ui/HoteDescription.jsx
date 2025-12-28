@@ -9,7 +9,7 @@ export function HoteDescription({ description }) {
         Hotel Description
       </span>
       <p
-        className={`font-body text-sm text-tPrimary text-start max-w-lg leading-relaxed `}
+        className={`font-body text-sm text-tPrimary text-start max-w-lg leading-relaxed mb-3`}
       >
         {description}
       </p>

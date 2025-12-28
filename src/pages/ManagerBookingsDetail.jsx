@@ -242,7 +242,7 @@ function DetailButtons({
         </>
       )}
 
-      <Link to="/managerbookings">
+      <Link to="/manager/bookings">
         <Button className="border border-tSecondary rounded-lg p-2 text-tSecondary">
           Back
         </Button>

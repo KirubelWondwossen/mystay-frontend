@@ -8,6 +8,7 @@ import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminDashboardLayout from "../components/layout/AdminDashboardLayout";
 import { getHotel, getManager } from "../services/getAPi";
 import { AdminManagerListDetails } from "../components/admin/AdminManagerListDetails";
+import Button from "../components/ui/Button";
 
 function AdminManagerDetail() {
   const [manager, setManager] = useState({});
@@ -43,11 +44,26 @@ function AdminManagerDetail() {
     <AdminDashboardLayout loading={loading} error={error} getData={getManager}>
       <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
         <ManagerTopComponents header={`Manager ${id}`}>
-          <Link to={"/adminmanagerslist"} className="font-heading text-primary">
+          <Link
+            to={"/admin/managerslist"}
+            className="font-heading text-primary"
+          >
             ← Back
           </Link>
         </ManagerTopComponents>
         <AdminManagerListDetails hotel={hotel} manager={manager} />
+        <Link
+          to={"/admin/managerslist"}
+          className="font-heading text-primary self-end"
+        >
+          <Button
+            className={
+              "border border-tSecondary rounded-lg p-2 text-tSecondary"
+            }
+          >
+            Back
+          </Button>
+        </Link>
       </div>
       <Toaster
         position="top-center"

@@ -18,7 +18,7 @@ function AdminSidebar() {
         <SideBtnName>Applications</SideBtnName>
       </ManagerBtnList>
       <ManagerBtnList
-        path={"/admin/managers/list"}
+        path={"/admin/managerslist"}
         className={"w-full"}
         loc={location.pathname === "/admin/managers/list"}
       >

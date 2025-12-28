@@ -198,7 +198,7 @@ function DetailButtons({ status, updateApplicationStatus, id, token }) {
         </>
       )}
 
-      <Link to={"/adminapplication"} className="font-heading text-primary">
+      <Link to={"/admin/application"} className="font-heading text-primary">
         <Button
           className={"border border-tSecondary rounded-lg p-2 text-tSecondary"}
         >
