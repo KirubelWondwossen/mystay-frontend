@@ -5,8 +5,7 @@ export function Map({ latitude, longitude, location }) {
   function ChangeView({ lat, lng }) {
     const map = useMap();
     useEffect(() => {
-      if (!lat || !lng) return;
-      map.setView([lat, lng], map.getZoom());
+      if (lat && lng) map.setView([lat, lng], 15);
     }, [lat, lng, map]);
     return null;
   }
@@ -15,11 +14,11 @@ export function Map({ latitude, longitude, location }) {
     <MapContainer
       center={[latitude, longitude]}
       zoom={15}
-      style={{ height: "400px", width: "100%" }}
+      style={{ width: "100%", height: "400px" }}
     >
       <TileLayer
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        attribution="© Esri"
+        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+        attribution="Google Maps Hybrid"
       />
 
       <ChangeView lat={latitude} lng={longitude} />
