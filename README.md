@@ -94,7 +94,8 @@ The application is built as part of a **Distributed Systems course project** and
   - Data persistence
 
 > ⚠️ Note: The backend is developed by a team member and is not part of this repository.
-> Bacckend Repo : https://github.com/Samuel-Tefera/mystay-backend
+
+Backend Repo : https://github.com/Samuel-Tefera/mystay-backend
 
 ---
 
