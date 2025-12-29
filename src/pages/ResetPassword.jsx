@@ -5,6 +5,7 @@ import Button from "../components/ui/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../services/apiURl";
 
 export default function ResetPassword() {
   const [params] = useSearchParams();
@@ -50,17 +51,14 @@ function ManagerPassword({ token }) {
     };
     toast.success("Password changed successfully");
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/hotelmanager/reset-password`,
-        {
-          method: "POST",
+      const res = await fetch(`${API_URL}/hotelmanager/reset-password`, {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
 

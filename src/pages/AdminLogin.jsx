@@ -1,9 +1,10 @@
+import { API_URL } from "../services/apiURl";
 import LoginForm from "../components/auth/LoginForm";
 
 function AdminLogin() {
   return (
     <LoginForm
-      endpoint="http://127.0.0.1:8000/api/admin/login"
+      endpoint={`${API_URL}/admin/login`}
       role="admin"
       redirectTo="/admin/application"
     />

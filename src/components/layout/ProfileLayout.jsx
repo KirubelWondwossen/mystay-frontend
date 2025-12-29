@@ -8,6 +8,7 @@ import { getCookie } from "../../utils/getCookie";
 import { getGuestProfile } from "../../services/getAPi";
 import { Loader } from "../../components/ui/Loader";
 import Button from "../ui/Button";
+import { API_URL } from "../../services/apiURl";
 
 function ProfileLayout({ children }) {
   const [guest, setGuest] = useState(null);
@@ -36,7 +37,7 @@ function ProfileLayout({ children }) {
 
   const handleGoogleLogin = () => {
     window.location.href =
-      `http://127.0.0.1:8000/api/auth/google/login` +
+      `${API_URL}/auth/google/login` +
       `?redirect=http://127.0.0.1:5173${window.location.pathname}`;
   };
 

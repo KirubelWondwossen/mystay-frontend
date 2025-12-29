@@ -30,6 +30,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import { API_URL } from "../services/apiURl";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: icon,
@@ -173,7 +174,7 @@ function GuestRoomDetail() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/bookings", {
+      const res = await fetch(`${API_URL}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -12,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 import { HoteDescription } from "../components/ui/HoteDescription";
 import { TextIcon } from "../components/ui/TextIcon";
 import { AdminAppTitleValue } from "../components/admin/AdminAppTitleValue";
+import { API_URL } from "../services/apiURl";
 
 const statusColors = {
   approved: "#dcfce7",
@@ -76,15 +77,12 @@ function AdminApplicationDetails() {
   async function updateApplicationStatus({ token, id, action }) {
     setLoading(true);
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/admin/${id}/${action}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${API_URL}/admin/${id}/${action}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) {
         if (res.status === 401) {

@@ -9,7 +9,8 @@ import { useState, useEffect } from "react";
 import SortBy from "./UserSortBy";
 import Button from "./Button";
 import { getCookie } from "../../utils/getCookie";
-
+import { API_URL } from "../../services/apiURl";
+import { useNavigate } from "react-router-dom";
 function Navbar({
   handleOpenModal,
   filterTxt,
@@ -79,6 +80,7 @@ function NavBtns({
       {location.pathname === "/" && <BecomeHostBtn />}
 
       {authenticated && <ManagerProfile guest={guest} />}
+      {authenticated && <LogoutBtn />}
       {!authenticated && <LoginBtn location={location} />}
     </ul>
   );
@@ -166,13 +168,34 @@ function IconHolder({ children, active, onClick }) {
 function LoginBtn({ location }) {
   const handleGoogleLogin = () => {
     window.location.href =
-      `http://127.0.0.1:8000/api/auth/google/login` +
+      `${API_URL}/auth/google/login` +
       `?redirect=http://127.0.0.1:5173${location.pathname}`;
   };
 
   return (
     <Button className="border p-2 rounded-xl" onClick={handleGoogleLogin}>
       Login
+    </Button>
+  );
+}
+function LogoutBtn() {
+  async function deleteCookieStore(name, options) {
+    try {
+      await cookieStore.delete(name, options);
+      console.log(`Cookie "${name}" deleted successfully.`);
+    } catch (error) {
+      console.error(`Error deleting cookie "${name}": ${error}`);
+    }
+  }
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    deleteCookieStore("access_token", { path: "/" });
+    navigate(0);
+  };
+
+  return (
+    <Button className="border p-2 rounded-xl" onClick={handleLogout}>
+      Logout
     </Button>
   );
 }

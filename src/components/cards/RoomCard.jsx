@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import RatingStars from "../ui/RatingStars";
+import { IMG_SRC } from "../../services/apiURl";
 
 function RoomCard({ room, onRemove }) {
   const key = "hotelRooms";
@@ -33,7 +34,7 @@ function RoomCard({ room, onRemove }) {
         <img
           src={
             room.image_url
-              ? `http://127.0.0.1:8000${room.image_url}`
+              ? `${IMG_SRC}${room.image_url}`
               : "/images/placeholder.webp"
           }
           alt="Room image"

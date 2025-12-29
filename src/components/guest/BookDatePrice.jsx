@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { getDaysFromRange } from "../../utils/getDaysFromRange";
 import { DayPicker } from "react-day-picker";
 import Button from "../ui/Button";
+import { API_URL } from "../../services/apiURl";
 
 export function BookDatePrice({
   range,
@@ -130,8 +131,7 @@ export function BookInfo({
   payment,
 }) {
   const handleGoogleLogin = () => {
-    window.location.href =
-      "http://127.0.0.1:8000/api/auth/google/login?redirect=http://localhost:5173/";
+    window.location.href = `${API_URL}/auth/google/login?redirect=http://localhost:5173/`;
   };
   const isPaymentDisabled = !range?.to || totalPrice <= 0;
 

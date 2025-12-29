@@ -9,6 +9,7 @@ import Logo from "../ui/Logo";
 import { SuccessMessage } from "../ui/SuccessMessage";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Loader } from "../ui/Loader";
+import { API_URL } from "../..//services/apiURl";
 
 function LoginForm({ endpoint, role, redirectTo }) {
   const [formData, setFormData] = useState({
@@ -58,14 +59,11 @@ function LoginForm({ endpoint, role, redirectTo }) {
 
     setLoadingF(true);
     try {
-      const res = await fetch(
-        "http://127.0.0.1:8000/api/hotelmanager/forgot-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: formData.email }),
-        }
-      );
+      const res = await fetch(`${API_URL}/hotelmanager/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      });
 
       const data = await res.json();
 

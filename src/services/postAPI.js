@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/api";
+import { API_URL } from "./apiURl";
 
 export async function apiFetchFormData(url, token, data) {
   const formData = new FormData();

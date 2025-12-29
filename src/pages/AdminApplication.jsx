@@ -11,6 +11,7 @@ import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader } from "../components/ui/Loader";
 import { EmptyState } from "../components/ui/EmptyState";
+import { API_URL } from "../services/apiURl";
 
 // const applicationsTemp = [
 //   {
@@ -103,7 +104,7 @@ function AdminApplication() {
     setError(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
+      const res = await fetch(`${API_URL}/hotel/application/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

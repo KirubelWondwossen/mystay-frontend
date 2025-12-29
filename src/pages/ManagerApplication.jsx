@@ -4,6 +4,7 @@ import Logo from "../components/ui/Logo";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { SuccessMessage } from "../components/ui/SuccessMessage";
+import { API_URL } from "../services/apiURl";
 const formEL = [
   {
     label: "Manager Name",
@@ -116,7 +117,7 @@ function ManagerApplication() {
       return toast.error("Invalid data please fill all the inputs correctly");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/hotel/application/", {
+      const res = await fetch(`${API_URL}/hotel/application/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

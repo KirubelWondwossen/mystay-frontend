@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../services/apiURl";
 
 function ManagerProfile() {
   const [manager, setManager] = useState({});
@@ -17,7 +18,7 @@ function ManagerProfile() {
     setError(null);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/hotelmanager/me`, {
+      const res = await fetch(`${API_URL}/hotelmanager/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
