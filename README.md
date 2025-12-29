@@ -94,6 +94,7 @@ The application is built as part of a **Distributed Systems course project** and
   - Data persistence
 
 > ⚠️ Note: The backend is developed by a team member and is not part of this repository.
+> Bacckend Repo : https://github.com/Samuel-Tefera/mystay-backend
 
 ---
 
@@ -107,8 +108,6 @@ The application is built as part of a **Distributed Systems course project** and
 
 ## 🚧 Limitations
 
-- Application runs on **localhost only**
-- No real-time updates (requires refresh to sync latest booking data)
 - Mobile responsiveness is possible but not fully optimized
 - Payments are **simulated**, not integrated with real gateways
 
