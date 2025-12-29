@@ -5,7 +5,6 @@ import Main from "../components/layout/MainLayout";
 import BottomNav from "../components/ui/BottomNav";
 import { useEffect, useState } from "react";
 import { getGuestProfile, getHotel, getHotelRooms } from "../services/getAPi";
-import { getCookie } from "../utils/getCookie";
 import { Loader } from "../components/ui/Loader";
 import { useParams } from "react-router-dom";
 
@@ -34,7 +33,7 @@ function HotelInfo() {
   const [error, setError] = useState(null);
   const [rooms, setRooms] = useState([]);
 
-  const accessToken = getCookie("access_token");
+  const accessToken = localStorage.getItem("access_token");
   const { id } = useParams();
 
   useEffect(() => {

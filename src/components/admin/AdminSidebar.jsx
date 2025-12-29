@@ -20,7 +20,7 @@ function AdminSidebar() {
       <ManagerBtnList
         path={"/admin/managerslist"}
         className={"w-full"}
-        loc={location.pathname === "/admin/managers/list"}
+        loc={location.pathname === "/admin/managerslist"}
       >
         <Icon icon={UsersIcon} />
         <SideBtnName>Managers</SideBtnName>

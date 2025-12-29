@@ -21,15 +21,16 @@ function ProfileSidebar({ guest }) {
         <Icon icon={HomeIcon} />
         <NavBtnName>Home</NavBtnName>
       </BtnList>
-
-      <BtnList
-        path={`/guest/reservations/${guest?.id || ""}`}
-        className={"w-full"}
-        loc={location.pathname === "/guest/reservations/:id"}
-      >
-        <Icon icon={CalendarDateRangeIcon} />
-        <NavBtnName>Reservations</NavBtnName>
-      </BtnList>
+      {guest?.id && (
+        <BtnList
+          path={`/guest/reservations/${guest?.id || ""}`}
+          className={"w-full"}
+          loc={location.pathname === "/guest/reservations/:id"}
+        >
+          <Icon icon={CalendarDateRangeIcon} />
+          <NavBtnName>Reservations</NavBtnName>
+        </BtnList>
+      )}
 
       <BtnList
         path={"/profile/info"}

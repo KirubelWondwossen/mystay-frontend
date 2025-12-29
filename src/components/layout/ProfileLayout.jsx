@@ -4,7 +4,6 @@ import Navbar from "../ui/Navbar";
 import Page from "./Page";
 import ProfileSidebar from "./ProfileSidebar";
 import Sticky from "./Sticky";
-import { getCookie } from "../../utils/getCookie";
 import { getGuestProfile } from "../../services/getAPi";
 import { Loader } from "../../components/ui/Loader";
 import Button from "../ui/Button";
@@ -13,7 +12,15 @@ import { API_URL } from "../../services/apiURl";
 function ProfileLayout({ children }) {
   const [guest, setGuest] = useState(null);
   const [loading, setLoading] = useState(true);
-  const accessToken = getCookie("access_token");
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (token) {
+    localStorage.setItem("access_token", token);
+    window.history.replaceState({}, "", "/");
+  }
+  const accessToken = localStorage.getItem("access_token");
 
   useEffect(() => {
     const loadGuest = async () => {
@@ -38,7 +45,7 @@ function ProfileLayout({ children }) {
   const handleGoogleLogin = () => {
     window.location.href =
       `${API_URL}/auth/google/login` +
-      `?redirect=http://127.0.0.1:5173${window.location.pathname}`;
+      `?redirect=http://127.0.0.1:5173${location.pathname}`;
   };
 
   return (

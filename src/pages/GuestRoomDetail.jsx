@@ -16,7 +16,6 @@ import {
   getUnavailableDates,
 } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
-import { getCookie } from "../utils/getCookie";
 import { formatDateToYMD } from "../utils/formatDateToYMD";
 import Backdrop from "../components/ui/Backdrop";
 import { ImageDetail } from "../components/guest/ImageDetail";
@@ -56,7 +55,14 @@ function GuestRoomDetail() {
 
   const authenticated = Boolean(guest);
   const { roomId, hotelId } = useParams();
-  const accessToken = getCookie("access_token");
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (token) {
+    localStorage.setItem("access_token", token);
+    window.history.replaceState({}, "", "/");
+  }
+  const accessToken = localStorage.getItem("access_token");
 
   const navigate = useNavigate();
 
@@ -179,6 +185,7 @@ function GuestRoomDetail() {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
+          "ngrok-skip-browser-warning": true,
         },
         body: JSON.stringify(payload),
       });

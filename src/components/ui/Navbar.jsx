@@ -1,6 +1,7 @@
 import {
   AdjustmentsHorizontalIcon,
   MagnifyingGlassIcon,
+  ArrowRightEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
@@ -8,7 +9,6 @@ import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useState, useEffect } from "react";
 import SortBy from "./UserSortBy";
 import Button from "./Button";
-import { getCookie } from "../../utils/getCookie";
 import { API_URL } from "../../services/apiURl";
 import { useNavigate } from "react-router-dom";
 function Navbar({
@@ -23,7 +23,7 @@ function Navbar({
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    setAuthenticated(!!getCookie("access_token"));
+    setAuthenticated(localStorage.getItem("access_token"));
   }, [location.pathname]);
 
   return (
@@ -179,17 +179,9 @@ function LoginBtn({ location }) {
   );
 }
 function LogoutBtn() {
-  async function deleteCookieStore(name, options) {
-    try {
-      await cookieStore.delete(name, options);
-      console.log(`Cookie "${name}" deleted successfully.`);
-    } catch (error) {
-      console.error(`Error deleting cookie "${name}": ${error}`);
-    }
-  }
   const navigate = useNavigate();
   const handleLogout = () => {
-    deleteCookieStore("access_token", { path: "/" });
+    localStorage.removeItem("access_token");
     navigate(0);
   };
 

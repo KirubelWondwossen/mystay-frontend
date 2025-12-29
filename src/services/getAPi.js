@@ -6,11 +6,13 @@ export async function apiFetch(url, token) {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
+          "ngrok-skip-browser-warning": true,
         },
       })
     : await fetch(`${API_URL}${url}`, {
         headers: {
           Accept: "application/json",
+          "ngrok-skip-browser-warning": true,
         },
       });
 
@@ -24,7 +26,7 @@ export async function apiFetch(url, token) {
 
 export async function apiFetchGoogle(url) {
   const res = await fetch(`${API_URL}${url}`, {
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", "ngrok-skip-browser-warning": true },
     credentials: "include",
   });
 
@@ -35,6 +37,7 @@ export async function apiFetchGoogle(url) {
 
   return res.json();
 }
+export const getGuestProfile = (token) => apiFetch(`/guest/profile`, token);
 
 // For Admins
 export const getManager = (id, token) => apiFetch(`/hotelmanager/${id}`, token);
@@ -57,8 +60,6 @@ export const getRoomDetail = (roomId, hotelId) =>
   apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
 export const getUnavailableDates = (roomId) =>
   apiFetch(`/hotels/rooms/${roomId}/unavailable-dates`);
-
-export const getGuestProfile = (token) => apiFetch(`/guest/profile`, token);
 
 export const getGuestBookings = (token, bookingId) =>
   apiFetch(`/bookings/${bookingId}`);

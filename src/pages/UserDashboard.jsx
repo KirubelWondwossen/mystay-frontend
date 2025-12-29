@@ -16,7 +16,6 @@ import Main from "../components/layout/MainLayout";
 import { Loader } from "../components/ui/Loader";
 import { getGuestProfile, getRooms } from "../services/getAPi";
 import { EmptyState } from "../components/ui/EmptyState";
-import { getCookie } from "../utils/getCookie";
 import Button from "../components/ui/Button";
 
 const sortOptions = [
@@ -36,9 +35,18 @@ function UserDasboard() {
   const [guest, setGuest] = useState();
   const filterType = searchParams.get("filter") || "all";
   const sortBy = searchParams.get("sortBy") || "name-asc";
-  const accessToken = getCookie("access_token");
   const VISIBLE_ROOMS = 8;
   const [visibleCount, setVisibleCount] = useState(VISIBLE_ROOMS);
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (token) {
+    localStorage.setItem("access_token", token);
+    window.history.replaceState({}, "", "/");
+  }
+
+  const accessToken = localStorage.getItem("access_token");
 
   useEffect(() => {
     const loadGuest = async () => {

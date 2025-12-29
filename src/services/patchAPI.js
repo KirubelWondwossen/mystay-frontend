@@ -6,6 +6,7 @@ export async function apiPatchJson(url, token, data) {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "ngrok-skip-browser-warning": true,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),

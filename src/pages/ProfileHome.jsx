@@ -1,4 +1,3 @@
-import { getCookie } from "../utils/getCookie";
 import ProfileLayout from "../components/layout/ProfileLayout";
 import Subheader from "../components/ui/Subheader";
 import { useEffect, useState } from "react";
@@ -10,7 +9,7 @@ function ProfileHome() {
   const [guest, setGuest] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const accessToken = getCookie("access_token");
+  const accessToken = localStorage.getItem("access_token");
   useEffect(() => {
     const loadGuest = async () => {
       if (!accessToken) return;

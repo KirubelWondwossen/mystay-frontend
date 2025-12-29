@@ -109,6 +109,7 @@ function AdminApplication() {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
+          "ngrok-skip-browser-warning": true,
         },
       });
 
@@ -178,12 +179,13 @@ function AdminApplication() {
 
   return (
     <AdminDashboardLayout user={user}>
-      {!hasData && (
+      {!hasData && !loading && (
         <EmptyState
           title={"No applications"}
           description={"Wait for applications"}
         />
       )}
+      {loading && <Loader loading={loading} />}
       {!loading && !error && hasData && (
         <div className="max-w-[120rem] mx-auto flex flex-col gap-5">
           <ManagerTopComponents header={"All Application"}>

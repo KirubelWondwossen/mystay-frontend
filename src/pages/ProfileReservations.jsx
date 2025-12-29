@@ -2,7 +2,6 @@ import { Link, useParams } from "react-router-dom";
 import ProfileLayout from "../components/layout/ProfileLayout";
 import Subheader from "../components/ui/Subheader";
 import { useEffect, useState } from "react";
-import { getCookie } from "../utils/getCookie";
 import { getBookings } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
@@ -17,7 +16,7 @@ function ProfileReservations() {
   const [bookings, setBookings] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const accessToken = getCookie("access_token");
+  const accessToken = localStorage.getItem("access_token");
   const { id } = useParams();
   const navigate = useNavigate();
 

@@ -1,2 +1,2 @@
-export const API_URL = "http://127.0.0.1:8000/api";
-export const IMG_SRC = "http://127.0.0.1:8000";
+export const API_URL = "https://impishly-unrisky-gus.ngrok-free.dev/api";
+export const IMG_SRC = "https://impishly-unrisky-gus.ngrok-free.dev";

@@ -7,7 +7,6 @@ import SectionHeader from "../components/ui/SectionHeader";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 import { useEffect, useState } from "react";
-import { getCookie } from "../utils/getCookie";
 import { getGuestProfile } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
 
@@ -15,7 +14,14 @@ function About() {
   const [guest, setGuest] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const accessToken = getCookie("access_token");
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (token) {
+    localStorage.setItem("access_token", token);
+    window.history.replaceState({}, "", "/");
+  }
+  const accessToken = localStorage.getItem("access_token");
   useEffect(() => {
     const loadGuest = async () => {
       if (!accessToken) return;

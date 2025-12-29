@@ -6,6 +6,7 @@ import ManagerTopComponents from "../components/manager/ManagerTopComponents";
 import AdminManagerListTable from "../components/admin/AdminManagerListTable";
 import { getManagers } from "../services/getAPi";
 import { useAuth } from "../context/AuthContext";
+import { Loader } from "../components/ui/Loader";
 const fields = ["Manager Name", "Hotel Name", "Phone"];
 
 function AdminManagerList() {
@@ -37,7 +38,7 @@ function AdminManagerList() {
 
   return (
     <AdminDashboardLayout loading={loading} error={error}>
-      {!hasData && (
+      {!hasData && !loading && (
         <EmptyState
           title={"No mangers yet"}
           description={"Wait for managers"}

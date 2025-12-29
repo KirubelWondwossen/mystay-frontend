@@ -28,7 +28,10 @@ function LoginForm({ endpoint, role, redirectTo }) {
     try {
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
+        },
         body: JSON.stringify(formData),
       });
 
@@ -61,7 +64,10 @@ function LoginForm({ endpoint, role, redirectTo }) {
     try {
       const res = await fetch(`${API_URL}/hotelmanager/forgot-password`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
+        },
         body: JSON.stringify({ email: formData.email }),
       });
 

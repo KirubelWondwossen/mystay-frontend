@@ -42,29 +42,31 @@ function AdminManagerDetail() {
   if (!isAuthenticated) return <Navigate to="/adminlogin" replace />;
   return (
     <AdminDashboardLayout loading={loading} error={error} getData={getManager}>
-      <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
-        <ManagerTopComponents header={`Manager ${id}`}>
+      {!loading && (
+        <div className="max-w-[120rem] mx-auto flex flex-col gap-6">
+          <ManagerTopComponents header={`Manager ${id}`}>
+            <Link
+              to={"/admin/managerslist"}
+              className="font-heading text-primary"
+            >
+              ← Back
+            </Link>
+          </ManagerTopComponents>
+          <AdminManagerListDetails hotel={hotel} manager={manager} />
           <Link
             to={"/admin/managerslist"}
-            className="font-heading text-primary"
+            className="font-heading text-primary self-end"
           >
-            ← Back
+            <Button
+              className={
+                "border border-tSecondary rounded-lg p-2 text-tSecondary"
+              }
+            >
+              Back
+            </Button>
           </Link>
-        </ManagerTopComponents>
-        <AdminManagerListDetails hotel={hotel} manager={manager} />
-        <Link
-          to={"/admin/managerslist"}
-          className="font-heading text-primary self-end"
-        >
-          <Button
-            className={
-              "border border-tSecondary rounded-lg p-2 text-tSecondary"
-            }
-          >
-            Back
-          </Button>
-        </Link>
-      </div>
+        </div>
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}

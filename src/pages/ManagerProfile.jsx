@@ -23,6 +23,7 @@ function ManagerProfile() {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
+          "ngrok-skip-browser-warning": true,
         },
       });
 
@@ -148,18 +149,16 @@ function ManagerPassword({ id, token }) {
     };
 
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/hotelmanager/${id}/update-password`,
-        {
-          method: "PATCH",
+      const res = await fetch(`${API_URL}/hotelmanager/${id}/update-password`, {
+        method: "PATCH",
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": true,
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
       console.log(data);

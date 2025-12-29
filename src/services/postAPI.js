@@ -12,6 +12,7 @@ export async function apiFetchFormData(url, token, data) {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     body: formData,
   });

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ProfileLayout from "../components/layout/ProfileLayout";
 import Subheader from "../components/ui/Subheader";
 import ErrorMessage from "../components/ui/ErrorMessage";
-import { getCookie } from "../utils/getCookie";
 import { getGuestProfile } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
 
@@ -10,7 +9,7 @@ function ProfileInfo() {
   const [guest, setGuest] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const accessToken = getCookie("access_token");
+  const accessToken = localStorage.getItem("access_token");
   useEffect(() => {
     const loadGuest = async () => {
       if (!accessToken) return;

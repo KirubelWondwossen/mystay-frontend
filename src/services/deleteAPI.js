@@ -6,6 +6,7 @@ export async function apiDelete(url, token) {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+      "ngrok-skip-browser-warning": true,
     },
   });
 

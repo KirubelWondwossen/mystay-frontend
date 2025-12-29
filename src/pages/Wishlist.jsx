@@ -7,7 +7,6 @@ import Main from "../components/layout/MainLayout";
 import RoomCardContainer from "../components/cards/RoomCardContainer";
 import RoomCard from "../components/cards/RoomCard";
 import { EmptyState } from "../components/ui/EmptyState";
-import { getCookie } from "../utils/getCookie";
 import { getGuestProfile } from "../services/getAPi";
 import { Loader } from "../components/ui/Loader";
 import ErrorMessage from "../components/ui/ErrorMessage";
@@ -17,7 +16,16 @@ function WishList() {
   const [guest, setGuest] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const accessToken = getCookie("access_token");
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  if (token) {
+    localStorage.setItem("access_token", token);
+    window.history.replaceState({}, "", "/");
+  }
+
+  const accessToken = localStorage.getItem("access_token");
 
   useEffect(() => {
     const loadGuest = async () => {
