@@ -13,64 +13,6 @@ import { Loader } from "../components/ui/Loader";
 import { EmptyState } from "../components/ui/EmptyState";
 import { API_URL } from "../services/apiURl";
 
-// const applicationsTemp = [
-//   {
-//     manager_name: "John Doe",
-//     manager_email: "john@example.com",
-//     hotel_name: "Sunrise Hotel",
-//     hotel_address: "123 Main St, City",
-//     manager_phone: "+251900000001",
-//     hotel_description: "A cozy hotel near the beach.",
-//     hotel_star_rating: 4,
-//     created_at: "2025-12-01T10:00:00Z",
-//     status: "approved",
-//   },
-//   {
-//     manager_name: "Jane Smith",
-//     manager_email: "jane@example.com",
-//     hotel_name: "Mountain View Inn",
-//     hotel_address: "456 Hill Rd, City",
-//     manager_phone: "+251900000002",
-//     hotel_description: "A scenic hotel in the mountains.",
-//     hotel_star_rating: 3,
-//     created_at: "2025-12-03T14:30:00Z",
-//     status: "pending",
-//   },
-//   {
-//     manager_name: "Michael Brown",
-//     manager_email: "michael@example.com",
-//     hotel_name: "City Center Lodge",
-//     hotel_address: "789 Center Ave, City",
-//     manager_phone: "+251900000003",
-//     hotel_description: "Hotel in the heart of the city.",
-//     hotel_star_rating: 5,
-//     created_at: "2025-12-05T08:15:00Z",
-//     status: "rejected",
-//   },
-//   {
-//     manager_name: "Emily White",
-//     manager_email: "emily@example.com",
-//     hotel_name: "Riverside Suites",
-//     hotel_address: "321 River Rd, City",
-//     manager_phone: "+251900000004",
-//     hotel_description: "Luxury suites with river views.",
-//     hotel_star_rating: 4,
-//     created_at: "2025-12-07T12:45:00Z",
-//     status: "approved",
-//   },
-//   {
-//     manager_name: "David Green",
-//     manager_email: "david@example.com",
-//     hotel_name: "Garden Paradise",
-//     hotel_address: "654 Garden St, City",
-//     manager_phone: "+251900000005",
-//     hotel_description: "Relaxing hotel with beautiful gardens.",
-//     hotel_star_rating: 3,
-//     created_at: "2025-12-08T09:20:00Z",
-//     status: "pending",
-//   },
-// ];
-
 const filterOptions = [
   { value: 1, type: "All" },
   { value: 2, type: "Pending" },
@@ -84,6 +26,7 @@ const sortOptions = [
 ];
 
 const fields = ["Manager Name", "Hotel Name", "Status", "Date"];
+const PAGE_SIZE = 9;
 
 function AdminApplication() {
   const { user, isAuthenticated } = useAuth();
@@ -98,7 +41,13 @@ function AdminApplication() {
   const filter = searchParams.get("filter") || "All";
   const { token } = useAuth();
   const hasData = applications.length > 0;
-
+  const [page, setPage] = useState(1);
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedApps = filteredApps.slice(startIndex, endIndex);
+  useEffect(() => {
+    setPage(1);
+  }, [filter, sortBy]);
   async function getData(token) {
     setLoading(true);
     setError(null);

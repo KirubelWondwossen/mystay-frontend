@@ -32,12 +32,11 @@ function RoomCard({ room, onRemove }) {
     <div className="flex flex-col rounded-xl bg-white overflow-hidden shadow-sm hover:shadow-lg transition duration-300">
       <div className="relative h-56 overflow-hidden">
         <img
-          src={
-            room.image_url
-              ? `${IMG_SRC}${room.image_url}`
-              : "/images/placeholder.webp"
-          }
-          alt="Room image"
+          src={`${IMG_SRC}${room.image_url}`}
+          alt="room"
+          onError={(e) => {
+            e.currentTarget.src = "/images/placeholder.webp";
+          }}
           className="w-full h-full object-cover"
         />
 

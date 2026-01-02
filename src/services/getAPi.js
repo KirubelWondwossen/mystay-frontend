@@ -50,14 +50,12 @@ export const getBookings = (token) => apiFetch("/bookings/", token);
 export const getManagerBookings = (id, token) =>
   apiFetch(`/bookings/hotels/${id}`, token);
 export const getManagerInfo = (token) => apiFetch(`/hotelmanager/me`, token);
-export const getRoomsManager = (id, token) =>
-  apiFetch(`/hotels/${id}/rooms`, token);
+
 export const getDashboard = (token) =>
   apiFetch(`/hotelmanager/dashboard`, token);
 //Guest
 export const getRooms = () => apiFetch("/hotels/rooms");
-export const getRoomDetail = (roomId, hotelId) =>
-  apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
+
 export const getUnavailableDates = (roomId) =>
   apiFetch(`/hotels/rooms/${roomId}/unavailable-dates`);
 
@@ -71,3 +69,9 @@ export const getHotelRooms = (id) => apiFetch(`/hotels/${id}/rooms`);
 //Search
 export const searchHotel = (search) =>
   apiFetch(`/hotels?search=${encodeURIComponent(search)}`);
+
+export const getRoomDetail = (roomId, hotelId) =>
+  apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);
+
+export const getRoomsManager = (id, token) =>
+  apiFetch(`/hotels/${id}/rooms`, token);

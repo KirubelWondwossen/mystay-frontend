@@ -44,7 +44,7 @@ function ManagerProfile({ user }) {
   );
 }
 
-function ManagerNavIcons({ isDark, handleDarkMode, logout, navigate, id }) {
+function ManagerNavIcons({ logout, navigate, id }) {
   function handleLogout() {
     logout();
     navigate("/manager/login");
