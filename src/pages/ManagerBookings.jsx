@@ -51,6 +51,8 @@ function ManagerBookings() {
 
   const { token } = useAuth();
   const filterBy = searchParams.get("filter") || "All";
+  const sortBy = searchParams.get("sortBy") || "recent";
+
   const hasData = bookings.length > 0;
   const navigate = useNavigate();
 
@@ -60,7 +62,7 @@ function ManagerBookings() {
 
   useEffect(() => {
     setPage(1);
-  }, [filterBy]);
+  }, [filterBy, sortBy]);
 
   useEffect(() => {
     const load = async () => {
@@ -90,11 +92,29 @@ function ManagerBookings() {
     let updated = [...bookings];
 
     if (filterBy !== "All") {
-      updated = updated.filter((booking) => booking.status === filterBy);
+      updated = updated.filter(
+        (booking) => booking.status.toLowerCase() === filterBy.toLowerCase()
+      );
+    }
+
+    if (sortBy === "recent") {
+      updated.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+
+    if (sortBy === "earlier") {
+      updated.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    }
+
+    if (sortBy === "high") {
+      updated.sort((a, b) => b.total_price - a.total_price);
+    }
+
+    if (sortBy === "low") {
+      updated.sort((a, b) => a.total_price - b.total_price);
     }
 
     setFilteredBookings(updated);
-  }, [bookings, filterBy]);
+  }, [bookings, filterBy, sortBy]);
 
   async function handleCheckin(bookingId) {
     try {
@@ -153,6 +173,10 @@ function ManagerBookings() {
 
     setSearchParams(searchParams);
   }
+  function handleSort(option) {
+    searchParams.set("sortBy", option);
+    setSearchParams(searchParams);
+  }
 
   return (
     <ManagerLayout
@@ -182,7 +206,11 @@ function ManagerBookings() {
                 ))}
               </ManagerFilter>
 
-              <SortBy sortOptions={sortOptions} />
+              <SortBy
+                sortOptions={sortOptions}
+                sortBy={sortBy}
+                onChange={handleSort}
+              />
             </div>
           </ManagerTopComponents>
 
