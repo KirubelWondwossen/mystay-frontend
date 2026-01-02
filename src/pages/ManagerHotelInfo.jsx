@@ -22,6 +22,42 @@ L.Icon.Default.mergeOptions({
   shadowUrl: iconShadow,
 });
 
+const RULES = {
+  name: {
+    label: "Hotel name",
+    min: 3,
+    max: 80,
+  },
+  address: {
+    label: "Hotel address",
+    min: 5,
+    max: 120,
+  },
+  description: {
+    label: "Hotel description",
+    min: 30,
+    max: 500,
+  },
+  rating: {
+    label: "Rating",
+    min: 0,
+    max: 5,
+    type: "number",
+  },
+  latitude: {
+    label: "Latitude",
+    min: -90,
+    max: 90,
+    type: "number",
+  },
+  longitude: {
+    label: "Longitude",
+    min: -180,
+    max: 180,
+    type: "number",
+  },
+};
+
 function ManagerHotelInfo() {
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -126,6 +162,42 @@ function ImageDetail({ children }) {
   );
 }
 
+function validateHotelForm(data) {
+  for (const [key, rule] of Object.entries(RULES)) {
+    const value = data[key];
+
+    if (value === null || value === undefined || value === "") {
+      return `${rule.label} is required`;
+    }
+
+    if (!rule.type || rule.type === "string") {
+      const trimmed = String(value).trim();
+
+      if (trimmed.length < rule.min) {
+        return `${rule.label} must be at least ${rule.min} characters`;
+      }
+
+      if (rule.max && trimmed.length > rule.max) {
+        return `${rule.label} must be at most ${rule.max} characters`;
+      }
+    }
+
+    if (rule.type === "number") {
+      const num = Number(value);
+
+      if (Number.isNaN(num)) {
+        return `${rule.label} must be a valid number`;
+      }
+
+      if (num < rule.min || num > rule.max) {
+        return `${rule.label} must be between ${rule.min} and ${rule.max}`;
+      }
+    }
+  }
+
+  return true;
+}
+
 function UpdateHotelModal({ open, onClose, hotel, onSubmit }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -154,10 +226,25 @@ function UpdateHotelModal({ open, onClose, hotel, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onSubmit({
+    const flatData = {
       name: formData.name,
-      description: formData.description,
       address: formData.address,
+      description: formData.description,
+      rating: formData.rating,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+    };
+
+    const validationResult = validateHotelForm(flatData);
+
+    if (validationResult !== true) {
+      return toast.error(validationResult);
+    }
+
+    onSubmit({
+      name: formData.name.trim(),
+      address: formData.address.trim(),
+      description: formData.description.trim(),
       rating: Number(formData.rating),
       exact_location: {
         latitude: Number(formData.latitude),

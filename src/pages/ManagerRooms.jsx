@@ -23,7 +23,6 @@ import { getManagerInfo, getRoomsManager } from "../services/getAPi";
 import { deleteRoom } from "../services/deleteAPI";
 import WarningPopup from "../components/ui/WarningPopup";
 import PrevNext from "../components/ui/PrevNext";
-import { API_URL, IMG_SRC } from "../services/apiURl";
 
 const filterOptions = [
   { value: 1, type: "All" },
@@ -316,7 +315,7 @@ function Rooms({ room, handleEditRoom, handleOpenDelete }) {
   return (
     <div className="relative grid grid-cols-[0.6fr_1.2fr_1fr_1fr_1fr_1fr] gap-5 text-tSecondary font-heading items-center border border-t-0 border-[#e5e7eb] bg-white">
       <img
-        src={`${IMG_SRC}${room.image_url}`}
+        src={`${room.image_url}`}
         alt="room"
         onError={(e) => {
           e.currentTarget.src = "/images/placeholder.webp";

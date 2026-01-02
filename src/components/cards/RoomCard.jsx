@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import RatingStars from "../ui/RatingStars";
-import { IMG_SRC } from "../../services/apiURl";
 
 function RoomCard({ room, onRemove }) {
   const key = "hotelRooms";
   const [saved, setSaved] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem(key) || "[]");
@@ -30,19 +31,29 @@ function RoomCard({ room, onRemove }) {
 
   return (
     <div className="flex flex-col rounded-xl bg-white overflow-hidden shadow-sm hover:shadow-lg transition duration-300">
-      <div className="relative h-56 overflow-hidden">
+      <div className="relative h-56 overflow-hidden bg-gray-100">
+        {!imgLoaded && !imgError && (
+          <div className="absolute inset-0 animate-pulse bg-gray-300" />
+        )}
+
         <img
-          src={`${IMG_SRC}${room.image_url}`}
+          src={room.image_url}
           alt="room"
+          loading="lazy"
+          onLoad={() => setImgLoaded(true)}
           onError={(e) => {
+            setImgError(true);
             e.currentTarget.src = "/images/placeholder.webp";
           }}
-          className="w-full h-full object-cover"
+          className={`
+      w-full h-full object-cover transition-opacity duration-500
+      ${imgLoaded ? "opacity-100" : "opacity-0"}
+    `}
         />
 
         <div
           onClick={toggleWishlist}
-          className="absolute right-4 top-4 cursor-pointer"
+          className="absolute right-4 top-4 cursor-pointer z-10"
         >
           {saved ? (
             <HeartIconSolid className="w-7 text-red-500 drop-shadow" />
@@ -51,7 +62,7 @@ function RoomCard({ room, onRemove }) {
           )}
         </div>
 
-        <div className="absolute left-4 top-4 flex gap-2">
+        <div className="absolute left-4 top-4 flex gap-2 z-10">
           <span className="bg-black/60 text-white text-xs px-3 py-1 rounded-full">
             {room.room_type[0].toUpperCase() + room.room_type.slice(1)}
           </span>

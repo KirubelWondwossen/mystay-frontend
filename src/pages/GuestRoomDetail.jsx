@@ -229,36 +229,35 @@ function GuestRoomDetail() {
       </Sticky>
       {loading && <Loader loading={loading} />}
       {!loading && error && <p className="text-center text-red-500">{error}</p>}
-      {!loading && !error && (
-        <Main style={"mb-6"}>
-          {!loading && !error && (
-            <>
-              <ImageDetail room={room} />
-              {hotel && (
-                <div className="w-full h-[400px] mt-10 mb-10">
-                  <Map
-                    latitude={Number(hotel.exact_location.latitude)}
-                    longitude={Number(hotel.exact_location.longitude)}
-                    location={hotel.address}
-                  />
-                </div>
-              )}
-              <BookDatePrice
-                range={range}
-                setRange={setRange}
-                price={room.price_per_night}
-                unavDates={unavDates}
-                authenticated={authenticated}
-                totalPrice={totalPrice}
-                setTotalPrice={setTotalPrice}
-                handleBook={handleBook}
-                setPayment={setPayment}
-                payment={payment}
-              />
-            </>
-          )}
-        </Main>
-      )}
+
+      <Main style={"mb-6"}>
+        {!loading && !error && (
+          <>
+            <ImageDetail room={room} />
+            {hotel && (
+              <div className="w-full h-[400px] mt-10 mb-10">
+                <Map
+                  latitude={Number(hotel.exact_location.latitude)}
+                  longitude={Number(hotel.exact_location.longitude)}
+                  location={hotel.address}
+                />
+              </div>
+            )}
+            <BookDatePrice
+              range={range}
+              setRange={setRange}
+              price={room.price_per_night}
+              unavDates={unavDates}
+              authenticated={authenticated}
+              totalPrice={totalPrice}
+              setTotalPrice={setTotalPrice}
+              handleBook={handleBook}
+              setPayment={setPayment}
+              payment={payment}
+            />
+          </>
+        )}
+      </Main>
       <Sticky pos={"bottom"}>
         <BottomNav />
       </Sticky>
