@@ -42,17 +42,14 @@ function AdminApplicationDetails() {
       setError(null);
 
       try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/api/hotel/application/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "ngrok-skip-browser-warning": true,
-            },
-          }
-        );
+        const res = await fetch(`${API_URL}/hotel/application/${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": true,
+          },
+        });
 
         if (!res.ok) {
           if (res.status === 401) {

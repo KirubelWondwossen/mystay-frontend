@@ -5,6 +5,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { SuccessMessage } from "../components/ui/SuccessMessage";
 import { API_URL } from "../services/apiURl";
+import ClipLoader from "react-spinners/ClipLoader";
+
 const formEL = [
   {
     label: "Manager Name",
@@ -68,6 +70,7 @@ function ManagerApplication() {
     },
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -94,15 +97,54 @@ function ManagerApplication() {
     }));
   }, [coords]);
 
-  const isNotEmpty = (value) => {
-    if (value === null || value === undefined) return false;
+  const LENGTH_RULES = {
+    manager_name: { min: 3, max: 60, label: "Manager name" },
+    manager_email: { min: 5, max: 100, label: "Email" },
+    manager_phone: { min: 9, max: 15, label: "Phone number" },
+    hotel_name: { min: 3, max: 80, label: "Hotel name" },
+    hotel_address: { min: 5, max: 120, label: "Hotel address" },
+    hotel_description: {
+      min: 30,
+      max: 500,
+      label: "Hotel description",
+    },
+    hotel_star_rating: { min: 1, max: 1, label: "Star rating" },
+  };
+
+  const isValidLength = (value, key = null) => {
+    if (value === null || value === undefined) {
+      return "Some fields are missing";
+    }
 
     if (typeof value === "string") {
-      return value.trim() !== "";
+      const trimmed = value.trim();
+
+      if (trimmed === "") {
+        return `${LENGTH_RULES[key]?.label || "This field"} is required`;
+      }
+
+      if (key && LENGTH_RULES[key]) {
+        const { min, max, label } = LENGTH_RULES[key];
+        const len = trimmed.length;
+
+        if (len < min) {
+          return `${label} must be at least ${min} characters`;
+        }
+
+        if (max && len > max) {
+          return `${label} must be at most ${max} characters`;
+        }
+      }
+
+      return true;
     }
 
     if (typeof value === "object") {
-      return Object.values(value).every(isNotEmpty);
+      for (const [k, v] of Object.entries(value)) {
+        const result = isValidLength(v, k);
+        if (result !== true) return result;
+      }
+      return true;
     }
 
     return true;
@@ -112,10 +154,12 @@ function ManagerApplication() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const isFormValid = isNotEmpty(formData);
-    if (!isFormValid)
-      return toast.error("Invalid data please fill all the inputs correctly");
+    const validationResult = isValidLength(formData);
 
+    if (validationResult !== true) {
+      return toast.error(validationResult);
+    }
+    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/hotel/application/`, {
         method: "POST",
@@ -152,6 +196,8 @@ function ManagerApplication() {
     } catch (err) {
       toast.error("Network error, please try again");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -163,7 +209,11 @@ function ManagerApplication() {
           <h4 className="font-heading text-tSecondary text-2xl font-semibold ">
             Hotel application form
           </h4>
-          <Form setFormData={setFormData} handleSubmit={handleSubmit} />
+          <Form
+            setFormData={setFormData}
+            handleSubmit={handleSubmit}
+            loading={loading}
+          />
         </>
       ) : (
         <SuccessMessage
@@ -188,7 +238,7 @@ function ManagerApplication() {
   );
 }
 
-function Form({ setFormData, handleSubmit }) {
+function Form({ setFormData, handleSubmit, loading }) {
   return (
     <form
       onSubmit={handleSubmit}
@@ -210,7 +260,8 @@ function Form({ setFormData, handleSubmit }) {
         type={"submit"}
         className="text-white px-4 w-full py-2 rounded-lg text-sm bg-primary hover:bg-[#4338ca] col-span-2 justify-self-center"
       >
-        Submit
+        {!loading && "Submit"}
+        {loading && <ClipLoader color="#fff" loading={loading} size={20} />}
       </Button>
     </form>
   );

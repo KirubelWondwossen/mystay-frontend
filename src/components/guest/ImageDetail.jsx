@@ -1,3 +1,4 @@
+import { IMG_SRC } from "../../services/apiURl";
 import { RoomDetail } from "./RoomDetail";
 
 export function ImageDetail({ room }) {
@@ -7,7 +8,7 @@ export function ImageDetail({ room }) {
         className="object-cover object-center aspect-[3/2]"
         src={
           room.image_url
-            ? `http://127.0.0.1:8000${room.image_url}`
+            ? `${IMG_SRC}${room.image_url}`
             : "/images/placeholder.webp"
         }
       />
