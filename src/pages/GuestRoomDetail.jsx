@@ -43,6 +43,7 @@ function GuestRoomDetail() {
   const [payload, setPayload] = useState({});
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(false);
+  const [loadingBook, setLoadingBook] = useState(false);
   const [error, setError] = useState(null);
   const [range, setRange] = useState();
   const [unavDates, setUnavDates] = useState({
@@ -178,14 +179,13 @@ function GuestRoomDetail() {
       toast.error("Please complete payment first");
       return;
     }
-
+    setLoadingBook(true);
     try {
-      const res = await fetch(`${API_URL}/bookings`, {
+      const res = await fetch(`${API_URL}/bookings/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
-          "ngrok-skip-browser-warning": true,
         },
         body: JSON.stringify(payload),
       });
@@ -216,9 +216,13 @@ function GuestRoomDetail() {
       setRange(undefined);
       setPayment("");
       setSuccessPayment(false);
-      navigate(0);
+      setTimeout(() => {
+        navigate(0);
+      }, 1000);
     } catch (err) {
       toast.error(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoadingBook(false);
     }
   }
 
@@ -243,6 +247,7 @@ function GuestRoomDetail() {
                 />
               </div>
             )}
+
             <BookDatePrice
               range={range}
               setRange={setRange}
@@ -254,6 +259,7 @@ function GuestRoomDetail() {
               handleBook={handleBook}
               setPayment={setPayment}
               payment={payment}
+              loadingBook={loadingBook}
             />
           </>
         )}

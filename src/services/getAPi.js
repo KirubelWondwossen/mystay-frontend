@@ -68,7 +68,7 @@ export const getHotelRooms = (id) => apiFetch(`/hotels/${id}/rooms`);
 
 //Search
 export const searchHotel = (search) =>
-  apiFetch(`/hotels?search=${encodeURIComponent(search)}`);
+  apiFetch(`/hotels/?search=${encodeURIComponent(search)}`);
 
 export const getRoomDetail = (roomId, hotelId) =>
   apiFetch(`/hotels/${hotelId}/rooms/${roomId}`);

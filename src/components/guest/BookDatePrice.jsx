@@ -3,6 +3,7 @@ import { getDaysFromRange } from "../../utils/getDaysFromRange";
 import { DayPicker } from "react-day-picker";
 import Button from "../ui/Button";
 import { API_URL } from "../../services/apiURl";
+import { Loader } from "../../components/ui/Loader";
 
 export function BookDatePrice({
   range,
@@ -15,6 +16,7 @@ export function BookDatePrice({
   handleBook,
   setPayment,
   payment,
+  loadingBook,
 }) {
   return (
     <div className="grid grid-cols-[1.2fr_1fr] w-full">
@@ -25,14 +27,18 @@ export function BookDatePrice({
         unavDates={unavDates}
         setTotalPrice={setTotalPrice}
       />
-      <BookInfo
-        authenticated={authenticated}
-        range={range}
-        totalPrice={totalPrice}
-        handleBook={handleBook}
-        setPayment={setPayment}
-        payment={payment}
-      />
+      {loadingBook && <Loader loading={loadingBook} />}
+
+      {!loadingBook && (
+        <BookInfo
+          authenticated={authenticated}
+          range={range}
+          totalPrice={totalPrice}
+          handleBook={handleBook}
+          setPayment={setPayment}
+          payment={payment}
+        />
+      )}
     </div>
   );
 }
@@ -131,12 +137,39 @@ export function BookInfo({
   payment,
 }) {
   const handleGoogleLogin = () => {
-    window.location.href = `${API_URL}/auth/google/login?redirect=http://localhost:5173/`;
+    window.location.href =
+      `${API_URL}/auth/google/login` +
+      `?redirect=http://127.0.0.1:5173${location.pathname}`;
   };
+
   const isPaymentDisabled = !range?.to || totalPrice <= 0;
 
   return (
     <div className="flex flex-col items-start gap-4">
+      {!authenticated && (
+        <div className="flex flex-col items-center gap-4 mt-20">
+          <h2 className="text-xl font-heading font-semibold">
+            Login to access your profile
+          </h2>
+
+          <Button
+            onClick={handleGoogleLogin}
+            className="
+    px-6 py-3
+    rounded-xl
+    border border-gray-300
+    bg-white
+    font-heading font-semibold
+    text-gray-800
+    hover:bg-gray-100
+    hover:border-gray-400
+    transition-colors
+  "
+          >
+            Continue with Google
+          </Button>
+        </div>
+      )}
       {authenticated && (
         <>
           <div className="flex items-center gap-4">

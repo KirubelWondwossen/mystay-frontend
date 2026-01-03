@@ -315,7 +315,6 @@ function LabelInput({
           />
         )}
 
-        {/* Regular input (text, number, etc.) */}
         {formElement === "input" && type !== "file" && (
           <input
             type={type}
